@@ -1,3 +1,10 @@
+.pnpm-store/
+.codex/
+node_modules/
+dist/
+apps/*/dist/
+apps/*/.wrangler/
+packages/*/dist/
 .omx/*
 !.omx/context/
 !.omx/context/*.md
@@ -7,3 +14,5 @@
 !.omx/specs/*.md
 !.omx/plans/
 !.omx/plans/*.md
+apps/web/playwright-report/
+apps/web/test-results/

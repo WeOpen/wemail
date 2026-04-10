@@ -1,0 +1,42 @@
+{
+  "name": "wemail",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.18.2",
+  "scripts": {
+    "lint": "node scripts/run-task.mjs lint",
+    "typecheck": "node scripts/run-task.mjs typecheck",
+    "test": "node scripts/run-task.mjs test",
+    "build": "node scripts/run-task.mjs build",
+    "test:worker": "node scripts/run-task.mjs test --filter worker",
+    "test:web": "node scripts/run-task.mjs test --filter web",
+    "test:shared": "node scripts/run-task.mjs test --filter shared",
+    "test:worker:integration": "pnpm --dir apps/worker exec vitest run tests/integration",
+    "test:web:integration": "pnpm --dir apps/web exec vitest run src/test/integration",
+    "test:e2e": "pnpm exec playwright test -c apps/web/playwright.config.ts",
+    "test:e2e:install": "pnpm exec playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@cloudflare/workers-types": "^4.20260405.1",
+    "@eslint/js": "^9.39.1",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^24.6.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.0.4",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.4.0",
+    "jsdom": "^26.1.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.2",
+    "vite": "^7.1.10",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.40.0"
+  }
+}

@@ -1,0 +1,15 @@
+# 默认由仓库维护者兜底
+* @willxue
+
+# 前端
+/apps/web/ @willxue
+
+# 后端
+/apps/worker/ @willxue
+
+# 共享契约
+/packages/shared/ @willxue
+
+# 文档与治理
+/docs/ @willxue
+/.github/ @willxue

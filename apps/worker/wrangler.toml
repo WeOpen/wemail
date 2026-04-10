@@ -1,0 +1,83 @@
+name = "wemail"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Local defaults used by `wrangler dev`.
+[vars]
+ENVIRONMENT = "local"
+APP_NAME = "wemail"
+DEFAULT_MAIL_DOMAIN = "example.com"
+COOKIE_NAME = "wemail_session"
+COOKIE_SECURE = "false"
+MAILBOX_LIMIT = "5"
+MESSAGE_RETENTION_DAYS = "7"
+OUTBOUND_DAILY_LIMIT = "20"
+AI_FALLBACK_LIMIT = "20"
+MAX_ATTACHMENT_BYTES = "10485760"
+MAX_TOTAL_ATTACHMENT_BYTES = "15728640"
+ENABLE_AI = "true"
+ENABLE_TELEGRAM = "true"
+ENABLE_OUTBOUND = "true"
+ENABLE_MAILBOX_CREATION = "true"
+ADMIN_EMAILS = ""
+
+[[d1_databases]]
+binding = "DB"
+database_name = "wemail"
+database_id = "local"
+
+# Remote deployments should use explicit environments so staging and
+# production can point at different D1 instances, domains, and secrets.
+[env.staging]
+workers_dev = true
+
+[env.staging.vars]
+ENVIRONMENT = "staging"
+APP_NAME = "wemail"
+DEFAULT_MAIL_DOMAIN = "staging.example.com"
+COOKIE_NAME = "wemail_session"
+COOKIE_SECURE = "true"
+MAILBOX_LIMIT = "5"
+MESSAGE_RETENTION_DAYS = "7"
+OUTBOUND_DAILY_LIMIT = "20"
+AI_FALLBACK_LIMIT = "20"
+MAX_ATTACHMENT_BYTES = "10485760"
+MAX_TOTAL_ATTACHMENT_BYTES = "15728640"
+ENABLE_AI = "true"
+ENABLE_TELEGRAM = "true"
+ENABLE_OUTBOUND = "true"
+ENABLE_MAILBOX_CREATION = "true"
+ADMIN_EMAILS = ""
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "wemail-staging"
+database_id = "replace-with-staging-d1-id"
+
+[env.production]
+workers_dev = true
+
+[env.production.vars]
+ENVIRONMENT = "production"
+APP_NAME = "wemail"
+DEFAULT_MAIL_DOMAIN = "example.com"
+COOKIE_NAME = "wemail_session"
+COOKIE_SECURE = "true"
+MAILBOX_LIMIT = "5"
+MESSAGE_RETENTION_DAYS = "7"
+OUTBOUND_DAILY_LIMIT = "20"
+AI_FALLBACK_LIMIT = "20"
+MAX_ATTACHMENT_BYTES = "10485760"
+MAX_TOTAL_ATTACHMENT_BYTES = "15728640"
+ENABLE_AI = "true"
+ENABLE_TELEGRAM = "true"
+ENABLE_OUTBOUND = "true"
+ENABLE_MAILBOX_CREATION = "true"
+ADMIN_EMAILS = ""
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "wemail-production"
+database_id = "replace-with-production-d1-id"
+

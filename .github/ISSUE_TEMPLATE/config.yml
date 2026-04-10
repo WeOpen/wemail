@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Architecture / process discussion
+    url: https://github.com/
+    about: 使用 issue 前，如需先讨论架构或流程，请先开 discussion 或在 PR 中引用。

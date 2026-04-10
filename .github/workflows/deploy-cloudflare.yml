@@ -1,0 +1,210 @@
+name: Deploy Cloudflare
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: deploy-cloudflare-${{ github.event.inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    outputs:
+      worker_command: ${{ steps.target.outputs.worker_command }}
+      worker_environment: ${{ steps.target.outputs.worker_environment }}
+      pages_branch: ${{ steps.target.outputs.pages_branch }}
+      pages_mode: ${{ steps.target.outputs.pages_mode }}
+    steps:
+      - name: Guard production branch
+        if: ${{ github.event.inputs.environment == 'production' }}
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" != "refs/heads/main" ]]; then
+            echo "Production deployments are only allowed from the main branch." >&2
+            echo "Current ref: ${GITHUB_REF}" >&2
+            exit 1
+          fi
+
+      - name: Validate required Cloudflare secrets
+        shell: bash
+        env:
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_PAGES_PROJECT: ${{ secrets.CLOUDFLARE_PAGES_PROJECT_NAME }}
+        run: |
+          missing=()
+          [[ -z "$CF_API_TOKEN" ]] && missing+=("CLOUDFLARE_API_TOKEN")
+          [[ -z "$CF_ACCOUNT_ID" ]] && missing+=("CLOUDFLARE_ACCOUNT_ID")
+          [[ -z "$CF_PAGES_PROJECT" ]] && missing+=("CLOUDFLARE_PAGES_PROJECT_NAME")
+          if (( ${#missing[@]} > 0 )); then
+            printf 'Missing required secrets for %s: %s\n' "${{ github.event.inputs.environment }}" "${missing[*]}" >&2
+            exit 1
+          fi
+
+      - name: Resolve deployment targets
+        id: target
+        shell: bash
+        run: |
+          if [[ "${{ github.event.inputs.environment }}" == "staging" ]]; then
+            echo "worker_command=deploy --env staging" >> "$GITHUB_OUTPUT"
+            echo "worker_environment=staging" >> "$GITHUB_OUTPUT"
+            echo "pages_branch=staging" >> "$GITHUB_OUTPUT"
+            echo "pages_mode=preview" >> "$GITHUB_OUTPUT"
+          else
+            echo "worker_command=deploy --env production" >> "$GITHUB_OUTPUT"
+            echo "worker_environment=production" >> "$GITHUB_OUTPUT"
+            echo "pages_branch=" >> "$GITHUB_OUTPUT"
+            echo "pages_mode=production" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish plan summary
+        shell: bash
+        run: |
+          echo "## Cloudflare Deploy Plan" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Environment: ${{ github.event.inputs.environment }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Git ref: ${GITHUB_REF}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Worker command: ${{ steps.target.outputs.worker_command }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Pages mode: ${{ steps.target.outputs.pages_mode }}" >> "$GITHUB_STEP_SUMMARY"
+
+  verify:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.18.2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify
+        run: |
+          pnpm test
+          pnpm typecheck
+          pnpm lint
+          pnpm build
+
+      - name: Upload web bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist-${{ github.event.inputs.environment }}
+          path: apps/web/dist
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy-worker:
+    needs: [prepare, verify]
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.18.2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Deploy Worker with Wrangler Action
+        id: deploy_worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: apps/worker
+          command: ${{ needs.prepare.outputs.worker_command }}
+
+      - name: Worker deploy summary
+        if: ${{ steps.deploy_worker.outcome == 'success' }}
+        shell: bash
+        run: |
+          echo "## Worker Deploy" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Environment: ${{ needs.prepare.outputs.worker_environment }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Deployment URL: ${{ steps.deploy_worker.outputs.deployment-url }}" >> "$GITHUB_STEP_SUMMARY"
+
+  deploy-pages:
+    needs: [prepare, verify]
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download web bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: web-dist-${{ github.event.inputs.environment }}
+          path: apps/web/dist
+
+      - name: Deploy Pages staging preview via Wrangler
+        if: ${{ needs.prepare.outputs.pages_branch != '' }}
+        id: deploy_pages_staging
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: >-
+            pages deploy apps/web/dist
+            --project-name=${{ secrets.CLOUDFLARE_PAGES_PROJECT_NAME }}
+            --branch=${{ needs.prepare.outputs.pages_branch }}
+
+      - name: Deploy Pages production via Wrangler
+        if: ${{ needs.prepare.outputs.pages_branch == '' }}
+        id: deploy_pages_production
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: >-
+            pages deploy apps/web/dist
+            --project-name=${{ secrets.CLOUDFLARE_PAGES_PROJECT_NAME }}
+
+      - name: Publish Pages summary
+        if: ${{ steps.deploy_pages_staging.outcome == 'success' || steps.deploy_pages_production.outcome == 'success' }}
+        shell: bash
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy_pages_staging.outputs.deployment-url || steps.deploy_pages_production.outputs.deployment-url }}
+          ALIAS_URL: ${{ steps.deploy_pages_staging.outputs.pages-deployment-alias-url || steps.deploy_pages_production.outputs.pages-deployment-alias-url }}
+        run: |
+          echo "## Pages Deploy" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Mode: ${{ needs.prepare.outputs.pages_mode }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Deployment URL: ${DEPLOYMENT_URL}" >> "$GITHUB_STEP_SUMMARY"
+          if [[ -n "${ALIAS_URL}" ]]; then
+            echo "- Alias URL: ${ALIAS_URL}" >> "$GITHUB_STEP_SUMMARY"
+          fi

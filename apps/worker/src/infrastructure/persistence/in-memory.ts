@@ -1,0 +1,316 @@
+import type {
+  ApiKeyRecord,
+  AppStore,
+  AttachmentRecord,
+  AuditEventRecord,
+  FeatureToggles,
+  InviteRecord,
+  MailboxRecord,
+  PersistedMessageRecord,
+  QuotaRecord,
+  SessionRecord,
+  TelegramSubscriptionRecord,
+  UserRecord
+} from "../../core/bindings";
+
+function nowIso() {
+  return new Date().toISOString();
+}
+
+function clone<T>(value: T) {
+  return JSON.parse(JSON.stringify(value)) as T;
+}
+
+export function createInMemoryStore(): AppStore {
+  const users = new Map<string, UserRecord>();
+  const sessions = new Map<string, SessionRecord>();
+  const invites = new Map<string, InviteRecord>();
+  const mailboxes = new Map<string, MailboxRecord>();
+  const messages = new Map<string, PersistedMessageRecord>();
+  const attachments = new Map<string, AttachmentRecord[]>();
+  const outboundMessages: Array<{
+    id: string;
+    mailboxId: string;
+    toAddress: string;
+    subject: string;
+    status: "sent" | "failed";
+    errorText: string | null;
+    createdAt: string;
+  }> = [];
+  const apiKeys = new Map<string, ApiKeyRecord>();
+  const telegramSubscriptions = new Map<string, TelegramSubscriptionRecord>();
+  const quotas = new Map<string, QuotaRecord>();
+  const settings = new Map<keyof FeatureToggles, boolean>();
+  const auditEvents: AuditEventRecord[] = [];
+
+  return {
+    users: {
+      async count() {
+        return users.size;
+      },
+      async findByEmail(email) {
+        return clone(Array.from(users.values()).find((entry) => entry.email === email) ?? null);
+      },
+      async findById(id) {
+        return clone(users.get(id) ?? null);
+      },
+      async create(input) {
+        const record: UserRecord = {
+          id: crypto.randomUUID(),
+          email: input.email,
+          passwordHash: input.passwordHash,
+          role: input.role,
+          createdAt: nowIso()
+        };
+        users.set(record.id, record);
+        return clone(record);
+      },
+      async list() {
+        return clone(Array.from(users.values()).sort((a, b) => a.email.localeCompare(b.email)));
+      }
+    },
+    sessions: {
+      async create(input) {
+        const record: SessionRecord = {
+          id: `${crypto.randomUUID()}-${Math.random().toString(36).slice(2, 10)}`,
+          userId: input.userId,
+          expiresAt: input.expiresAt,
+          createdAt: nowIso()
+        };
+        sessions.set(record.id, record);
+        return clone(record);
+      },
+      async findById(id) {
+        return clone(sessions.get(id) ?? null);
+      },
+      async delete(id) {
+        sessions.delete(id);
+      }
+    },
+    invites: {
+      async create(input) {
+        const record: InviteRecord = {
+          id: crypto.randomUUID(),
+          code: input.code,
+          createdByUserId: input.createdByUserId,
+          redeemedByUserId: null,
+          redeemedAt: null,
+          disabledAt: null,
+          createdAt: nowIso()
+        };
+        invites.set(record.id, record);
+        return clone(record);
+      },
+      async findByCode(code) {
+        return clone(Array.from(invites.values()).find((entry) => entry.code === code) ?? null);
+      },
+      async redeem(code, userId) {
+        const invite = Array.from(invites.values()).find((entry) => entry.code === code);
+        if (!invite) throw new Error("Invite not found");
+        invite.redeemedByUserId = userId;
+        invite.redeemedAt = nowIso();
+        invites.set(invite.id, invite);
+        return clone(invite);
+      },
+      async list() {
+        return clone(Array.from(invites.values()));
+      },
+      async disable(id) {
+        const invite = invites.get(id);
+        if (!invite) return;
+        invite.disabledAt = nowIso();
+        invites.set(id, invite);
+      }
+    },
+    mailboxes: {
+      async countByUser(userId) {
+        return Array.from(mailboxes.values()).filter((entry) => entry.userId === userId).length;
+      },
+      async create(input) {
+        const record: MailboxRecord = {
+          id: crypto.randomUUID(),
+          userId: input.userId,
+          address: input.address,
+          label: input.label,
+          createdAt: nowIso()
+        };
+        mailboxes.set(record.id, record);
+        return clone(record);
+      },
+      async listByUser(userId) {
+        return clone(Array.from(mailboxes.values()).filter((entry) => entry.userId === userId));
+      },
+      async listAll() {
+        return clone(Array.from(mailboxes.values()));
+      },
+      async findById(id) {
+        return clone(mailboxes.get(id) ?? null);
+      },
+      async findByAddress(address) {
+        return clone(Array.from(mailboxes.values()).find((entry) => entry.address === address) ?? null);
+      },
+      async delete(id) {
+        mailboxes.delete(id);
+      }
+    },
+    messages: {
+      async create(input) {
+        const record: PersistedMessageRecord = {
+          id: crypto.randomUUID(),
+          ...input
+        };
+        messages.set(record.id, record);
+        return clone(record);
+      },
+      async listByMailbox(mailboxId) {
+        return clone(
+          Array.from(messages.values())
+            .filter((entry) => entry.mailboxId === mailboxId)
+            .sort((a, b) => b.receivedAt.localeCompare(a.receivedAt))
+        );
+      },
+      async findById(id) {
+        return clone(messages.get(id) ?? null);
+      },
+      async listExpired(beforeIso) {
+        return clone(Array.from(messages.values()).filter((entry) => entry.expiresAt <= beforeIso));
+      },
+      async deleteMany(ids) {
+        for (const id of ids) messages.delete(id);
+      }
+    },
+    attachments: {
+      async createMany(messageId, nextAttachments) {
+        attachments.set(messageId, clone(nextAttachments));
+      },
+      async listByMessage(messageId) {
+        return clone(attachments.get(messageId) ?? []);
+      },
+      async listByMessageIds(messageIds) {
+        return clone(messageIds.flatMap((messageId) => attachments.get(messageId) ?? []));
+      },
+      async deleteByMessageIds(messageIds) {
+        for (const messageId of messageIds) attachments.delete(messageId);
+      }
+    },
+    outboundMessages: {
+      async create(input) {
+        outboundMessages.push({
+          id: crypto.randomUUID(),
+          mailboxId: input.mailboxId,
+          toAddress: input.toAddress,
+          subject: input.subject,
+          status: input.status,
+          errorText: input.errorText,
+          createdAt: nowIso()
+        });
+      },
+      async listByMailbox(mailboxId) {
+        return clone(outboundMessages.filter((entry) => entry.mailboxId === mailboxId));
+      }
+    },
+    apiKeys: {
+      async create(input) {
+        const record: ApiKeyRecord = {
+          id: crypto.randomUUID(),
+          userId: input.userId,
+          label: input.label,
+          prefix: input.prefix,
+          keyHash: input.keyHash,
+          createdAt: nowIso(),
+          lastUsedAt: null,
+          revokedAt: null
+        };
+        apiKeys.set(record.id, record);
+        return clone(record);
+      },
+      async listByUser(userId) {
+        return clone(Array.from(apiKeys.values()).filter((entry) => entry.userId === userId));
+      },
+      async findActiveByHash(hash) {
+        return clone(
+          Array.from(apiKeys.values()).find((entry) => entry.keyHash === hash && entry.revokedAt === null) ?? null
+        );
+      },
+      async touch(id) {
+        const key = apiKeys.get(id);
+        if (!key) return;
+        key.lastUsedAt = nowIso();
+        apiKeys.set(id, key);
+      },
+      async revoke(id, userId) {
+        const key = apiKeys.get(id);
+        if (!key || key.userId !== userId) return;
+        key.revokedAt = nowIso();
+        apiKeys.set(id, key);
+      }
+    },
+    telegram: {
+      async upsert(input) {
+        const existing = telegramSubscriptions.get(input.userId);
+        const next: TelegramSubscriptionRecord = {
+          id: existing?.id ?? crypto.randomUUID(),
+          userId: input.userId,
+          chatId: input.chatId,
+          enabled: input.enabled,
+          createdAt: existing?.createdAt ?? nowIso(),
+          updatedAt: nowIso()
+        };
+        telegramSubscriptions.set(input.userId, next);
+        return clone(next);
+      },
+      async findByUserId(userId) {
+        return clone(telegramSubscriptions.get(userId) ?? null);
+      }
+    },
+    quotas: {
+      async getByUserId(userId, fallbackLimit) {
+        const existing = quotas.get(userId);
+        if (existing) return clone(existing);
+        const next: QuotaRecord = {
+          userId,
+          dailyLimit: fallbackLimit,
+          sendsToday: 0,
+          disabled: false,
+          updatedAt: nowIso()
+        };
+        quotas.set(userId, next);
+        return clone(next);
+      },
+      async save(quota) {
+        quotas.set(quota.userId, clone(quota));
+      }
+    },
+    settings: {
+      async getFeatureToggles(defaults) {
+        return {
+          aiEnabled: settings.get("aiEnabled") ?? defaults.aiEnabled,
+          telegramEnabled: settings.get("telegramEnabled") ?? defaults.telegramEnabled,
+          outboundEnabled: settings.get("outboundEnabled") ?? defaults.outboundEnabled,
+          mailboxCreationEnabled: settings.get("mailboxCreationEnabled") ?? defaults.mailboxCreationEnabled
+        };
+      },
+      async saveFeatureToggles(next) {
+        settings.set("aiEnabled", next.aiEnabled);
+        settings.set("telegramEnabled", next.telegramEnabled);
+        settings.set("outboundEnabled", next.outboundEnabled);
+        settings.set("mailboxCreationEnabled", next.mailboxCreationEnabled);
+        return clone(next);
+      }
+    },
+    audit: {
+      async record(event) {
+        auditEvents.push({
+          id: crypto.randomUUID(),
+          createdAt: nowIso(),
+          ...event
+        });
+      },
+      async countByActorSince(actorId, eventType, sinceIso) {
+        return auditEvents.filter(
+          (entry) => entry.actorId === actorId && entry.eventType === eventType && entry.createdAt >= sinceIso
+        ).length;
+      }
+    }
+  };
+}

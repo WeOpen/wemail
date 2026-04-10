@@ -1,0 +1,49 @@
+name: Release Check
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.18.2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Full verification
+        run: |
+          pnpm test
+          pnpm typecheck
+          pnpm lint
+          pnpm build
+
+      - name: Create GitHub release draft
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          draft: true
+
+      - name: Release summary
+        run: |
+          echo "## Release Check Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- Verification: passed" >> $GITHUB_STEP_SUMMARY
+          echo "- Trigger ref: $GITHUB_REF" >> $GITHUB_STEP_SUMMARY
