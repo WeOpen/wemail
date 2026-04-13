@@ -19,3 +19,4 @@ apps/web/playwright-report/
 apps/web/test-results/
 .spec-workflow/
 .omx/
+optimus/
