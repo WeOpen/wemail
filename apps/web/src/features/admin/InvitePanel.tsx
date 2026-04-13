@@ -9,18 +9,26 @@ type InvitePanelProps = {
 
 export function InvitePanel({ adminInvites, onCreateInvite, onDisableInvite }: InvitePanelProps) {
   return (
-    <section className="panel">
-      <p className="panel-kicker">Invites</p>
-      <h2>Invite control</h2>
-      <button onClick={() => void onCreateInvite()}>Create invite</button>
-      <div className="stack-list">
+    <section className="panel workspace-card page-panel">
+      <p className="panel-kicker">邀请流程</p>
+      <h2>邀请码控制</h2>
+      <p className="section-copy">创建、停用并查看邀请码状态，无需离开当前控制台。</p>
+      <button className="workspace-action-button primary" onClick={() => void onCreateInvite()} type="button">
+        创建邀请码
+      </button>
+      <div className="stack-list workspace-stack-list">
         {adminInvites.map((invite) => (
-          <div key={invite.id} className="stack-item">
-            <strong>{invite.code}</strong>
-            <span>{formatInviteStatus(invite)}</span>
-            <button onClick={() => void onDisableInvite(invite.id)}>Disable</button>
+          <div key={invite.id} className="stack-item admin-stack-item">
+            <div>
+              <strong>{invite.code}</strong>
+              <span>{formatInviteStatus(invite)}</span>
+            </div>
+            <button className="workspace-action-button ghost" onClick={() => void onDisableInvite(invite.id)} type="button">
+              停用
+            </button>
           </div>
         ))}
+        {adminInvites.length === 0 ? <p className="empty-state">当前没有可用邀请码，创建一个以邀请新成员。</p> : null}
       </div>
     </section>
   );

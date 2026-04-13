@@ -52,9 +52,15 @@ type AppRoutesProps = {
     submitQuota: (event: FormEvent<HTMLFormElement>, userId: string) => Promise<void>;
     toggleFeatures: (nextFeatureToggles: FeatureToggles) => Promise<void>;
   };
+  workspace: {
+    mailboxComposerOpen: boolean;
+    onOpenMailboxComposer: () => void;
+    onCloseMailboxComposer: () => void;
+    onCreateMailbox: (label: string) => Promise<void>;
+  };
 };
 
-export function AppRoutes({ session, inbox, selectedMessage, settings, admin }: AppRoutesProps) {
+export function AppRoutes({ session, inbox, selectedMessage, settings, admin, workspace }: AppRoutesProps) {
   return (
     <Routes>
       <Route
@@ -67,13 +73,13 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin }: 
             selectedMessageId={inbox.selectedMessageId}
             selectedMessage={selectedMessage}
             outboundHistory={inbox.outboundHistory}
+            mailboxComposerOpen={workspace.mailboxComposerOpen}
+            onCloseMailboxComposer={workspace.onCloseMailboxComposer}
+            onCreateMailbox={workspace.onCreateMailbox}
+            onOpenMailboxComposer={workspace.onOpenMailboxComposer}
             onSelectMailbox={inbox.setSelectedMailboxId}
             onSelectMessage={inbox.setSelectedMessageId}
             onRefreshMessages={() => void inbox.refreshMessages()}
-            onRequestCreateMailbox={() => {
-              const label = prompt("Mailbox label", `Mailbox ${inbox.mailboxes.length + 1}`);
-              if (label) void inbox.createMailbox(label);
-            }}
             onSendMail={inbox.sendMail}
           />
         }
@@ -94,8 +100,14 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin }: 
         path="/admin"
         element={
           session.user.role !== "admin" ? (
-            <main className="panel">
-              <p>Admin access only.</p>
+            <main className="workspace-grid restricted-grid">
+              <section className="panel workspace-card restricted-card">
+                <p className="panel-kicker">受限区域</p>
+                <h2>当前账号无法访问管理员控制台</h2>
+                <p className="section-copy">
+                  当前仍会展示统一工作台外壳，但只有管理员才能调整邀请码、用户配额、功能开关和邮箱总览。
+                </p>
+              </section>
             </main>
           ) : (
             <AdminPage
