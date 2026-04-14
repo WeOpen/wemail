@@ -452,7 +452,7 @@ button:disabled {
 .workspace-grid,
 .workspace-frame {
   display: grid;
-  gap: 22px;
+  gap: 18px;
 }
 
 .landing-feature-grid {
@@ -535,8 +535,8 @@ button:disabled {
 .app-layout.workspace-shell {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  padding: 16px 20px 20px;
-  gap: 16px;
+  padding: 8px 20px 20px;
+  gap: 10px;
   height: 100vh;
   overflow: hidden;
 }
@@ -545,14 +545,14 @@ button:disabled {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   border-radius: var(--radius-shell);
-  padding: 10px 18px;
+  padding: 8px 16px;
   position: sticky;
-  top: 16px;
+  top: 8px;
   z-index: 40;
   box-shadow:
-    0 6px 14px rgba(17, 17, 17, 0.045),
+    0 14px 32px rgba(17, 17, 17, 0.08),
     0 1px 0 rgba(255, 255, 255, 0.1) inset;
 }
 
