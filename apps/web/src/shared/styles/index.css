@@ -535,8 +535,8 @@ button:disabled {
 .app-layout.workspace-shell {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  padding: 8px 20px 20px;
-  gap: 10px;
+  padding: 2px 20px 20px;
+  gap: 12px;
   height: 100vh;
   overflow: hidden;
 }
@@ -549,10 +549,11 @@ button:disabled {
   border-radius: var(--radius-shell);
   padding: 8px 16px;
   position: sticky;
-  top: 8px;
+  top: 2px;
   z-index: 40;
   box-shadow:
-    0 14px 32px rgba(17, 17, 17, 0.08),
+    0 18px 42px rgba(17, 17, 17, 0.12),
+    0 6px 18px rgba(17, 17, 17, 0.06),
     0 1px 0 rgba(255, 255, 255, 0.1) inset;
 }
 
