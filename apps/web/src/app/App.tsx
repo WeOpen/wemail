@@ -8,6 +8,13 @@ import { buildWorkspaceShellState } from "./workspaceShell";
 import { useAppShell } from "./useAppShell";
 import { useWorkspaceTheme } from "./useWorkspaceTheme";
 
+function resolvePostAuthPath(search: string) {
+  const next = new URLSearchParams(search).get("next");
+  if (!next || !next.startsWith("/")) return "/";
+  if (next.startsWith("/login") || next.startsWith("/register")) return "/";
+  return next;
+}
+
 function AppContent() {
   const location = useLocation();
   const { session, notice, auth, inbox, settings, admin } = useAppShell();
@@ -91,7 +98,7 @@ function AppContent() {
   }
 
   if (location.pathname === "/login" || location.pathname === "/register") {
-    return <Navigate to="/" replace />;
+    return <Navigate to={resolvePostAuthPath(location.search)} replace />;
   }
 
   if (!shell) return null;

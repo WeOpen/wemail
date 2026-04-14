@@ -1,7 +1,8 @@
 import type { FormEvent, KeyboardEvent } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { AuthForms } from "../features/auth/AuthForms";
+import { WemailLandingPage } from "../features/landing/WemailLandingPage";
 
 type AuthPageProps = {
   authError: string | null;
@@ -18,7 +19,8 @@ export function AuthPage({ authError, onRegister, onLogin }: AuthPageProps) {
 
   function switchMode(nextMode: (typeof AUTH_MODES)[number]) {
     if (nextMode === mode) return;
-    void navigate(nextMode === "login" ? "/login" : "/register");
+    const nextPath = nextMode === "login" ? "/login" : "/register";
+    void navigate(`${nextPath}${location.search}`);
   }
 
   function handleTabsKeyDown(event: KeyboardEvent<HTMLDivElement>) {
@@ -42,63 +44,13 @@ export function AuthPage({ authError, onRegister, onLogin }: AuthPageProps) {
     switchMode(AUTH_MODES[nextIndex]);
   }
 
+  if (location.pathname === "/") {
+    return <WemailLandingPage />;
+  }
+
   if (location.pathname !== "/login" && location.pathname !== "/register") {
-    return (
-      <div className="landing-shell">
-        <header className="landing-topbar">
-          <div>
-            <p className="eyebrow">wemail</p>
-            <p className="landing-subtitle">团队临时邮箱与管理控制台</p>
-          </div>
-          <div className="hero-actions">
-            <Link className="hero-action primary" to="/login">
-              登录
-            </Link>
-            <Link className="hero-action secondary" to="/register">
-              注册
-            </Link>
-          </div>
-        </header>
-        <main className="landing-main">
-          <section className="landing-hero">
-            <div className="hero-blocks" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
-            <p className="eyebrow">自托管 · 邀请制 · Cloudflare 优先</p>
-            <h1>自托管临时邮箱，给团队一套可控的收信与管理工作台</h1>
-            <p className="hero-copy">
-              wemail 把临时邮箱、邀请码、外发能力、Telegram 通知和后台治理整合到同一套界面里，适合团队内部测试、运营协作和自动化场景。
-            </p>
-            <div className="hero-badges">
-              <span>落地页 + 登录分流</span>
-              <span>邀请码注册</span>
-              <span>多邮箱收发</span>
-              <span>后台治理</span>
-            </div>
-            <div className="landing-feature-grid">
-              <article className="landing-feature-card">
-                <p className="panel-kicker">统一入口</p>
-                <h2>首页只做转化</h2>
-                <p>首页聚焦价值表达和转化动作，登录与注册单独进入认证页，避免首屏信息过载。</p>
-              </article>
-              <article className="landing-feature-card">
-                <p className="panel-kicker">团队协作</p>
-                <h2>后台集中治理</h2>
-                <p>管理员可以统一管理邀请码、用户配额、功能开关和邮箱概览，适合内部平台运营。</p>
-              </article>
-              <article className="landing-feature-card">
-                <p className="panel-kicker">开发友好</p>
-                <h2>自动化能力完整</h2>
-                <p>支持 API Key、Telegram 通知和 Cloudflare 部署，方便开发、测试和联调使用。</p>
-              </article>
-            </div>
-          </section>
-        </main>
-      </div>
-    );
+    const next = `${location.pathname}${location.search}${location.hash}`;
+    return <Navigate replace to={`/login?next=${encodeURIComponent(next)}`} />;
   }
 
   return (

@@ -213,7 +213,6 @@ em {
 .notice-banner,
 .error-banner,
 .warning-card,
-.landing-hero,
 .auth-hero-card,
 .auth-panel,
 .auth-card,
@@ -229,7 +228,6 @@ em {
 }
 
 .panel,
-.landing-hero,
 .auth-hero-card,
 .auth-panel,
 .auth-card,
@@ -298,14 +296,12 @@ button:disabled {
 }
 
 .shell,
-.landing-shell,
 .auth-shell,
 .app-layout {
   min-height: 100vh;
 }
 
 .shell,
-.landing-shell,
 .auth-shell,
 .app-layout {
   padding: 24px;
@@ -319,7 +315,6 @@ button:disabled {
   color: var(--accent);
 }
 
-.landing-subtitle,
 .topbar-meta,
 .hero-copy,
 .section-copy,
@@ -337,13 +332,11 @@ button:disabled {
   color: var(--text-muted);
 }
 
-.landing-shell,
 .auth-shell {
   display: grid;
   gap: 24px;
 }
 
-.landing-topbar,
 .app-topbar {
   display: flex;
   align-items: center;
@@ -351,8 +344,6 @@ button:disabled {
   gap: 20px;
 }
 
-.hero-actions,
-.hero-badges,
 .detail-meta,
 .attachment-grid,
 .toggle-grid,
@@ -366,7 +357,6 @@ button:disabled {
   gap: 12px;
 }
 
-.landing-hero,
 .auth-hero-card,
 .auth-panel,
 .auth-card,
@@ -379,49 +369,6 @@ button:disabled {
   padding: 22px;
 }
 
-.landing-main {
-  display: grid;
-}
-
-.landing-hero {
-  display: grid;
-  gap: 24px;
-  background: var(--hero-gradient);
-}
-
-.hero-blocks {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  max-width: 280px;
-}
-
-.hero-blocks span {
-  height: 52px;
-  border-radius: 18px;
-}
-
-.hero-blocks span:nth-child(1) {
-  background: linear-gradient(135deg, #ff8c26, #ffb347);
-}
-
-.hero-blocks span:nth-child(2) {
-  background: linear-gradient(135deg, rgba(255, 140, 38, 0.3), rgba(255, 255, 255, 0.28));
-}
-
-.hero-blocks span:nth-child(3) {
-  background: linear-gradient(135deg, rgba(93, 138, 255, 0.28), rgba(255, 255, 255, 0.12));
-}
-
-.hero-blocks span:nth-child(4) {
-  background: linear-gradient(135deg, #141414, #2b2b2b);
-}
-
-:root[data-theme="dark"] .hero-blocks span:nth-child(4) {
-  background: linear-gradient(135deg, #ffffff, #8c8c8c);
-}
-
-.landing-hero h1,
 .auth-hero-card h1,
 .auth-card h1,
 .workspace-hero h1 {
@@ -438,14 +385,6 @@ button:disabled {
   max-width: 64ch;
 }
 
-.hero-badges span {
-  padding: 10px 14px;
-  border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.42);
-  border: 1px solid var(--border);
-}
-
-.landing-feature-grid,
 .auth-grid,
 .page-grid,
 .settings-grid,
@@ -453,19 +392,6 @@ button:disabled {
 .workspace-frame {
   display: grid;
   gap: 18px;
-}
-
-.landing-feature-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.landing-feature-card {
-  padding: 22px;
-  border-radius: var(--radius-card);
-  background: rgba(255, 255, 255, 0.3);
-  border: 1px solid var(--border);
-  display: grid;
-  gap: 12px;
 }
 
 .auth-shell {
@@ -1122,7 +1048,6 @@ button:disabled {
   }
 
   .workspace-frame,
-  .landing-feature-grid,
   .auth-shell,
   .settings-grid,
   .admin-grid,
@@ -1164,7 +1089,6 @@ button:disabled {
 
 @media (max-width: 760px) {
   .shell,
-  .landing-shell,
   .auth-shell,
   .app-layout {
     padding: 16px;
@@ -1174,7 +1098,6 @@ button:disabled {
   .workspace-card-header,
   .panel-header,
   .workspace-dialog-header,
-  .landing-topbar,
   .app-topbar {
     flex-direction: column;
     align-items: flex-start;
@@ -1203,7 +1126,6 @@ button:disabled {
     width: 100%;
   }
 
-  .landing-hero h1,
   .auth-card h1,
   .workspace-hero h1 {
     font-size: clamp(2.3rem, 12vw, 3.4rem);

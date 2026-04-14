@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { App } from "../app/App";
@@ -17,18 +17,18 @@ describe("App", () => {
   });
 
   it(
-    "renders the hero copy for signed-out users",
+    "renders the optimus-style landing shell for signed-out users",
     async () => {
       vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("not authenticated"));
       render(<App />);
 
-      expect(
-        await screen.findByRole("heading", {
-          name: /自托管临时邮箱，给团队一套可控的收信与管理工作台/i
-        })
-      ).toBeInTheDocument();
-      expect(screen.getByRole("link", { name: /登录/i })).toBeInTheDocument();
-      expect(screen.getByRole("link", { name: /注册/i })).toBeInTheDocument();
+      const navigation = await screen.findByRole("navigation", { name: /landing page navigation/i });
+      expect(navigation).toBeInTheDocument();
+      expect(within(navigation).getByRole("link", { name: /^Features$/i })).toHaveAttribute("href", "#features");
+      expect(within(navigation).getByRole("link", { name: /^How it works$/i })).toHaveAttribute("href", "#how-it-works");
+      expect(screen.getByRole("heading", { name: /The platform/i })).toBeInTheDocument();
+      expect(within(navigation).getByRole("link", { name: /登录/i })).toBeInTheDocument();
+      expect(within(navigation).getByRole("link", { name: /注册/i })).toBeInTheDocument();
     },
     10000
   );
@@ -39,10 +39,130 @@ describe("App", () => {
       vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("not authenticated"));
       render(<App />);
 
-      fireEvent.click(await screen.findByRole("link", { name: /登录/i }));
+      const navigation = await screen.findByRole("navigation", { name: /landing page navigation/i });
+      fireEvent.click(within(navigation).getByRole("link", { name: /登录/i }));
 
       expect(await screen.findByRole("button", { name: /^立即登录$/i })).toBeInTheDocument();
       expect(screen.getByLabelText(/邮箱/i)).toBeInTheDocument();
+    },
+    10000
+  );
+
+
+  it(
+    "opens the landing mobile menu on demand",
+    async () => {
+      vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("not authenticated"));
+      render(<App />);
+
+      fireEvent.click(await screen.findByRole("button", { name: /toggle menu/i }));
+
+      const dialog = screen.getByRole("dialog", { name: /landing mobile menu/i });
+      expect(dialog).toBeInTheDocument();
+      expect(within(dialog).getByRole("link", { name: /^Pricing$/i })).toHaveAttribute("href", "#pricing");
+      expect(within(dialog).getByRole("link", { name: /登录/i })).toBeInTheDocument();
+    },
+    10000
+  );
+
+  it(
+    "redirects signed-out deep links into login with a return target",
+    async () => {
+      window.history.pushState({}, "", "/settings");
+      vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("not authenticated"));
+      render(<App />);
+
+      expect(await screen.findByRole("button", { name: /^立即登录$/i })).toBeInTheDocument();
+      await waitFor(() => {
+        expect(window.location.pathname).toBe("/login");
+      });
+      expect(window.location.search).toContain("next=%2Fsettings");
+    },
+    10000
+  );
+
+  it(
+    "preserves the next target when switching auth tabs",
+    async () => {
+      window.history.pushState({}, "", "/login?next=%2Fsettings");
+      vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("not authenticated"));
+      render(<App />);
+
+      fireEvent.click(await screen.findByRole("tab", { name: /^注册$/i }));
+      await waitFor(() => {
+        expect(window.location.pathname).toBe("/register");
+      });
+      expect(window.location.search).toContain("next=%2Fsettings");
+
+      fireEvent.click(screen.getByRole("tab", { name: /^登录$/i }));
+      await waitFor(() => {
+        expect(window.location.pathname).toBe("/login");
+      });
+      expect(window.location.search).toContain("next=%2Fsettings");
+    },
+    10000
+  );
+
+  it(
+    "restores the intended route after authentication when next is present",
+    async () => {
+      window.history.pushState({}, "", "/login?next=%2Fsettings");
+      vi.restoreAllMocks();
+      vi.spyOn(globalThis, "fetch").mockImplementation((input) => {
+        const url = typeof input === "string" ? input : input instanceof Request ? input.url : String(input);
+
+        if (url.endsWith("/auth/session")) {
+          return jsonResponse({
+            user: {
+              id: "member-1",
+              email: "member@example.com",
+              role: "member",
+              createdAt: "2026-04-08T00:00:00.000Z"
+            },
+            featureToggles: {
+              aiEnabled: true,
+              telegramEnabled: true,
+              outboundEnabled: true,
+              mailboxCreationEnabled: true
+            }
+          });
+        }
+
+        if (url.endsWith("/api/mailboxes")) return jsonResponse({ mailboxes: [] });
+        if (url.endsWith("/api/keys")) return jsonResponse({ keys: [] });
+        if (url.endsWith("/api/telegram")) return jsonResponse({ subscription: null });
+        if (url.endsWith("/admin/users")) return jsonResponse({ users: [] });
+        if (url.endsWith("/admin/invites")) return jsonResponse({ invites: [] });
+        if (url.endsWith("/admin/features")) {
+          return jsonResponse({
+            featureToggles: {
+              aiEnabled: true,
+              telegramEnabled: true,
+              outboundEnabled: true,
+              mailboxCreationEnabled: true
+            }
+          });
+        }
+        if (url.includes("/admin/quotas/")) {
+          return jsonResponse({
+            quota: {
+              userId: "member-1",
+              dailyLimit: 20,
+              sendsToday: 0,
+              disabled: false,
+              updatedAt: "2026-04-08T00:00:00.000Z"
+            }
+          });
+        }
+        if (url.endsWith("/admin/mailboxes")) return jsonResponse({ mailboxes: [] });
+        return jsonResponse({});
+      });
+
+      render(<App />);
+      expect(await screen.findByRole("heading", { name: /密钥、通知与接入控制/i })).toBeInTheDocument();
+      await waitFor(() => {
+        expect(window.location.pathname).toBe("/settings");
+      });
     },
     10000
   );
