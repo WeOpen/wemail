@@ -47,19 +47,22 @@ export const featureCards = [
 
 export const workflowSteps = [
   {
-    number: '01',
+    number: 'I',
     title: 'Create or assign a mailbox',
-    description: 'Open a mailbox for a test flow, campaign, or teammate in seconds — no manual DNS or inbox juggling required.'
+    description: 'Open a mailbox for a test flow, campaign, or teammate in seconds — no manual DNS or inbox juggling required.',
+    code: `POST /api/mailboxes\n{\n  "label": "qa-signup"\n}\n\n// Returns { mailbox } for the signed-in user`
   },
   {
-    number: '02',
+    number: 'II',
     title: 'Receive, inspect, and extract',
-    description: 'Review messages, attachments, and extracted codes/links from the same interface, whether you are in QA or ops.'
+    description: 'Review messages, attachments, and extracted codes/links from the same interface, whether you are in QA or ops.',
+    code: `GET /api/messages?mailboxId=<mailbox-id>\nGET /api/outbound?mailboxId=<mailbox-id>\n\n// UI reads inbox, detail, and outbound history from the same surface`
   },
   {
-    number: '03',
+    number: 'III',
     title: 'Control access centrally',
-    description: 'Adjust invites, quotas, feature switches, and mailbox oversight from one admin surface when traffic or abuse patterns change.'
+    description: 'Adjust invites, quotas, feature switches, and mailbox oversight from one admin surface when traffic or abuse patterns change.',
+    code: `PATCH /admin/quotas/<user-id>\n{\n  "dailyLimit": 20,\n  "disabled": false\n}\n\n// Admin-only session route`
   }
 ] as const;
 
@@ -236,3 +239,5 @@ export const socialLinks = [
   { name: 'Telegram', href: '#' },
   { name: 'Status', href: '#' }
 ] as const;
+
+export const trustedCompanies = ['Launch Ops', 'Growth Systems', 'Beacon Ops', 'Prism Labs', 'Signal Desk', 'Inbox Studio', 'Edge Support', 'Relay Team'] as const;

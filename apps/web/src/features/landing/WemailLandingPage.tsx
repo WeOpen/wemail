@@ -33,6 +33,7 @@ import {
   securityCards,
   socialLinks,
   testimonials,
+  trustedCompanies,
   workflowSteps
 } from './landing-content';
 import './landing.css';
@@ -401,8 +402,8 @@ function FeaturesSection() {
   return (
     <RevealSection id="features" className="landing-section landing-section-border-top">
       <div className="landing-section-header left">
-        <SectionEyebrow>Features</SectionEyebrow>
-        <h2 className="landing-display-title">Built for speed. Designed for teams.</h2>
+        <SectionEyebrow>Capabilities</SectionEyebrow>
+        <h2 className="landing-display-title">Everything you need. Nothing you don't.</h2>
         <p className="landing-section-copy">
           Wemail keeps inbox creation, message review, outbound sends, and governance in one product surface instead of scattered scripts and browser tabs.
         </p>
@@ -426,23 +427,54 @@ function FeaturesSection() {
 }
 
 function HowItWorksSection() {
+  const reducedMotion = useReducedMotion();
+  const [activeStep, setActiveStep] = useAutoIndex(workflowSteps.length, 5000, reducedMotion);
+
   return (
     <RevealSection id="how-it-works" className="landing-section landing-section-dark">
       <div className="landing-section-header left on-dark">
-        <SectionEyebrow>How it works</SectionEyebrow>
-        <h2 className="landing-display-title">A workflow your whole team can follow.</h2>
-        <p className="landing-section-copy">
-          Structure, previews, and release confidence come from the same interface — no jumping between disconnected tools.
-        </p>
+        <SectionEyebrow>Process</SectionEyebrow>
+        <h2 className="landing-display-title">
+          Three steps.
+          <br />
+          <span className="landing-display-subtle">Infinite possibilities.</span>
+        </h2>
       </div>
-      <div className="landing-workflow-grid">
-        {workflowSteps.map((step) => (
-          <article className="landing-workflow-card" key={step.number}>
-            <span>{step.number}</span>
-            <h3>{step.title}</h3>
-            <p>{step.description}</p>
-          </article>
-        ))}
+      <div className="landing-process-layout">
+        <div className="landing-process-steps">
+          {workflowSteps.map((step, index) => (
+            <button
+              key={step.number}
+              className={activeStep === index ? 'landing-process-step active' : 'landing-process-step'}
+              onClick={() => setActiveStep(index)}
+              type="button"
+            >
+              <span>{step.number}</span>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+                {activeStep === index ? <em className="landing-process-progress" aria-hidden="true" /> : null}
+              </div>
+            </button>
+          ))}
+        </div>
+        <div className="landing-process-code">
+          <header>
+            <div className="landing-window-controls" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
+            <small>workflow.ts</small>
+          </header>
+          <pre>
+            <code>{workflowSteps[activeStep]?.code}</code>
+          </pre>
+          <footer>
+            <span className="landing-ready-dot" aria-hidden="true" />
+            <small>Ready</small>
+          </footer>
+        </div>
       </div>
     </RevealSection>
   );
@@ -654,7 +686,7 @@ function TestimonialsSection() {
   const activeTestimonial = testimonials[activeIndex];
 
   return (
-    <RevealSection id="testimonials" className="landing-section landing-section-border-top">
+    <RevealSection id="testimonials" className="landing-section landing-section-border-top landing-testimonials-section">
       <div className="landing-testimonial-header">
         <SectionEyebrow>What people say</SectionEyebrow>
         <span>
@@ -664,13 +696,21 @@ function TestimonialsSection() {
       <div className="landing-testimonial-grid">
         <blockquote>
           <p>“{activeTestimonial.quote}”</p>
+          <div className="landing-testimonial-author">
+            <div className="landing-testimonial-avatar">{activeTestimonial.author.charAt(0)}</div>
+            <div>
+              <strong>{activeTestimonial.author}</strong>
+              <span>
+                {activeTestimonial.role}, {activeTestimonial.company}
+              </span>
+            </div>
+          </div>
         </blockquote>
         <aside>
-          <strong>{activeTestimonial.author}</strong>
-          <span>
-            {activeTestimonial.role} · {activeTestimonial.company}
-          </span>
-          <em>{activeTestimonial.metric}</em>
+          <div className="landing-testimonial-metric">
+            <span>Key Result</span>
+            <p>{activeTestimonial.metric}</p>
+          </div>
           <div className="landing-testimonial-pills">
             {testimonials.map((testimonial, index) => (
               <button
@@ -678,12 +718,25 @@ function TestimonialsSection() {
                 aria-label={`Show testimonial ${index + 1}`}
                 className={index === activeIndex ? 'active' : ''}
                 onClick={() => setActiveIndex(index)}
-                tabIndex={-1}
                 type="button"
               />
             ))}
           </div>
         </aside>
+      </div>
+      <div className="landing-trusted-band">
+        <p>Trusted by forward-thinking teams</p>
+      </div>
+      <div className="landing-trusted-marquee">
+        <div className="landing-marquee-track">
+          {Array.from({ length: 2 }).flatMap((_, index) =>
+            trustedCompanies.map((company) => (
+              <span className="landing-trusted-company" key={`${company}-${index}`}>
+                {company}
+              </span>
+            ))
+          )}
+        </div>
       </div>
     </RevealSection>
   );
@@ -696,10 +749,14 @@ function PricingSection() {
     <RevealSection id="pricing" className="landing-section landing-section-border-top">
       <div className="landing-section-header left">
         <SectionEyebrow>Pricing</SectionEyebrow>
-        <h2 className="landing-display-title">Simple, transparent pricing.</h2>
+        <h2 className="landing-display-title">
+          Simple, transparent
+          <br />
+          <span className="landing-display-subtle stroke">pricing</span>
+        </h2>
         <p className="landing-section-copy">Start free and scale as you grow. No hidden fees, no surprises.</p>
       </div>
-      <div className="landing-billing-toggle">
+      <div className="landing-billing-toggle pricing">
         <span className={!isAnnual ? 'active' : ''}>Monthly</span>
         <button
           aria-pressed={isAnnual}
@@ -710,11 +767,13 @@ function PricingSection() {
           <span />
         </button>
         <span className={isAnnual ? 'active' : ''}>Annual</span>
+        {isAnnual ? <small>Save 17%</small> : null}
       </div>
-      <div className="landing-pricing-grid">
-        {pricingPlans.map((plan) => (
+      <div className="landing-pricing-grid lines">
+        {pricingPlans.map((plan, index) => (
           <article className={plan.popular ? 'landing-pricing-card popular' : 'landing-pricing-card'} key={plan.name}>
-            {plan.popular ? <p className="landing-pricing-badge">Most popular</p> : null}
+            {plan.popular ? <p className="landing-pricing-badge">Most Popular</p> : null}
+            <span className="landing-pricing-index">{String(index + 1).padStart(2, '0')}</span>
             <h3>{plan.name}</h3>
             <p>{plan.description}</p>
             <div className="landing-pricing-value">
@@ -723,7 +782,7 @@ function PricingSection() {
               ) : (
                 <>
                   <strong>${isAnnual ? plan.price.annual : plan.price.monthly}</strong>
-                  <small>/mo</small>
+                  <small>/month</small>
                 </>
               )}
             </div>
@@ -737,10 +796,14 @@ function PricingSection() {
             </ul>
             <Link className={plan.popular ? 'landing-cta primary' : 'landing-cta secondary'} to={plan.popular ? '/register' : '/login'}>
               {plan.cta}
+              <ArrowRight aria-hidden="true" />
             </Link>
           </article>
         ))}
       </div>
+      <p className="landing-pricing-note">
+        All plans include automatic updates, HTTPS, and DDoS protection. <a href="#developers">Compare all features</a>
+      </p>
     </RevealSection>
   );
 }
@@ -810,6 +873,13 @@ function FooterSection() {
             </ul>
           </div>
         ))}
+      </div>
+      <div className="landing-footer-bottom">
+        <p>2026 wemail. All rights reserved.</p>
+        <span>
+          <i aria-hidden="true" />
+          All systems operational
+        </span>
       </div>
     </footer>
   );
