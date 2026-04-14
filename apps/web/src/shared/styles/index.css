@@ -587,6 +587,12 @@ button:disabled {
   box-shadow: 0 10px 24px rgba(255, 122, 0, 0.28);
 }
 
+.workspace-brand-logo {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
 .workspace-icon {
   width: 18px;
   height: 18px;
@@ -796,19 +802,19 @@ button:disabled {
   gap: 22px;
   min-height: 0;
   overflow-y: auto;
-  padding: 10px 14px 28px 6px;
+  padding: 22px 22px 36px 18px;
   overscroll-behavior: contain;
-  scrollbar-gutter: stable;
+  scrollbar-gutter: auto;
 }
 
 .workspace-hero {
   display: grid;
   gap: 18px;
   background: var(--hero-gradient);
-  min-height: 500px;
+  min-height: 520px;
   border-top-left-radius: var(--radius-card);
   border-top-right-radius: var(--radius-card);
-  padding-bottom: 30px;
+  padding-bottom: 34px;
   overflow: hidden;
   align-content: start;
 }

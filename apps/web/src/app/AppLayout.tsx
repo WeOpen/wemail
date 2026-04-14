@@ -1,9 +1,10 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { ChevronDown, LogOut, Mail, MoonStar, SunMedium } from "lucide-react";
+import { ChevronDown, LogOut, MoonStar, SunMedium } from "lucide-react";
 
 import type { SessionSummary } from "@wemail/shared";
 
+import { WemailLogo } from "../shared/WemailLogo";
 import type { WorkspaceShellState } from "./workspaceShell";
 import type { WorkspaceTheme } from "./useWorkspaceTheme";
 
@@ -110,8 +111,8 @@ export function AppLayout({
     <div className="app-layout workspace-shell">
       <header className="workspace-topbar panel">
         <div className="workspace-brand" aria-label="wemail 工作台品牌">
-          <span className="workspace-brand-mark" aria-hidden="true">
-            <Mail absoluteStrokeWidth className="workspace-icon" strokeWidth={1.9} />
+          <span className="workspace-brand-mark">
+            <WemailLogo className="workspace-brand-logo" />
           </span>
           <div>
             <strong>WeMail</strong>
