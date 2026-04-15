@@ -45,6 +45,9 @@ describe("App", () => {
 
       expect(await screen.findByRole("button", { name: /^立即登录$/i })).toBeInTheDocument();
       expect(screen.getByLabelText(/wemail auth brand/i)).toBeInTheDocument();
+      expect(screen.queryAllByRole("heading", { name: /登录到 WeMail/i })).toHaveLength(0);
+      expect(screen.queryByText(/在同一个认证入口里切换登录与注册/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/^账号登录$/i)).not.toBeInTheDocument();
       expect(screen.getByLabelText(/邮箱/i)).toBeInTheDocument();
     },
     10000
@@ -201,8 +204,11 @@ describe("App", () => {
       vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("not authenticated"));
       render(<App />);
 
+      expect(await screen.findByLabelText(/wemail auth brand/i)).toBeInTheDocument();
       expect(await screen.findByRole("tab", { name: /^注册$/i })).toHaveAttribute("aria-selected", "true");
       expect(screen.getByRole("button", { name: /^立即注册$/i })).toBeInTheDocument();
+      expect(screen.queryByRole("heading", { name: /创建你的工作台账号/i })).not.toBeInTheDocument();
+      expect(screen.queryByText(/^邀请码注册$/i)).not.toBeInTheDocument();
       expect(screen.getByLabelText(/邀请码/i)).toBeInTheDocument();
     },
     10000

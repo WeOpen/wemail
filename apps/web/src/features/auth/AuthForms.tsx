@@ -14,8 +14,6 @@ export function AuthForms({ authError, onRegister, onLogin, mode }: AuthFormsPro
       {mode === "login" ? (
         <div aria-labelledby="auth-tab-login" className="auth-form-panel" id="auth-panel-login" role="tabpanel">
           <form className="auth-form" onSubmit={onLogin}>
-            <p className="panel-kicker">账号登录</p>
-            <h2>登录到 WeMail</h2>
             <label>
               邮箱
               <input name="email" type="email" required />
@@ -30,8 +28,6 @@ export function AuthForms({ authError, onRegister, onLogin, mode }: AuthFormsPro
       ) : (
         <div aria-labelledby="auth-tab-register" className="auth-form-panel" id="auth-panel-register" role="tabpanel">
           <form className="auth-form" onSubmit={onRegister}>
-            <p className="panel-kicker">邀请码注册</p>
-            <h2>创建你的工作台账号</h2>
             <label>
               邮箱
               <input name="email" type="email" required />

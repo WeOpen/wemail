@@ -3,7 +3,8 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { AuthForms } from "../features/auth/AuthForms";
 import { WemailLandingPage } from "../features/landing/WemailLandingPage";
-import { WemailBrandLockup } from "../shared/WemailBrandLockup";
+import { WemailLogo } from "../shared/WemailLogo";
+import { WemailWordmark } from "../shared/WemailWordmark";
 
 type AuthPageProps = {
   authError: string | null;
@@ -58,19 +59,12 @@ export function AuthPage({ authError, onRegister, onLogin }: AuthPageProps) {
     <div className="auth-shell">
       <section className="auth-card">
         <div className="auth-card-header">
-          <WemailBrandLockup
-            className="auth-brand-lockup"
-            compact
-            detail="secure inbox platform"
-            label="WeMail auth brand"
-          />
-          <p className="eyebrow">{mode === "login" ? "账号登录" : "邀请码注册"}</p>
-          <h1>{mode === "login" ? "登录到 WeMail" : "创建你的 WeMail 账号"}</h1>
-          <p className="hero-copy">
-            {mode === "login"
-              ? "在同一个认证入口里切换登录与注册，进入你的邮箱工作台与后台。"
-              : "通过邀请码完成注册，认证成功后直接进入你的团队邮箱工作区。"}
-          </p>
+          <div aria-label="WeMail auth brand" className="auth-brand-stack" role="img">
+            <span aria-hidden="true" className="auth-brand-mark">
+              <WemailLogo className="auth-brand-logo" title="" />
+            </span>
+            <WemailWordmark className="auth-brand-wordmark" />
+          </div>
         </div>
         <div className="auth-tabs" role="tablist" aria-label="认证方式切换" onKeyDown={handleTabsKeyDown}>
           <button

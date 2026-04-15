@@ -415,12 +415,46 @@ button:disabled {
   background: var(--hero-gradient);
 }
 
-.auth-card-header .hero-copy {
-  max-width: 46ch;
+.auth-card-header {
+  justify-items: center;
+  gap: 10px;
 }
 
-.auth-brand-lockup {
-  margin-bottom: 4px;
+.auth-brand-stack {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.auth-brand-mark {
+  width: 56px;
+  height: 56px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255, 122, 0, 0.14), rgba(255, 255, 255, 0.52));
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+  color: var(--text);
+  box-shadow: 0 14px 28px rgba(255, 122, 0, 0.14);
+}
+
+.auth-brand-logo {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.auth-brand-wordmark {
+  font-size: 1.38rem;
+}
+
+.auth-form-shell {
+  gap: 12px;
+}
+
+.auth-form {
+  gap: 16px;
 }
 
 .wemail-brand-lockup {
@@ -1204,5 +1238,10 @@ button:disabled {
 
   .auth-card {
     padding: 24px 20px;
+  }
+
+  .auth-brand-mark {
+    width: 52px;
+    height: 52px;
   }
 }
