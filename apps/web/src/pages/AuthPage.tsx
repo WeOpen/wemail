@@ -1,5 +1,5 @@
 import type { FormEvent, KeyboardEvent } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { AuthForms } from "../features/auth/AuthForms";
 import { WemailLandingPage } from "../features/landing/WemailLandingPage";
@@ -59,12 +59,12 @@ export function AuthPage({ authError, onRegister, onLogin }: AuthPageProps) {
     <div className="auth-shell">
       <section className="auth-card">
         <div className="auth-card-header">
-          <div aria-label="WeMail auth brand" className="auth-brand-stack" role="img">
+          <Link aria-label="WeMail auth brand" className="auth-brand-stack" to="/">
             <span aria-hidden="true" className="auth-brand-mark">
               <WemailLogo className="auth-brand-logo" title="" />
             </span>
             <WemailWordmark className="auth-brand-wordmark" />
-          </div>
+          </Link>
         </div>
         <div className="auth-tabs" role="tablist" aria-label="认证方式切换" onKeyDown={handleTabsKeyDown}>
           <button

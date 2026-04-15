@@ -423,16 +423,16 @@ button:disabled {
 .auth-brand-stack {
   display: grid;
   justify-items: center;
-  gap: 10px;
+  gap: 12px;
   text-align: center;
 }
 
 .auth-brand-mark {
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   display: inline-grid;
   place-items: center;
-  border-radius: 18px;
+  border-radius: 20px;
   background: linear-gradient(135deg, rgba(255, 122, 0, 0.14), rgba(255, 255, 255, 0.52));
   border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
   color: var(--text);
@@ -440,13 +440,13 @@ button:disabled {
 }
 
 .auth-brand-logo {
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   display: block;
 }
 
 .auth-brand-wordmark {
-  font-size: 1.38rem;
+  font-size: 1.56rem;
 }
 
 .auth-form-shell {
@@ -492,8 +492,8 @@ button:disabled {
 }
 
 .wemail-brand-lockup.compact .wemail-brand-lockup-logo {
-  width: 18px;
-  height: 18px;
+  width: 21px;
+  height: 21px;
 }
 
 .wemail-brand-lockup-copy {
@@ -1241,7 +1241,7 @@ button:disabled {
   }
 
   .auth-brand-mark {
-    width: 52px;
-    height: 52px;
+    width: 58px;
+    height: 58px;
   }
 }

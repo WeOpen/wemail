@@ -53,6 +53,24 @@ describe("App", () => {
     10000
   );
 
+  it(
+    "navigates back to the landing page when the auth brand is clicked",
+    async () => {
+      window.history.pushState({}, "", "/login?next=%2Fsettings");
+      vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("not authenticated"));
+      render(<App />);
+
+      fireEvent.click(await screen.findByRole("link", { name: /wemail auth brand/i }));
+
+      await waitFor(() => {
+        expect(window.location.pathname).toBe("/");
+      });
+      expect(window.location.search).toBe("");
+      expect(await screen.findByRole("navigation", { name: /landing page navigation/i })).toBeInTheDocument();
+    },
+    10000
+  );
+
 
   it(
     "opens the landing mobile menu on demand",
