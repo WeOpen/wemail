@@ -440,8 +440,8 @@ button:disabled {
 }
 
 .auth-brand-mark {
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   display: inline-grid;
   place-items: center;
   border-radius: 20px;
@@ -452,8 +452,8 @@ button:disabled {
 }
 
 .auth-brand-logo {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   display: block;
 }
 
@@ -480,8 +480,8 @@ button:disabled {
 }
 
 .wemail-brand-lockup-mark {
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
   display: inline-grid;
   place-items: center;
   border-radius: 14px;
@@ -492,20 +492,20 @@ button:disabled {
 }
 
 .wemail-brand-lockup.compact .wemail-brand-lockup-mark {
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   border-radius: 12px;
 }
 
 .wemail-brand-lockup-logo {
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   display: block;
 }
 
 .wemail-brand-lockup.compact .wemail-brand-lockup-logo {
-  width: 21px;
-  height: 21px;
+  width: 25px;
+  height: 25px;
 }
 
 .wemail-brand-lockup-copy {
@@ -1174,8 +1174,8 @@ button:disabled {
 .wemail-loading-logo {
   position: relative;
   z-index: 1;
-  width: 86px;
-  height: 86px;
+  width: 98px;
+  height: 98px;
   display: block;
 }
 

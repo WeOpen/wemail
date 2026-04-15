@@ -17,14 +17,14 @@ export function WemailLogo({ title = "Wemail logo", ...props }: WemailLogoProps)
     >
       <path
         className="wemail-logo-envelope"
-        d="M10 18H54V46H10V18Z"
+        d="M7 14H57V50H7V14Z"
         stroke="currentColor"
         strokeLinejoin="miter"
         strokeWidth="4"
       />
       <path
         className="wemail-logo-envelope"
-        d="M10 20L22 32L32 24L42 32L54 20"
+        d="M10 19L23.5 31.5L32 24.5L40.5 31.5L54 19"
         stroke="currentColor"
         strokeLinecap="square"
         strokeLinejoin="miter"
@@ -32,7 +32,7 @@ export function WemailLogo({ title = "Wemail logo", ...props }: WemailLogoProps)
       />
       <path
         className="wemail-logo-fold"
-        d="M22 32L32 24L42 32"
+        d="M23.5 31.5L32 24.5L40.5 31.5"
         stroke="var(--accent, currentColor)"
         strokeLinecap="square"
         strokeLinejoin="miter"
@@ -40,7 +40,7 @@ export function WemailLogo({ title = "Wemail logo", ...props }: WemailLogoProps)
       />
       <path
         className="wemail-logo-envelope"
-        d="M10 42L24 30"
+        d="M10 45L25 32"
         stroke="currentColor"
         strokeLinecap="square"
         strokeLinejoin="miter"
@@ -48,7 +48,7 @@ export function WemailLogo({ title = "Wemail logo", ...props }: WemailLogoProps)
       />
       <path
         className="wemail-logo-envelope"
-        d="M54 42L40 30"
+        d="M54 45L39 32"
         stroke="currentColor"
         strokeLinecap="square"
         strokeLinejoin="miter"
@@ -58,19 +58,19 @@ export function WemailLogo({ title = "Wemail logo", ...props }: WemailLogoProps)
         <circle
           className="wemail-logo-seal"
           cx="32"
-          cy="38.5"
+          cy="40"
           fill="var(--accent, currentColor)"
-          r="7.5"
+          r="8.75"
           stroke="currentColor"
           strokeWidth="3"
         />
         <path
           className="wemail-logo-monogram"
-          d="M27.5 41.5V35L32 40.75L36.5 35V41.5"
+          d="M26.75 43.5V35.5L32 42L37.25 35.5V43.5"
           stroke="currentColor"
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeWidth="2.25"
+          strokeWidth="2.35"
         />
       </g>
     </svg>

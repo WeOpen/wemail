@@ -11,33 +11,34 @@ describe("brand assets", () => {
   it("adds a centered wax seal to the React logo mark", () => {
     const markup = renderToStaticMarkup(createElement(WemailLogo));
 
-    expect(markup).toContain('circle cx="32" cy="38.5" r="7.5"');
-    expect(markup).toContain('d="M27.5 41.5V35L32 40.75L36.5 35V41.5"');
+    expect(markup).toContain('d="M7 14H57V50H7V14Z"');
+    expect(markup).toContain('cx="32" cy="40" fill="var(--accent, currentColor)" r="8.75"');
+    expect(markup).toContain('d="M26.75 43.5V35.5L32 42L37.25 35.5V43.5"');
   });
 
   it("uses a tighter favicon composition with a centered wax seal for better small-size legibility", () => {
     const faviconPath = resolve(process.cwd(), "public", "brand", "favicon.svg");
     const svg = readFileSync(faviconPath, "utf8");
 
-    expect(svg).toContain('rect x="8" y="16" width="48" height="32"');
-    expect(svg).toContain('path d="M10 20L22 31.5L32 24L42 31.5L54 20"');
-    expect(svg).toContain('circle cx="32" cy="38.5" r="7.5"');
+    expect(svg).toContain('rect x="6" y="14" width="52" height="36"');
+    expect(svg).toContain('path d="M10 19L23.5 31.5L32 24.5L40.5 31.5L54 19"');
+    expect(svg).toContain('circle cx="32" cy="40" r="8.75"');
   });
 
   it("keeps the shared icon asset in sync with the sealed-envelope mark", () => {
     const iconPath = resolve(process.cwd(), "public", "brand", "icon.svg");
     const svg = readFileSync(iconPath, "utf8");
 
-    expect(svg).toContain('path d="M22 40L44 61L64 47L84 61L106 40"');
-    expect(svg).toContain('circle cx="64" cy="77" r="15"');
-    expect(svg).toContain('d="M55 85V72L64 83.5L73 72V85"');
+    expect(svg).toContain('path d="M18 38L45 63L64 49L83 63L110 38"');
+    expect(svg).toContain('circle cx="64" cy="80" r="17.5"');
+    expect(svg).toContain('d="M53.5 87V71L64 84L74.5 71V87"');
   });
 
   it("keeps the mono icon seal as a line-drawn M", () => {
     const iconPath = resolve(process.cwd(), "public", "brand", "icon-mono.svg");
     const svg = readFileSync(iconPath, "utf8");
 
-    expect(svg).toContain('circle cx="32" cy="38.5" r="7.5" fill="none"');
-    expect(svg).toContain('d="M27.5 41.5V35L32 40.75L36.5 35V41.5"');
+    expect(svg).toContain('circle cx="32" cy="40" r="8.75" fill="none"');
+    expect(svg).toContain('d="M26.75 43.5V35.5L32 42L37.25 35.5V43.5"');
   });
 });

@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect x="8" y="16" width="48" height="32" rx="8" stroke="#111111" stroke-width="3.5"/>
-  <path d="M10 19.5L22 31L32 23.5L42 31L54 19.5" stroke="#111111" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
-  <path d="M10 44L24.5 31.5" stroke="#111111" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
-  <path d="M54 44L39.5 31.5" stroke="#111111" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
-  <circle cx="32" cy="38.5" r="7.5" fill="none" stroke="#111111" stroke-width="3"/>
-  <path d="M27.5 41.5V35L32 40.75L36.5 35V41.5" stroke="#111111" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="6" y="14" width="52" height="36" rx="9" stroke="#111111" stroke-width="3.5"/>
+  <path d="M10 19L23.5 31.5L32 24.5L40.5 31.5L54 19" stroke="#111111" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
+  <path d="M10 45L25 32" stroke="#111111" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
+  <path d="M54 45L39 32" stroke="#111111" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
+  <circle cx="32" cy="40" r="8.75" fill="none" stroke="#111111" stroke-width="3"/>
+  <path d="M26.75 43.5V35.5L32 42L37.25 35.5V43.5" stroke="#111111" stroke-width="2.35" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
