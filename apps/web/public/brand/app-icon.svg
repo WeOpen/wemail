@@ -5,4 +5,6 @@
   <path d="M44 61L64 47L84 61" stroke="#ff7a00" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
   <path d="M22 84L48 62" stroke="#111111" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
   <path d="M106 84L80 62" stroke="#111111" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
+  <circle cx="64" cy="77" r="15" fill="#ff7a00" stroke="#111111" stroke-width="6"/>
+  <path d="M55 85V72L64 83.5L73 72V85" stroke="#111111" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+﻿import { useCallback, useEffect, useMemo, useState } from "react";
 import { BrowserRouter, Navigate, useLocation } from "react-router-dom";
 
 import { AppLayout } from "./AppLayout";
 import { AppRoutes } from "./AppRoutes";
 import { AuthPage } from "../pages/AuthPage";
+import { WemailLoadingShell } from "../shared/WemailLoadingShell";
 import { buildWorkspaceShellState } from "./workspaceShell";
 import { useAppShell } from "./useAppShell";
 import { useWorkspaceTheme } from "./useWorkspaceTheme";
@@ -85,13 +86,7 @@ function AppContent() {
     settings.telegram
   ]);
 
-  if (auth.loadingSession) {
-    return (
-      <div className="shell">
-        <div className="panel shimmer">正在加载 WeMail 工作台…</div>
-      </div>
-    );
-  }
+  if (auth.loadingSession) return <WemailLoadingShell />;
 
   if (!session) {
     return <AuthPage authError={auth.authError} onRegister={auth.handleRegister} onLogin={auth.handleLogin} />;

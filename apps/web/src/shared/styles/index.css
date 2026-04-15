@@ -209,6 +209,18 @@ em {
   font-style: normal;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .panel,
 .notice-banner,
 .error-banner,
@@ -1101,10 +1113,180 @@ button:disabled {
   gap: 16px;
 }
 
-.shimmer {
-  min-height: 120px;
+.wemail-loading-shell {
   display: grid;
   place-items: center;
+  padding-block: clamp(56px, 12vh, 104px);
+}
+
+.wemail-loading-panel {
+  width: min(520px, 100%);
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  padding: clamp(28px, 4vw, 38px);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border);
+  background: var(--hero-gradient);
+  box-shadow: var(--shadow-card), var(--shadow-border);
+  backdrop-filter: blur(24px);
+  text-align: center;
+}
+
+.wemail-loading-mark {
+  position: relative;
+  width: 138px;
+  height: 138px;
+  display: grid;
+  place-items: center;
+  border-radius: 42px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 18%, transparent),
+    color-mix(in srgb, var(--surface-strong) 88%, transparent)
+  );
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  box-shadow:
+    0 28px 64px rgba(255, 122, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42);
+  isolation: isolate;
+  animation: wemail-loading-mark-float 2.6s ease-in-out infinite;
+}
+
+.wemail-loading-glow {
+  position: absolute;
+  inset: 18px;
+  border-radius: 999px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 38%, transparent), transparent 70%);
+  filter: blur(14px);
+  animation: wemail-loading-glow 2.6s ease-in-out infinite;
+}
+
+.wemail-loading-echo {
+  position: absolute;
+  inset: 14px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 44%, transparent);
+  opacity: 0;
+  animation: wemail-loading-echo 2.6s ease-out infinite;
+}
+
+.wemail-loading-logo {
+  position: relative;
+  z-index: 1;
+  width: 86px;
+  height: 86px;
+  display: block;
+}
+
+.wemail-loading-logo .wemail-logo-seal-group {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wemail-loading-seal-breathe 2.6s ease-in-out infinite;
+}
+
+.wemail-loading-logo .wemail-logo-monogram {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wemail-loading-monogram-pulse 1.3s ease-in-out infinite alternate;
+}
+
+.wemail-loading-logo .wemail-logo-fold {
+  animation: wemail-loading-fold-flicker 1.8s ease-in-out infinite;
+}
+
+.wemail-loading-copy {
+  display: grid;
+  gap: 0;
+  justify-items: center;
+  max-width: none;
+}
+
+.wemail-loading-kicker {
+  font-size: 0.76rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent) 94%, var(--text));
+}
+
+@keyframes wemail-loading-seal-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+}
+
+@keyframes wemail-loading-monogram-pulse {
+  0%,
+  100% {
+    opacity: 0.66;
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+  }
+  50%,
+  100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+  }
+}
+
+@keyframes wemail-loading-fold-flicker {
+  0%,
+  100% {
+    opacity: 0.78;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes wemail-loading-mark-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes wemail-loading-glow {
+  0%,
+  100% {
+    opacity: 0.42;
+    transform: scale(0.88);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+}
+
+@keyframes wemail-loading-echo {
+  0% {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  20% {
+    opacity: 0.42;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.28);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wemail-loading-mark,
+  .wemail-loading-glow,
+  .wemail-loading-echo,
+  .wemail-loading-logo .wemail-logo-seal-group,
+  .wemail-loading-logo .wemail-logo-monogram,
+  .wemail-loading-logo .wemail-logo-fold {
+    animation: none;
+  }
 }
 
 @media (max-width: 1320px) {

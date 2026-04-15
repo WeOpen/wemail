@@ -1,7 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect x="8" y="16" width="48" height="32" rx="8" fill="#fffaf6" stroke="#111111" stroke-width="3.5"/>
-  <path d="M10 19.5L22 31L32 23.5L42 31L54 19.5" stroke="#111111" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
-  <path d="M22 31L32 23.5L42 31" stroke="#ff7a00" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
-  <path d="M10 44L24.5 31.5" stroke="#111111" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
-  <path d="M54 44L39.5 31.5" stroke="#111111" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <rect width="128" height="128" rx="28" fill="#fff8f2"/>
+  <rect x="18" y="34" width="92" height="60" rx="15" fill="#ffffff" stroke="#111111" stroke-width="7"/>
+  <path d="M22 40L44 61L64 47L84 61L106 40" stroke="#111111" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
+  <path d="M44 61L64 47L84 61" stroke="#ff7a00" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
+  <path d="M22 84L48 62" stroke="#111111" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
+  <path d="M106 84L80 62" stroke="#111111" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
+  <circle cx="64" cy="77" r="15" fill="#ff7a00" stroke="#111111" stroke-width="6"/>
+  <path d="M55 85V72L64 83.5L73 72V85" stroke="#111111" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

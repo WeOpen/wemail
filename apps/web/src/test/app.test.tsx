@@ -16,6 +16,26 @@ describe("App", () => {
     window.history.pushState({}, "", "/");
   });
 
+  it("renders an icon-first branded loading shell while the session request is pending", () => {
+    vi.spyOn(globalThis, "fetch").mockImplementation(
+      () =>
+        new Promise<Response>(() => {
+          // keep the session bootstrap pending so the loading shell stays visible
+        })
+    );
+
+    const { container } = render(<App />);
+
+    const status = screen.getByRole("status");
+    expect(status).toHaveAttribute("aria-busy", "true");
+    expect(status).toHaveTextContent(/Preparing WeMail/i);
+    expect(screen.getByText(/Loading workspace/i)).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: /wemail loading mark/i })).toBeInTheDocument();
+    expect(container.querySelector(".wemail-loading-title")).toBeNull();
+    expect(container.querySelector(".wemail-loading-detail")).toBeNull();
+    expect(screen.queryByText(/姝ｅ湪鍔犺浇 WeMail 宸ヤ綔鍙?/i)).not.toBeInTheDocument();
+  });
+
   it(
     "renders the optimus-style landing shell for signed-out users",
     async () => {

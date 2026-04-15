@@ -9,6 +9,8 @@
     <path d="M39 49L64 34L89 49" stroke="#ff7a00" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/>
     <path d="M6 84L42 53" stroke="#111111" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/>
     <path d="M122 84L86 53" stroke="#111111" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/>
+    <circle cx="64" cy="72" r="18" fill="#ff7a00" stroke="#111111" stroke-width="6.5"/>
+    <path d="M55 82V65L64 77.25L73 65V82" stroke="#111111" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
   <text x="360" y="285" fill="#111111" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="94" font-weight="700" letter-spacing="-4">We</text>
   <text x="495" y="285" fill="#ff7a00" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="94" font-weight="700" letter-spacing="-4">Mail</text>
