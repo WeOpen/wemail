@@ -15,7 +15,7 @@ describe("worker config", () => {
     });
 
     expect(config.environment).toBe("staging");
-    expect(config.appName).toBe("wemail");
+    expect(config.appName).toBe("WeMail");
     expect(config.cookie.name).toBe("wemail_session");
     expect(config.cookie.secure).toBe(true);
     expect(config.session.ttlHours).toBe(24);

@@ -1,6 +1,6 @@
 # Contributing Guide
 
-感谢参与 `wemail` 的开发。
+感谢参与 `WeMail` 的开发。
 
 ## 开始前先阅读
 

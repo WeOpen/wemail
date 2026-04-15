@@ -1,8 +1,8 @@
-# Wemail Logo Implementation Plan
+# WeMail Logo Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** 为 wemail 添加一个信封与 `W` 折痕融合的极简 SVG logo，并接入当前工作台顶栏品牌位。
+**Goal:** 为 WeMail 添加一个信封与 `W` 折痕融合的极简 SVG logo，并接入当前工作台顶栏品牌位。
 
 **Architecture:** 新 logo 作为可复用 React SVG 组件落在 `apps/web/src/shared/`，由 `AppLayout` 品牌位直接引用。先用测试锁定品牌位渲染结果，再做最小实现与样式接入，避免只停留在资产创建而没有真实使用。
 
@@ -17,7 +17,7 @@
 
 **Step 1: Write the failing test**
 
-- 在已登录工作台测试里新增断言，要求品牌区域渲染 `Wemail logo`。
+- 在已登录工作台测试里新增断言，要求品牌区域渲染 `WeMail logo`。
 
 **Step 2: Run test to verify it fails**
 

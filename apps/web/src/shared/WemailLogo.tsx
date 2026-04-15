@@ -4,7 +4,7 @@ type WemailLogoProps = SVGProps<SVGSVGElement> & {
   title?: string;
 };
 
-export function WemailLogo({ title = "Wemail logo", ...props }: WemailLogoProps) {
+export function WemailLogo({ title = "WeMail logo", ...props }: WemailLogoProps) {
   return (
     <svg
       aria-hidden={title ? undefined : true}

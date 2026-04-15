@@ -17,7 +17,7 @@
 
 **Step 1: Write the failing test**
 
-- 断言 auth 页渲染 `wemail auth brand`
+- 断言 auth 页渲染 `WeMail auth brand`
 - 断言 `登录到 WeMail`、`创建你的工作台账号`、`账号登录`、说明文案不再出现
 
 **Step 2: Run test to verify it fails**

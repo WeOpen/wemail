@@ -399,7 +399,7 @@ function FeaturesSection() {
         <SectionEyebrow>Capabilities</SectionEyebrow>
         <h2 className="landing-display-title">Everything you need. Nothing you don't.</h2>
         <p className="landing-section-copy">
-          Wemail keeps inbox creation, message review, outbound sends, and governance in one product surface instead of scattered scripts and browser tabs.
+          WeMail keeps inbox creation, message review, outbound sends, and governance in one product surface instead of scattered scripts and browser tabs.
         </p>
       </div>
       <div className="landing-features-grid">

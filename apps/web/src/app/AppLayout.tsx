@@ -160,7 +160,7 @@ export function AppLayout({
     <div className="app-layout workspace-shell">
       <header className="workspace-topbar panel">
         <div className="workspace-brand" aria-label="WeMail 工作台品牌">
-          <WemailBrandLockup compact className="workspace-brand-lockup" label="Wemail logo" />
+          <WemailBrandLockup compact className="workspace-brand-lockup" label="WeMail logo" />
         </div>
 
         <div className="workspace-topbar-center">

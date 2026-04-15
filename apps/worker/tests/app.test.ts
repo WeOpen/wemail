@@ -4,7 +4,7 @@ import { createApp } from "../src/app/create-app";
 import { createInMemoryStore } from "../src/infrastructure/persistence/in-memory";
 
 const env = {
-  APP_NAME: "wemail",
+  APP_NAME: "WeMail",
   COOKIE_NAME: "wemail_session",
   DEFAULT_MAIL_DOMAIN: "example.com",
   MAILBOX_LIMIT: "5",

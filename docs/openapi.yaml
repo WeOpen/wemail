@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: wemail 后端 API
+  title: WeMail 后端 API
   version: 1.0.0
   description: |
     这是当前 `apps/worker` 已实现 HTTP 接口的 OpenAPI 文档，内容按现有代码行为整理。
