@@ -13,7 +13,7 @@ import {
   X
 } from 'lucide-react';
 
-import { WemailLogo } from '../../shared/WemailLogo';
+import { WemailBrandLockup } from '../../shared/WemailBrandLockup';
 import { AnimatedSphere } from './AnimatedSphere';
 import { AnimatedTetrahedron } from './AnimatedTetrahedron';
 import { AnimatedWave } from './AnimatedWave';
@@ -260,14 +260,8 @@ function Navigation() {
     <header className={isScrolled ? 'landing-nav-shell is-scrolled' : 'landing-nav-shell'}>
       <nav className={isScrolled || isMobileMenuOpen ? 'landing-nav is-floating' : 'landing-nav'} aria-label="landing page navigation">
         <div className={isScrolled ? 'landing-nav-bar compact' : 'landing-nav-bar'}>
-          <Link className="landing-brand" to="/">
-            <span className="landing-brand-mark">
-              <WemailLogo className="landing-brand-logo" />
-            </span>
-            <span className="landing-brand-copy">
-              <strong>wemail</strong>
-              <small>TM</small>
-            </span>
+          <Link aria-label="WeMail home" className="landing-brand" to="/">
+            <WemailBrandLockup className="landing-brand-lockup" compact label="WeMail brand lockup" />
           </Link>
 
           <DesktopNavLinks />
@@ -841,14 +835,8 @@ function FooterSection() {
       </div>
       <div className="landing-footer-grid">
         <div className="landing-footer-brand">
-          <Link className="landing-brand footer" to="/">
-            <span className="landing-brand-mark">
-              <WemailLogo className="landing-brand-logo" />
-            </span>
-            <span className="landing-brand-copy">
-              <strong>wemail</strong>
-              <small>TM</small>
-            </span>
+          <Link aria-label="WeMail home" className="landing-brand footer" to="/">
+            <WemailBrandLockup className="landing-brand-lockup footer" label="WeMail footer brand lockup" />
           </Link>
           <p>Temporary mail, extraction, outbound, and admin oversight in one operator-friendly surface.</p>
           <div className="landing-footer-socials">
@@ -875,7 +863,7 @@ function FooterSection() {
         ))}
       </div>
       <div className="landing-footer-bottom">
-        <p>2026 wemail. All rights reserved.</p>
+        <p>2026 WeMail. All rights reserved.</p>
         <span>
           <i aria-hidden="true" />
           All systems operational

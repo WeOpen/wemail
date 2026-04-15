@@ -24,6 +24,7 @@ describe("App", () => {
 
       const navigation = await screen.findByRole("navigation", { name: /landing page navigation/i });
       expect(navigation).toBeInTheDocument();
+      expect(within(navigation).getByLabelText(/wemail brand lockup/i)).toBeInTheDocument();
       expect(within(navigation).getByRole("link", { name: /^Features$/i })).toHaveAttribute("href", "#features");
       expect(within(navigation).getByRole("link", { name: /^How it works$/i })).toHaveAttribute("href", "#how-it-works");
       expect(screen.getByRole("heading", { name: /The platform/i })).toBeInTheDocument();
@@ -43,6 +44,7 @@ describe("App", () => {
       fireEvent.click(within(navigation).getByRole("link", { name: /登录/i }));
 
       expect(await screen.findByRole("button", { name: /^立即登录$/i })).toBeInTheDocument();
+      expect(screen.getByLabelText(/wemail auth brand/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/邮箱/i)).toBeInTheDocument();
     },
     10000

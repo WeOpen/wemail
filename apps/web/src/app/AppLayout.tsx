@@ -20,7 +20,7 @@ import {
 
 import type { SessionSummary } from "@wemail/shared";
 
-import { WemailLogo } from "../shared/WemailLogo";
+import { WemailBrandLockup } from "../shared/WemailBrandLockup";
 import type { WorkspaceRailIcon, WorkspaceShellState } from "./workspaceShell";
 import type { WorkspaceTheme } from "./useWorkspaceTheme";
 
@@ -170,13 +170,8 @@ export function AppLayout({
   return (
     <div className="app-layout workspace-shell">
       <header className="workspace-topbar panel">
-        <div className="workspace-brand" aria-label="wemail 工作台品牌">
-          <span className="workspace-brand-mark">
-            <WemailLogo className="workspace-brand-logo" />
-          </span>
-          <div>
-            <strong>WeMail</strong>
-          </div>
+        <div className="workspace-brand" aria-label="WeMail 工作台品牌">
+          <WemailBrandLockup compact className="workspace-brand-lockup" label="Wemail logo" />
         </div>
 
         <nav className="workspace-pill-nav" aria-label="工作台导航">

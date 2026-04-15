@@ -1,0 +1,21 @@
+{
+  "name": "WeMail",
+  "short_name": "WeMail",
+  "description": "Edge mail operations for temporary inboxes, outbound control, and admin oversight.",
+  "theme_color": "#ff7a00",
+  "background_color": "#f5f1ea",
+  "icons": [
+    {
+      "src": "/brand/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "monochrome"
+    }
+  ]
+}

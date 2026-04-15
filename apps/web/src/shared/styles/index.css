@@ -419,6 +419,82 @@ button:disabled {
   max-width: 46ch;
 }
 
+.auth-brand-lockup {
+  margin-bottom: 4px;
+}
+
+.wemail-brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wemail-brand-lockup.compact {
+  gap: 10px;
+}
+
+.wemail-brand-lockup-mark {
+  width: 42px;
+  height: 42px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255, 122, 0, 0.16), rgba(255, 255, 255, 0.04));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  color: var(--text);
+  box-shadow: 0 10px 24px rgba(255, 122, 0, 0.14);
+}
+
+.wemail-brand-lockup.compact .wemail-brand-lockup-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+}
+
+.wemail-brand-lockup-logo {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.wemail-brand-lockup.compact .wemail-brand-lockup-logo {
+  width: 18px;
+  height: 18px;
+}
+
+.wemail-brand-lockup-copy {
+  display: grid;
+  gap: 2px;
+}
+
+.wemail-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  font-size: 1.16rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.wemail-wordmark.compact {
+  font-size: 1rem;
+}
+
+.wemail-wordmark-we {
+  color: var(--text);
+}
+
+.wemail-wordmark-mail {
+  color: var(--accent);
+}
+
+.wemail-brand-lockup-detail {
+  color: var(--text-muted);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
 .auth-tabs {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -485,7 +561,7 @@ button:disabled {
 .workspace-brand {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 0;
 }
 
 .workspace-brand strong,
@@ -497,26 +573,11 @@ button:disabled {
   letter-spacing: -0.03em;
 }
 
-.workspace-brand > div {
-  display: grid;
-  gap: 0;
-}
-
-.workspace-brand-mark {
-  width: 34px;
-  height: 34px;
-  display: inline-grid;
-  place-items: center;
-  border-radius: 12px;
+.workspace-brand-lockup .wemail-brand-lockup-mark {
   background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  border-color: transparent;
   color: #ffffff;
   box-shadow: 0 10px 24px rgba(255, 122, 0, 0.28);
-}
-
-.workspace-brand-logo {
-  width: 18px;
-  height: 18px;
-  display: block;
 }
 
 .workspace-icon {

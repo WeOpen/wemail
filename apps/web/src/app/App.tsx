@@ -88,7 +88,7 @@ function AppContent() {
   if (auth.loadingSession) {
     return (
       <div className="shell">
-        <div className="panel shimmer">正在加载 wemail 工作台…</div>
+        <div className="panel shimmer">正在加载 WeMail 工作台…</div>
       </div>
     );
   }

@@ -3,6 +3,7 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { AuthForms } from "../features/auth/AuthForms";
 import { WemailLandingPage } from "../features/landing/WemailLandingPage";
+import { WemailBrandLockup } from "../shared/WemailBrandLockup";
 
 type AuthPageProps = {
   authError: string | null;
@@ -57,8 +58,14 @@ export function AuthPage({ authError, onRegister, onLogin }: AuthPageProps) {
     <div className="auth-shell">
       <section className="auth-card">
         <div className="auth-card-header">
+          <WemailBrandLockup
+            className="auth-brand-lockup"
+            compact
+            detail="secure inbox platform"
+            label="WeMail auth brand"
+          />
           <p className="eyebrow">{mode === "login" ? "账号登录" : "邀请码注册"}</p>
-          <h1>{mode === "login" ? "登录到 wemail" : "创建你的 wemail 账号"}</h1>
+          <h1>{mode === "login" ? "登录到 WeMail" : "创建你的 WeMail 账号"}</h1>
           <p className="hero-copy">
             {mode === "login"
               ? "在同一个认证入口里切换登录与注册，进入你的邮箱工作台与后台。"

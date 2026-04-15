@@ -15,7 +15,7 @@ export function AuthForms({ authError, onRegister, onLogin, mode }: AuthFormsPro
         <div aria-labelledby="auth-tab-login" className="auth-form-panel" id="auth-panel-login" role="tabpanel">
           <form className="auth-form" onSubmit={onLogin}>
             <p className="panel-kicker">账号登录</p>
-            <h2>登录到 wemail</h2>
+            <h2>登录到 WeMail</h2>
             <label>
               邮箱
               <input name="email" type="email" required />
