@@ -1,9 +1,27 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
+import {
+  Bell,
+  ChevronDown,
+  Inbox,
+  KeyRound,
+  LogOut,
+  Mailbox,
+  MoonStar,
+  Send,
+  Settings2,
+  Shield,
+  ShieldAlert,
+  Sparkles,
+  SunMedium,
+  UserRound,
+  Users
+} from "lucide-react";
 
 import type { SessionSummary } from "@wemail/shared";
 
-import type { WorkspaceShellState } from "./workspaceShell";
+import { WemailBrandLockup } from "../shared/WemailBrandLockup";
+import type { WorkspaceRailIcon, WorkspaceShellState } from "./workspaceShell";
 import type { WorkspaceTheme } from "./useWorkspaceTheme";
 
 type AppLayoutProps = {
@@ -16,6 +34,58 @@ type AppLayoutProps = {
   children: ReactNode;
 };
 
+function ThemeIcon({ theme }: { theme: WorkspaceTheme }) {
+  return theme === "dark" ? (
+    <SunMedium absoluteStrokeWidth aria-hidden="true" className="workspace-theme-icon workspace-icon" strokeWidth={1.8} />
+  ) : (
+    <MoonStar absoluteStrokeWidth aria-hidden="true" className="workspace-theme-icon workspace-icon" strokeWidth={1.8} />
+  );
+}
+
+function RailIcon({ icon }: { icon: WorkspaceRailIcon }) {
+  const props = {
+    absoluteStrokeWidth: true,
+    "aria-hidden": true as const,
+    className: "workspace-rail-icon workspace-icon",
+    strokeWidth: 1.9
+  };
+
+  switch (icon) {
+    case "inbox":
+      return <Inbox {...props} />;
+    case "settings":
+      return <Settings2 {...props} />;
+    case "admin":
+      return <Shield {...props} />;
+    case "keys":
+      return <KeyRound {...props} />;
+    case "telegram":
+      return <Bell {...props} />;
+    case "role":
+      return <UserRound {...props} />;
+    case "access":
+      return <ShieldAlert {...props} />;
+    case "users":
+      return <Users {...props} />;
+    case "invites":
+      return <Sparkles {...props} />;
+    case "mailboxes":
+      return <Mailbox {...props} />;
+    case "messages":
+      return <Inbox {...props} />;
+    case "outbound":
+      return <Send {...props} />;
+    case "runtime-ai":
+      return <Sparkles {...props} />;
+    case "runtime-telegram":
+      return <Bell {...props} />;
+    case "runtime-outbound":
+      return <Send {...props} />;
+    default:
+      return <Inbox {...props} />;
+  }
+}
+
 export function AppLayout({
   session,
   notice,
@@ -25,17 +95,83 @@ export function AppLayout({
   shell,
   children
 }: AppLayoutProps) {
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement | null>(null);
+  const railScrollRef = useRef<HTMLDivElement | null>(null);
+  const mainScrollRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handlePointerDown = (event: MouseEvent) => {
+      if (!userMenuRef.current) return;
+      if (userMenuRef.current.contains(event.target as Node)) return;
+      setIsUserMenuOpen(false);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  useEffect(() => {
+    const areas = [railScrollRef.current, mainScrollRef.current].filter(Boolean) as HTMLDivElement[];
+    if (areas.length === 0) return;
+
+    const cleanups = areas.map((area) => {
+      let resetTimer: number | null = null;
+
+      const markActive = () => {
+        area.dataset.scrollActive = "true";
+        if (resetTimer) {
+          window.clearTimeout(resetTimer);
+        }
+        resetTimer = window.setTimeout(() => {
+          area.dataset.scrollActive = "false";
+        }, 720);
+      };
+
+      const markIdle = () => {
+        if (resetTimer) {
+          window.clearTimeout(resetTimer);
+        }
+        area.dataset.scrollActive = "false";
+      };
+
+      area.dataset.scrollActive = "false";
+      area.addEventListener("scroll", markActive, { passive: true });
+      area.addEventListener("pointerenter", markActive);
+      area.addEventListener("pointerleave", markIdle);
+
+      return () => {
+        if (resetTimer) {
+          window.clearTimeout(resetTimer);
+        }
+        area.removeEventListener("scroll", markActive);
+        area.removeEventListener("pointerenter", markActive);
+        area.removeEventListener("pointerleave", markIdle);
+        delete area.dataset.scrollActive;
+      };
+    });
+
+    return () => {
+      cleanups.forEach((cleanup) => cleanup());
+    };
+  }, []);
+
   return (
     <div className="app-layout workspace-shell">
       <header className="workspace-topbar panel">
-        <div className="workspace-brand" aria-label="wemail 工作台品牌">
-          <span className="workspace-brand-mark" aria-hidden="true">
-            ✦
-          </span>
-          <div>
-            <strong>wemail</strong>
-            <span>运营工作台</span>
-          </div>
+        <div className="workspace-brand" aria-label="WeMail 工作台品牌">
+          <WemailBrandLockup compact className="workspace-brand-lockup" label="Wemail logo" />
         </div>
 
         <nav className="workspace-pill-nav" aria-label="工作台导航">
@@ -47,36 +183,56 @@ export function AppLayout({
           ))}
         </nav>
 
-        <div className="workspace-search" aria-label="工作台快速搜索">
-          <span aria-hidden="true">⌘K</span>
-          <strong>{shell.searchPlaceholder}</strong>
-        </div>
-
         <div className="workspace-topbar-actions">
-          <div className="workspace-identity-pill">
-            <strong>{session.user.email}</strong>
-            <span>{session.user.role === "admin" ? "管理员" : "成员"}</span>
-          </div>
           <button
             className="workspace-theme-toggle"
             onClick={onToggleTheme}
             aria-label={theme === "dark" ? "切换到浅色主题" : "切换到深色主题"}
             type="button"
           >
-            {theme === "dark" ? "☼" : "☾"}
+            <ThemeIcon theme={theme} />
           </button>
-          <button className="ghost-button workspace-logout-button" onClick={onLogout} type="button">
-            退出登录
-          </button>
+
+          <div className="workspace-user-menu" ref={userMenuRef}>
+            <button
+              aria-expanded={isUserMenuOpen}
+              aria-haspopup="menu"
+              aria-label="用户菜单"
+              className="workspace-user-trigger"
+              onClick={() => setIsUserMenuOpen((currentState) => !currentState)}
+              type="button"
+            >
+              <span>{session.user.email}</span>
+              <ChevronDown absoluteStrokeWidth aria-hidden="true" className="workspace-icon" strokeWidth={1.9} />
+            </button>
+
+            {isUserMenuOpen ? (
+              <div className="workspace-user-dropdown panel" role="menu">
+                <button
+                  className="workspace-user-dropdown-item"
+                  onClick={() => {
+                    setIsUserMenuOpen(false);
+                    onLogout();
+                  }}
+                  role="menuitem"
+                  type="button"
+                >
+                  <LogOut absoluteStrokeWidth aria-hidden="true" className="workspace-icon" strokeWidth={1.9} />
+                  <span>退出登录</span>
+                </button>
+              </div>
+            ) : null}
+          </div>
         </div>
       </header>
 
       <div className="workspace-frame">
-        <aside className="workspace-rail panel" aria-label="工作台侧栏">
-          {shell.railSections.map((section) => (
-            <section className="workspace-rail-section" key={section.title}>
-              <p className="panel-kicker">{section.title}</p>
-              <div className="workspace-rail-list">
+        <aside className="workspace-rail-shell panel" aria-label="workspace sidebar">
+          <div className="workspace-rail workspace-scroll-area" ref={railScrollRef}>
+            {shell.railSections.map((section) => (
+              <section className="workspace-rail-section" key={section.title}>
+                <p className="panel-kicker">{section.title}</p>
+                <div className="workspace-rail-list">
                 {section.items.map((item) =>
                   item.kind === "link" ? (
                     <NavLink
@@ -85,34 +241,44 @@ export function AppLayout({
                       to={item.to}
                       end={item.to === "/"}
                     >
-                      <span>{item.label}</span>
-                      <div>
-                        {item.badge ? <small>{item.badge}</small> : null}
+                      <span className="workspace-rail-icon-chip">
+                        <RailIcon icon={item.icon} />
+                      </span>
+                      <div className="workspace-rail-copy">
+                        <span>{item.label}</span>
                         {item.hint ? <em>{item.hint}</em> : null}
+                      </div>
+                      <div className="workspace-rail-meta">
+                        {item.badge ? <small>{item.badge}</small> : null}
                       </div>
                     </NavLink>
                   ) : (
                     <div className="workspace-rail-stat" key={`${section.title}-${item.label}`}>
-                      <div>
+                      <span className="workspace-rail-icon-chip">
+                        <RailIcon icon={item.icon} />
+                      </span>
+                      <div className="workspace-rail-copy">
                         <strong>{item.label}</strong>
                         {item.hint ? <span>{item.hint}</span> : null}
                       </div>
-                      <small>{item.value}</small>
+                      <small className="workspace-rail-value">{item.value}</small>
                     </div>
                   )
                 )}
-              </div>
-            </section>
-          ))}
+                </div>
+              </section>
+            ))}
+          </div>
         </aside>
 
-        <div className="workspace-main-column">
+        <div className="workspace-main-column workspace-scroll-area" ref={mainScrollRef}>
           <section className="workspace-hero panel">
             <div className="workspace-hero-copy">
               <p className="panel-kicker">{shell.hero.eyebrow}</p>
               <h1>{shell.hero.title}</h1>
               <p className="hero-copy workspace-hero-description">{shell.hero.description}</p>
             </div>
+
             <div className="workspace-hero-actions">
               {shell.hero.actions.map((action) =>
                 action.kind === "link" && action.to ? (
@@ -136,6 +302,7 @@ export function AppLayout({
                 )
               )}
             </div>
+
             <div className="workspace-hero-stats" aria-label={`${shell.routeLabel} highlights`}>
               {shell.hero.stats.map((stat) => (
                 <article className="workspace-stat-card" key={stat.label}>

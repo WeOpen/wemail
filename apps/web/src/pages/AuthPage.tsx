@@ -1,7 +1,10 @@
-import { useMemo, useState, type FormEvent } from "react";
-import { Link, useLocation } from "react-router-dom";
+import type { FormEvent, KeyboardEvent } from "react";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { AuthForms } from "../features/auth/AuthForms";
+import { WemailLandingPage } from "../features/landing/WemailLandingPage";
+import { WemailLogo } from "../shared/WemailLogo";
+import { WemailWordmark } from "../shared/WemailWordmark";
 
 type AuthPageProps = {
   authError: string | null;
@@ -9,105 +12,88 @@ type AuthPageProps = {
   onLogin: (event: FormEvent<HTMLFormElement>) => Promise<void>;
 };
 
+const AUTH_MODES = ["login", "register"] as const;
+
 export function AuthPage({ authError, onRegister, onLogin }: AuthPageProps) {
   const location = useLocation();
-  const initialMode = location.pathname === "/register" ? "register" : "login";
-  const [mode, setMode] = useState<"login" | "register">(initialMode);
+  const navigate = useNavigate();
+  const mode = location.pathname === "/register" ? "register" : "login";
 
-  const heroActions = useMemo(
-    () => (
-      <div className="hero-actions">
-        <Link className="hero-action primary" to="/login" onClick={() => setMode("login")}>
-          登录
-        </Link>
-        <Link className="hero-action secondary" to="/register" onClick={() => setMode("register")}>
-          注册
-        </Link>
-      </div>
-    ),
-    []
-  );
+  function switchMode(nextMode: (typeof AUTH_MODES)[number]) {
+    if (nextMode === mode) return;
+    const nextPath = nextMode === "login" ? "/login" : "/register";
+    void navigate(`${nextPath}${location.search}`);
+  }
+
+  function handleTabsKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
+
+    event.preventDefault();
+    const currentIndex = AUTH_MODES.indexOf(mode);
+
+    if (event.key === "Home") {
+      switchMode(AUTH_MODES[0]);
+      return;
+    }
+
+    if (event.key === "End") {
+      switchMode(AUTH_MODES[AUTH_MODES.length - 1]);
+      return;
+    }
+
+    const direction = event.key === "ArrowLeft" || event.key === "ArrowUp" ? -1 : 1;
+    const nextIndex = (currentIndex + direction + AUTH_MODES.length) % AUTH_MODES.length;
+    switchMode(AUTH_MODES[nextIndex]);
+  }
+
+  if (location.pathname === "/") {
+    return <WemailLandingPage />;
+  }
 
   if (location.pathname !== "/login" && location.pathname !== "/register") {
-    return (
-      <div className="landing-shell">
-        <header className="landing-topbar">
-          <div>
-            <p className="eyebrow">wemail</p>
-            <p className="landing-subtitle">团队临时邮箱与管理控制台</p>
-          </div>
-          {heroActions}
-        </header>
-        <main className="landing-main">
-          <section className="landing-hero">
-            <div className="hero-blocks" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
-            <p className="eyebrow">自托管 · 邀请制 · Cloudflare 优先</p>
-            <h1>自托管临时邮箱，给团队一套可控的收信与管理工作台</h1>
-            <p className="hero-copy">
-              wemail 把临时邮箱、邀请码、外发能力、Telegram 通知和后台治理整合到同一套界面里，适合团队内部测试、运营协作和自动化场景。
-            </p>
-            <div className="hero-badges">
-              <span>落地页 + 登录分流</span>
-              <span>邀请码注册</span>
-              <span>多邮箱收发</span>
-              <span>后台治理</span>
-            </div>
-            <div className="landing-feature-grid">
-              <article className="landing-feature-card">
-                <p className="panel-kicker">统一入口</p>
-                <h2>首页只做转化</h2>
-                <p>首页聚焦价值表达和转化动作，登录与注册单独进入认证页，避免首屏信息过载。</p>
-              </article>
-              <article className="landing-feature-card">
-                <p className="panel-kicker">团队协作</p>
-                <h2>后台集中治理</h2>
-                <p>管理员可以统一管理邀请码、用户配额、功能开关和邮箱概览，适合内部平台运营。</p>
-              </article>
-              <article className="landing-feature-card">
-                <p className="panel-kicker">开发友好</p>
-                <h2>自动化能力完整</h2>
-                <p>支持 API Key、Telegram 通知和 Cloudflare 部署，方便开发、测试和联调使用。</p>
-              </article>
-            </div>
-          </section>
-        </main>
-      </div>
-    );
+    const next = `${location.pathname}${location.search}${location.hash}`;
+    return <Navigate replace to={`/login?next=${encodeURIComponent(next)}`} />;
   }
 
   return (
     <div className="auth-shell">
-      <section className="auth-hero-card">
-        <p className="eyebrow">欢迎回来</p>
-        <h1>{mode === "login" ? "登录到 wemail" : "注册 wemail 账号"}</h1>
-        <p className="hero-copy">
-          {mode === "login"
-            ? "使用你的团队账号进入邮箱工作台与后台。"
-            : "通过邀请码注册新账号，创建属于你的临时邮箱工作区。"}
-        </p>
-        <div className="hero-actions" role="tablist" aria-label="认证方式切换">
-          <Link
-            className={mode === "login" ? "hero-action primary" : "hero-action secondary"}
-            to="/login"
-            onClick={() => setMode("login")}
-          >
-            登录
-          </Link>
-          <Link
-            className={mode === "register" ? "hero-action primary" : "hero-action secondary"}
-            to="/register"
-            onClick={() => setMode("register")}
-          >
-            注册
+      <section className="auth-card">
+        <div className="auth-card-header">
+          <Link aria-label="WeMail auth brand" className="auth-brand-stack" to="/">
+            <span aria-hidden="true" className="auth-brand-mark">
+              <WemailLogo className="auth-brand-logo" title="" />
+            </span>
+            <WemailWordmark className="auth-brand-wordmark" />
           </Link>
         </div>
+        <div className="auth-tabs" role="tablist" aria-label="认证方式切换" onKeyDown={handleTabsKeyDown}>
+          <button
+            aria-controls="auth-panel-login"
+            aria-selected={mode === "login"}
+            className={mode === "login" ? "auth-tab active" : "auth-tab"}
+            id="auth-tab-login"
+            onClick={() => switchMode("login")}
+            role="tab"
+            tabIndex={mode === "login" ? 0 : -1}
+            type="button"
+          >
+            登录
+          </button>
+          <button
+            aria-controls="auth-panel-register"
+            aria-selected={mode === "register"}
+            className={mode === "register" ? "auth-tab active" : "auth-tab"}
+            id="auth-tab-register"
+            onClick={() => switchMode("register")}
+            role="tab"
+            tabIndex={mode === "register" ? 0 : -1}
+            type="button"
+          >
+            注册
+          </button>
+        </div>
+        <AuthForms authError={authError} onRegister={onRegister} onLogin={onLogin} mode={mode} />
       </section>
-      <AuthForms authError={authError} onRegister={onRegister} onLogin={onLogin} mode={mode} />
     </div>
   );
 }

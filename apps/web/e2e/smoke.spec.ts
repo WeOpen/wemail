@@ -1,11 +1,57 @@
 import { expect, test } from "@playwright/test";
 
-test("shows the landing page headline", async ({ page }) => {
+test("shows the optimus-style landing page for signed-out users", async ({ page }) => {
   test.setTimeout(60000);
   await page.goto("/");
-  await expect(
-    page.getByRole("heading", { name: /自托管临时邮箱，给团队一套可控的收信与管理工作台/i })
-  ).toBeVisible();
+  const navigation = page.getByRole("navigation", { name: /landing page navigation/i });
+  await expect(navigation).toBeVisible();
+  await expect(page.getByRole("heading", { name: /The platform/i })).toBeVisible();
+  await expect(navigation.getByRole("link", { name: /^Features$/i })).toBeVisible();
+});
+
+test("redirects signed-out deep links into login with a return target", async ({ page }) => {
+  test.setTimeout(60000);
+  await page.goto("/settings");
+  await expect(page.getByRole("button", { name: /^立即登录$/i })).toBeVisible();
+  await expect.poll(() => page.url(), { timeout: 10000 }).toContain('/login?next=%2Fsettings');
+});
+
+test("keeps the next target when switching auth tabs", async ({ page }) => {
+  test.setTimeout(60000);
+  await page.goto('/login?next=%2Fsettings');
+  await page.getByRole('tab', { name: /^注册$/i }).click();
+  await expect.poll(() => page.url(), { timeout: 10000 }).toContain('/register?next=%2Fsettings');
+  await page.getByRole('tab', { name: /^登录$/i }).click();
+  await expect.poll(() => page.url(), { timeout: 10000 }).toContain('/login?next=%2Fsettings');
+});
+
+test("restores the intended route after auth when next is present", async ({ page }) => {
+  test.setTimeout(60000);
+  await page.route("**/auth/session", async (route) => {
+    await route.fulfill({
+      json: {
+        user: {
+          id: "member-1",
+          email: "member@example.com",
+          role: "member",
+          createdAt: "2026-04-08T00:00:00.000Z"
+        },
+        featureToggles: {
+          aiEnabled: true,
+          telegramEnabled: true,
+          outboundEnabled: true,
+          mailboxCreationEnabled: true
+        }
+      }
+    });
+  });
+  await page.route("**/api/mailboxes", async (route) => route.fulfill({ json: { mailboxes: [] } }));
+  await page.route("**/api/keys", async (route) => route.fulfill({ json: { keys: [] } }));
+  await page.route("**/api/telegram", async (route) => route.fulfill({ json: { subscription: null } }));
+
+  await page.goto('/login?next=%2Fsettings');
+  await expect(page.getByRole('heading', { name: /密钥、通知与接入控制/i })).toBeVisible();
+  await expect.poll(() => page.url(), { timeout: 10000 }).toContain('/settings');
 });
 
 test("shows the shared access shell for an authenticated member", async ({ page }) => {
@@ -66,6 +112,10 @@ test("shows the shared access shell for an authenticated member", async ({ page 
   await expect(page.getByRole("heading", { name: /密钥、通知与接入控制/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /API 密钥/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /Telegram 通知/i })).toBeVisible();
+  await expect(page.getByLabel(/工作台品牌/i)).toContainText("WeMail");
+  await expect(page.getByLabel(/工作台快速搜索/i)).toHaveCount(0);
+  await page.getByRole("button", { name: /用户菜单/i }).click();
+  await expect(page.getByRole("menuitem", { name: /退出登录/i })).toBeVisible();
 
   const themeToggle = page.locator(".workspace-theme-toggle");
   await expect(themeToggle).toBeVisible();
@@ -164,5 +214,6 @@ test("shows the control workspace for an authenticated admin", async ({ page }) 
   await expect(page.getByRole("heading", { name: /邀请码控制/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /配额控制/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /邮箱总览/i })).toBeVisible();
+  await expect(page.getByLabel(/工作台品牌/i)).toContainText("WeMail");
   await expect(page.getByText(/ops@example.com/i)).toBeVisible();
 });

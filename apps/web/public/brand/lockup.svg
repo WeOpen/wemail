@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 80" fill="none">
+  <rect width="360" height="80" fill="transparent"/>
+  <g transform="translate(4 8)">
+    <rect x="8" y="16" width="48" height="32" rx="8" fill="#fffaf6" stroke="#111111" stroke-width="3.5"/>
+    <path d="M10 19.5L22 31L32 23.5L42 31L54 19.5" stroke="#111111" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
+    <path d="M22 31L32 23.5L42 31" stroke="#ff7a00" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
+    <path d="M10 44L24.5 31.5" stroke="#111111" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
+    <path d="M54 44L39.5 31.5" stroke="#111111" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
+    <circle cx="32" cy="38.5" r="7.5" fill="#ff7a00" stroke="#111111" stroke-width="3"/>
+    <path d="M27.5 41.5V35L32 40.75L36.5 35V41.5" stroke="#111111" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="84" y="44" fill="#111111" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="-1.8">We</text>
+  <text x="133" y="44" fill="#ff7a00" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="-1.8">Mail</text>
+  <text x="86" y="60" fill="#6f6259" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="8.5" font-weight="600" letter-spacing="3.2">EDGE MAIL OPERATIONS</text>
+</svg>
