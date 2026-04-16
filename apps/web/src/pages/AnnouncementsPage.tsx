@@ -3,9 +3,20 @@ import {
   announcementsTimeline,
   announcementStatusSummary,
   featuredAnnouncement,
-  maintenanceWindows,
   type AnnouncementItem
 } from "../features/announcements/announcementsMockData";
+
+function buildOverviewDonut() {
+  let offset = 0;
+  const segments = announcementStatusSummary.map((item) => {
+    const next = offset + item.ratio;
+    const segment = `${item.tone} ${offset}% ${next}%`;
+    offset = next;
+    return segment;
+  });
+
+  return `conic-gradient(${segments.join(", ")})`;
+}
 
 function typeClassName(type: AnnouncementItem["type"]) {
   switch (type) {
@@ -40,86 +51,97 @@ function statusClassName(status: AnnouncementItem["status"]) {
 export function AnnouncementsPage() {
   return (
     <main className="workspace-grid announcements-grid">
-      <section className="panel workspace-card announcements-control-bar" aria-label="公告控制条">
-        <label className="announcements-search-field">
-          <span className="sr-only">公告搜索</span>
-          <input aria-label="公告搜索" placeholder="搜索标题 / 内容 / 标签" readOnly type="search" />
-        </label>
-
-        <label className="announcements-filter-field">
-          <span className="sr-only">按类型筛选公告</span>
-          <select aria-label="按类型筛选公告" defaultValue="all">
-            {announcementFilters.type.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label className="announcements-filter-field">
-          <span className="sr-only">按状态筛选公告</span>
-          <select aria-label="按状态筛选公告" defaultValue="all">
-            {announcementFilters.status.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label className="announcements-filter-field">
-          <span className="sr-only">按时间筛选公告</span>
-          <select aria-label="按时间筛选公告" defaultValue="all">
-            {announcementFilters.time.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
-      </section>
-
-      <section className="panel workspace-card announcements-hero-card">
-        <div className="announcements-hero-copy">
-          <p className="panel-kicker">置顶公告</p>
-          <h1>{featuredAnnouncement.title}</h1>
-          <p className="section-copy announcements-hero-description">{featuredAnnouncement.summary}</p>
-          <div className="announcements-chip-row">
-            <span className={`announcements-chip ${typeClassName(featuredAnnouncement.type)}`}>{featuredAnnouncement.type}</span>
-            <span className={`announcements-chip ${statusClassName(featuredAnnouncement.status)}`}>{featuredAnnouncement.status}</span>
-            <span className="announcements-chip neutral">发布者：{featuredAnnouncement.author}</span>
-            <span className="announcements-chip neutral">发布时间：{featuredAnnouncement.publishedAt}</span>
-          </div>
-        </div>
-
-        <div className="announcements-hero-meta">
-          <article className="announcements-meta-card">
-            <span>生效公告</span>
-            <strong>8</strong>
-            <small>当前对全员可见</small>
-          </article>
-          <article className="announcements-meta-card">
-            <span>即将开始</span>
-            <strong>3</strong>
-            <small>24h 内计划公告</small>
-          </article>
-          <article className="announcements-meta-card">
-            <span>本周更新</span>
-            <strong>12</strong>
-            <small>产品 + 运维混合</small>
-          </article>
-        </div>
-      </section>
-
-      <div className="announcements-main-grid">
-        <section className="panel workspace-card announcements-panel">
-          <div className="announcements-panel-head">
-            <div>
-              <p className="panel-kicker">时间线</p>
-              <h2>最近公告</h2>
+      <div className="announcements-top-grid">
+        <section className="panel workspace-card announcements-hero-card">
+          <div className="announcements-hero-copy">
+            <p className="panel-kicker">置顶公告</p>
+            <h1>{featuredAnnouncement.title}</h1>
+            <p className="section-copy announcements-hero-description">{featuredAnnouncement.summary}</p>
+            <div className="announcements-chip-row">
+              <span className={`announcements-chip ${typeClassName(featuredAnnouncement.type)}`}>{featuredAnnouncement.type}</span>
+              <span className={`announcements-chip ${statusClassName(featuredAnnouncement.status)}`}>{featuredAnnouncement.status}</span>
+              <span className="announcements-chip neutral">发布者：{featuredAnnouncement.author}</span>
+              <span className="announcements-chip neutral">发布时间：{featuredAnnouncement.publishedAt}</span>
             </div>
-            <p className="section-copy">左侧主列表按最近更新时间排序，管理员和成员都从这里继续往下读。</p>
+          </div>
+        </section>
+
+        <section className="panel workspace-card announcements-overview-panel" aria-label="公告概览">
+          <p className="panel-kicker announcements-section-kicker">概览</p>
+          <div className="announcements-overview-layout">
+            <div className="announcements-overview-visual">
+              <div
+                aria-label="公告状态分布图"
+                className="announcements-overview-donut announcements-overview-donut-combined"
+                role="img"
+                style={{ backgroundImage: buildOverviewDonut() }}
+              >
+                <div className="announcements-overview-donut-center">
+                  <strong>40</strong>
+                  <span>总公告</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="announcements-overview-legend">
+              {announcementStatusSummary.map((item) => (
+                <article className="announcements-overview-row" key={item.label}>
+                  <div className="announcements-overview-row-head">
+                    <span className="announcements-list-label">
+                      <i className="dashboard-dot" style={{ backgroundColor: item.tone }} />
+                      <h3>{item.label}</h3>
+                    </span>
+                    <strong>{item.value}</strong>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div className="announcements-main-grid announcements-main-grid-single">
+        <section className="panel workspace-card announcements-panel">
+          <p className="panel-kicker announcements-section-kicker">最近公告</p>
+
+          <div className="announcements-control-bar announcements-control-bar-inline" aria-label="最近公告筛选">
+            <label className="announcements-search-field">
+              <span className="sr-only">公告搜索</span>
+              <input aria-label="公告搜索" placeholder="搜索标题 / 内容 / 标签" readOnly type="search" />
+            </label>
+
+            <label className="announcements-filter-field">
+              <span className="sr-only">按类型筛选公告</span>
+              <select aria-label="按类型筛选公告" defaultValue="all">
+                {announcementFilters.type.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="announcements-filter-field">
+              <span className="sr-only">按状态筛选公告</span>
+              <select aria-label="按状态筛选公告" defaultValue="all">
+                {announcementFilters.status.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="announcements-filter-field">
+              <span className="sr-only">按时间筛选公告</span>
+              <select aria-label="按时间筛选公告" defaultValue="all">
+                {announcementFilters.time.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
 
           <div className="announcements-timeline">
@@ -148,47 +170,6 @@ export function AnnouncementsPage() {
             ))}
           </div>
         </section>
-
-        <div className="announcements-side-stack">
-          <section className="panel workspace-card announcements-panel">
-            <div className="announcements-panel-head">
-              <div>
-                <p className="panel-kicker">概览</p>
-                <h2>状态概览</h2>
-              </div>
-              <p className="section-copy">帮助管理员快速判断当前有哪些公告正在生效、计划中或已归档。</p>
-            </div>
-
-            <div className="announcements-summary-list">
-              {announcementStatusSummary.map((item) => (
-                <article className="announcements-summary-row" key={item.label}>
-                  <strong>{item.label}</strong>
-                  <span>{item.value}</span>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section className="panel workspace-card announcements-panel">
-            <div className="announcements-panel-head">
-              <div>
-                <p className="panel-kicker">窗口</p>
-                <h2>近期维护窗口</h2>
-              </div>
-              <p className="section-copy">强化系统维护场景，帮助管理员从公告页直接理解接下来的影响窗口。</p>
-            </div>
-
-            <div className="announcements-maintenance-list">
-              {maintenanceWindows.map((window) => (
-                <article className="announcements-maintenance-card" key={window.id}>
-                  <strong>{window.time}</strong>
-                  <span>{window.title}</span>
-                  <small>{window.impact}</small>
-                </article>
-              ))}
-            </div>
-          </section>
-        </div>
       </div>
     </main>
   );

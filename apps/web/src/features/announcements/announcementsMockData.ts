@@ -23,13 +23,9 @@ export type AnnouncementItem = {
 export type AnnouncementStatusSummary = {
   label: string;
   value: string;
-};
-
-export type MaintenanceWindow = {
-  id: string;
-  time: string;
-  title: string;
-  impact: string;
+  detail: string;
+  ratio: number;
+  tone: string;
 };
 
 export const announcementFilters = {
@@ -130,29 +126,8 @@ export const announcementsTimeline: AnnouncementItem[] = [
 ];
 
 export const announcementStatusSummary: AnnouncementStatusSummary[] = [
-  { label: "进行中", value: "4 条" },
-  { label: "即将开始", value: "3 条" },
-  { label: "本周已结束", value: "5 条" },
-  { label: "已归档", value: "28 条" }
-];
-
-export const maintenanceWindows: MaintenanceWindow[] = [
-  {
-    id: "maintenance-1",
-    time: "04-19 00:30 - 02:00",
-    title: "数据库升级与配额策略重算",
-    impact: "期间部分账号管理操作将进入只读保护"
-  },
-  {
-    id: "maintenance-2",
-    time: "04-21 23:00 - 23:30",
-    title: "Webhook 回调链路切换",
-    impact: "历史回调不受影响，新回调地址将逐步生效"
-  },
-  {
-    id: "maintenance-3",
-    time: "04-24 01:00 - 01:20",
-    title: "邮件外发队列例行维护",
-    impact: "外发请求可能短时排队，但不会丢失"
-  }
+  { label: "进行中", value: "4 条", detail: "当前对成员可见", ratio: 10, tone: "#ff7a00" },
+  { label: "即将开始", value: "3 条", detail: "24h 内计划公告", ratio: 7.5, tone: "#ffb866" },
+  { label: "本周已结束", value: "5 条", detail: "待归档复盘", ratio: 12.5, tone: "#111827" },
+  { label: "已归档", value: "28 条", detail: "历史公告沉淀", ratio: 70, tone: "#d9dde5" }
 ];

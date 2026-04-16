@@ -56,10 +56,20 @@ describe("announcements integration", () => {
       render(<App />);
 
       expect(await screen.findByRole("searchbox", { name: /公告搜索/i })).toBeInTheDocument();
+      expect(screen.getByLabelText(/最近公告筛选/i)).toBeInTheDocument();
+      expect(screen.queryByLabelText(/公告控制条/i)).not.toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: /^进行中$/i })).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: /^即将开始$/i })).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: /^本周已结束$/i })).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: /^已归档$/i })).toBeInTheDocument();
       expect(screen.getByRole("heading", { name: /4 月核心平台升级将于本周六凌晨执行/i })).toBeInTheDocument();
-      expect(screen.getByRole("heading", { name: /最近公告/i })).toBeInTheDocument();
-      expect(screen.getByRole("heading", { name: /状态概览/i })).toBeInTheDocument();
-      expect(screen.getByRole("heading", { name: /近期维护窗口/i })).toBeInTheDocument();
+      expect(screen.getByText(/^最近公告$/i)).toBeInTheDocument();
+      expect(screen.getByText(/^概览$/i)).toBeInTheDocument();
+      expect(screen.queryByRole("heading", { name: /公告状态分布/i })).not.toBeInTheDocument();
+      expect(screen.queryByText(/当前对成员可见|24h 内计划公告|待归档复盘|历史公告沉淀/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/^时间线$/i)).not.toBeInTheDocument();
+      expect(screen.queryByRole("heading", { name: /状态概览/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole("heading", { name: /近期维护窗口/i })).not.toBeInTheDocument();
       expect(screen.queryByText(/公告页面已预留/i)).not.toBeInTheDocument();
     },
     10000

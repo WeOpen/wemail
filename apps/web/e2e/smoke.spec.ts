@@ -352,8 +352,18 @@ test("shows the announcements board for an authenticated member", async ({ page 
 
   await page.goto("/announcements");
   await expect(page.getByRole("searchbox", { name: /公告搜索/i })).toBeVisible();
+  await expect(page.getByLabel("最近公告筛选")).toBeVisible();
+  await expect(page.getByLabel("公告控制条")).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: /^进行中$/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /^即将开始$/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /^本周已结束$/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /^已归档$/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /4 月核心平台升级将于本周六凌晨执行/i })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /最近公告/i })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /状态概览/i })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /近期维护窗口/i })).toBeVisible();
+  await expect(page.getByText(/^最近公告$/i)).toBeVisible();
+  await expect(page.getByText(/^概览$/i)).toBeVisible();
+  await expect(page.getByRole("heading", { name: /公告状态分布/i })).toHaveCount(0);
+  await expect(page.getByText(/当前对成员可见|24h 内计划公告|待归档复盘|历史公告沉淀/i)).toHaveCount(0);
+  await expect(page.getByText(/^时间线$/i)).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: /状态概览/i })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: /近期维护窗口/i })).toHaveCount(0);
 });
