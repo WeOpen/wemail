@@ -17,6 +17,7 @@ import type { OutboundHistoryItem } from "../features/inbox/types";
 import { ApiKeysPanel } from "../features/settings/ApiKeysPanel";
 import { TelegramPanel } from "../features/settings/TelegramPanel";
 import { AdminPage } from "../pages/AdminPage";
+import { AnnouncementsPage } from "../pages/AnnouncementsPage";
 import { DashboardPage } from "../pages/DashboardPage";
 import { InboxPage } from "../pages/InboxPage";
 import { SystemAppearancePage } from "../pages/SystemAppearancePage";
@@ -344,27 +345,7 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
     />
   );
 
-  const announcementsPage = (
-    <WorkspacePlaceholderPage
-      kicker="设置"
-      title="公告页面已预留"
-      description="公告入口已挂到左侧设置分组，当前先占位，后续可接系统公告、版本更新与维护通知。"
-      cards={[
-        {
-          title: "文档",
-          description: "可与文档页联动承接发布说明。",
-          actionLabel: "打开文档",
-          to: "/docs"
-        },
-        {
-          title: "仪表盘",
-          description: "回到仪表盘查看整个后台的导航总览。",
-          actionLabel: "返回仪表盘",
-          to: "/dashboard"
-        }
-      ]}
-    />
-  );
+  const announcementsPage = <AnnouncementsPage />;
 
   const systemAppearancePage = (
     <SystemAppearancePage

@@ -252,7 +252,7 @@ export function AppLayout({
         </aside>
 
         <div className="workspace-main-column workspace-scroll-area" ref={mainScrollRef}>
-          {shell.hero.variant !== "dashboard" ? (
+          {shell.hero.variant !== "board" ? (
             <section className="workspace-hero panel">
               <div className="workspace-hero-copy">
                 <p className="panel-kicker">{shell.hero.eyebrow}</p>

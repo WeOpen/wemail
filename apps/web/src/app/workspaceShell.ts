@@ -38,7 +38,7 @@ type WorkspaceHeroStat = {
 };
 
 type WorkspaceHero = {
-  variant?: "default" | "dashboard";
+  variant?: "default" | "board";
   eyebrow: string;
   title: string;
   description: string;
@@ -326,7 +326,7 @@ function buildHero({
   switch (activePrimary.id) {
     case "dashboard":
       return {
-        variant: "dashboard",
+        variant: "board",
         eyebrow: "仪表盘",
         title: "平台总览仪表盘",
         description: "先用 mock 数据验证管理后台首页的 KPI、趋势图和结构图布局，后续再逐步替换成真实平台指标。",
@@ -523,10 +523,11 @@ function buildHero({
       };
     case "announcements":
       return {
+        variant: "board",
         eyebrow: "公告中心",
-        title: "公告页面已占位",
-        description: "公告入口已挂到左侧设置组，当前先保留结构位置，后续可补系统公告、变更记录与维护通知。",
-        stats: [createApiKeyStat(settings.apiKeys), createTelegramStat(settings.telegram), createRoleStat(session)],
+        title: "公告看板",
+        description: "先用 mock 数据验证正式后台型公告看板的布局、置顶公告和控制条结构，后续再接真实公告接口。",
+        stats: [],
         actions: [
           { kind: "link", label: "返回仪表盘", to: "/dashboard", tone: "primary" },
           { kind: "link", label: "打开文档", to: "/docs", tone: "secondary" }

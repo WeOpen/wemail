@@ -316,3 +316,44 @@ test("shows the admin dashboard mock board for an authenticated admin", async ({
   await expect(page.getByRole("heading", { name: /邮箱状态分布/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /重点资源概览/i })).toBeVisible();
 });
+
+test("shows the announcements board for an authenticated member", async ({ page }) => {
+  test.setTimeout(60000);
+  await page.route("**/auth/session", async (route) => {
+    await route.fulfill({
+      json: {
+        user: {
+          id: "member-1",
+          email: "member@example.com",
+          role: "member",
+          createdAt: "2026-04-08T00:00:00.000Z"
+        },
+        featureToggles: {
+          aiEnabled: true,
+          telegramEnabled: true,
+          outboundEnabled: true,
+          mailboxCreationEnabled: true
+        }
+      }
+    });
+  });
+
+  await page.route("**/api/mailboxes", async (route) =>
+    route.fulfill({
+      json: {
+        mailboxes: [{ id: "box-1", address: "ops@example.com", label: "Ops", createdAt: "2026-04-08T00:00:00.000Z" }]
+      }
+    })
+  );
+  await page.route("**/api/messages?mailboxId=box-1", async (route) => route.fulfill({ json: { messages: [] } }));
+  await page.route("**/api/outbound?mailboxId=box-1", async (route) => route.fulfill({ json: { messages: [] } }));
+  await page.route("**/api/keys", async (route) => route.fulfill({ json: { keys: [] } }));
+  await page.route("**/api/telegram", async (route) => route.fulfill({ json: { subscription: null } }));
+
+  await page.goto("/announcements");
+  await expect(page.getByRole("searchbox", { name: /公告搜索/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /4 月核心平台升级将于本周六凌晨执行/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /最近公告/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /状态概览/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /近期维护窗口/i })).toBeVisible();
+});

@@ -33,7 +33,6 @@ const themeOptions: Array<{
 ];
 
 export function SystemAppearancePage({
-  resolvedTheme: _resolvedTheme,
   themePreference,
   onSelectThemePreference
 }: SystemAppearancePageProps) {
