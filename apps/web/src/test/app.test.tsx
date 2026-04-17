@@ -202,7 +202,8 @@ describe("App", () => {
       });
 
       render(<App />);
-      expect(await screen.findByRole("heading", { name: /个人 API 凭证中心/i })).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: /^API 密钥$/i })).toBeInTheDocument();
+      expect(screen.queryByRole("heading", { name: /个人 API 凭证中心/i })).not.toBeInTheDocument();
       await waitFor(() => {
         expect(window.location.pathname).toBe("/settings");
       });
@@ -333,7 +334,7 @@ describe("App", () => {
 
       render(<App />);
 
-      expect(await screen.findByRole("heading", { name: /访问、配额与系统开关/i })).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: /邀请码控制/i })).toBeInTheDocument();
       expect(screen.getByRole("heading", { name: /邮箱总览/i })).toBeInTheDocument();
       expect(screen.queryByLabelText(/工作台快速搜索/i)).not.toBeInTheDocument();
       expect(screen.getByLabelText(/WeMail logo/i)).toBeInTheDocument();
@@ -406,7 +407,7 @@ describe("App", () => {
       });
 
       render(<App />);
-      expect(await screen.findByRole("heading", { name: /访问、配额与系统开关/i })).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: /邀请码控制/i })).toBeInTheDocument();
 
       await waitFor(() => {
         expect(calls.get("http://127.0.0.1:8787/auth/session") ?? 0).toBe(1);

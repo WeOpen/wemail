@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { buildWorkspaceShellState } from "../app/workspaceShell";
 
@@ -19,24 +19,7 @@ describe("buildWorkspaceShellState", () => {
           outboundEnabled: true,
           mailboxCreationEnabled: true
         }
-      },
-      inbox: {
-        mailboxes: [],
-        messages: [],
-        outboundHistory: [],
-        selectedMailboxId: null
-      },
-      settings: {
-        apiKeys: [],
-        telegram: null
-      },
-      admin: {
-        adminUsers: [],
-        adminInvites: [],
-        adminQuota: null,
-        adminMailboxes: []
-      },
-      onOpenMailboxComposer: vi.fn()
+      }
     });
 
     expect(shell.activePrimaryId).toBe("mail");
@@ -100,26 +83,33 @@ describe("buildWorkspaceShellState", () => {
           outboundEnabled: true,
           mailboxCreationEnabled: true
         }
-      },
-      inbox: {
-        mailboxes: [],
-        messages: [],
-        outboundHistory: [],
-        selectedMailboxId: null
-      },
-      settings: {
-        apiKeys: [],
-        telegram: null
-      },
-      admin: {
-        adminUsers: [],
-        adminInvites: [],
-        adminQuota: null,
-        adminMailboxes: []
-      },
-      onOpenMailboxComposer: vi.fn()
+      }
     });
 
     expect(shell.railSections[0]?.items.some((item) => item.label === "用户")).toBe(false);
+  });
+
+  it("normalizes /settings to the api key route and preserves the settings rail", () => {
+    const shell = buildWorkspaceShellState({
+      pathname: "/settings",
+      session: {
+        user: {
+          id: "member-1",
+          email: "member@example.com",
+          role: "member",
+          createdAt: "2026-04-14T00:00:00.000Z"
+        },
+        featureToggles: {
+          aiEnabled: true,
+          telegramEnabled: true,
+          outboundEnabled: true,
+          mailboxCreationEnabled: true
+        }
+      }
+    });
+
+    expect(shell.routeKey).toBe("api-keys");
+    expect(shell.routeLabel).toBe("API 密钥");
+    expect(shell.secondaryNav).toEqual([]);
   });
 });

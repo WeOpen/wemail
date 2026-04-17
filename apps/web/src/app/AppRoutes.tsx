@@ -172,12 +172,6 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
           to: "/mail/list"
         },
         {
-          title: "创建账号",
-          description: "导航已预留创建账号入口，后续可接入独立表单或对话框。",
-          actionLabel: "查看创建账号入口",
-          to: "/accounts/create"
-        },
-        {
           title: "账号设置",
           description: "账号设置位已经预留，后续可拆出偏好与接入规则。",
           actionLabel: "打开账号设置",

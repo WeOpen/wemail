@@ -50,7 +50,7 @@ test("restores the intended route after auth when next is present", async ({ pag
   await page.route("**/api/telegram", async (route) => route.fulfill({ json: { subscription: null } }));
 
   await page.goto("/login?next=%2Fsettings");
-  await expect(page.getByRole("heading", { name: /密钥、通知与接入控制/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /^API 密钥$/i })).toBeVisible();
   await expect.poll(() => page.url(), { timeout: 10000 }).toContain("/settings");
 });
 
@@ -112,7 +112,7 @@ test("shows the reworked shared access shell for an authenticated member", async
   await expect(sidebar).toBeVisible();
   await expect(sidebar.getByRole("link", { name: /^仪表盘$/i })).toBeVisible();
   await expect(sidebar.getByRole("link", { name: /^邮件(?:\s|$)/i })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /密钥、通知与接入控制/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /^API 密钥$/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /API 密钥/i })).toBeVisible();
   await expect(page.getByLabel(/工作台品牌/i)).toContainText("WeMail");
   await expect(page.getByLabel(/API 密钥 二级菜单/i)).toHaveCount(0);
@@ -132,7 +132,6 @@ test("shows the reworked shared access shell for an authenticated member", async
 
   await sidebar.getByRole("link", { name: /^邮件(?:\s|$)/i }).click();
   await expect(page.getByRole("navigation", { name: /邮件 二级菜单/i })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /一个工作台，管理所有邮箱/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /当前邮箱/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /最新消息/i })).toBeVisible();
   await expect.poll(async () => page.evaluate(() => document.documentElement.dataset.theme), { timeout: 10000 }).toBe("light");
@@ -217,7 +216,6 @@ test("shows the admin users workspace for an authenticated admin", async ({ page
   await expect(sidebar).toBeVisible();
   await expect(sidebar.getByRole("link", { name: /^用户(?:\s|$)/i })).toBeVisible();
   await expect(page.getByRole("navigation", { name: /用户 二级菜单/i })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /访问、配额与系统开关/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /邀请码控制/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /配额控制/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /邮箱总览/i })).toBeVisible();
