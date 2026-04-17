@@ -109,7 +109,7 @@ export function AnnouncementsPage({ canPublish = false }: AnnouncementsPageProps
           <div className="announcements-section-head">
             <p className="panel-kicker announcements-section-kicker">最近公告</p>
             {canPublish ? (
-              <button className="workspace-action-button secondary announcements-publish-button" type="button">
+              <button className="workspace-action-button primary announcements-publish-button" type="button">
                 发布公告
               </button>
             ) : null}

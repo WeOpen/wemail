@@ -202,7 +202,7 @@ describe("App", () => {
       });
 
       render(<App />);
-      expect(await screen.findByRole("heading", { name: /密钥、通知与接入控制/i })).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: /个人 API 凭证中心/i })).toBeInTheDocument();
       await waitFor(() => {
         expect(window.location.pathname).toBe("/settings");
       });

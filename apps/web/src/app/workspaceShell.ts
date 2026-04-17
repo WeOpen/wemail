@@ -476,8 +476,8 @@ function buildHero({
     case "api-keys":
       return {
         eyebrow: "设置中心",
-        title: "密钥、通知与接入控制",
-        description: "在统一的圆角工作台中管理自动化凭证、通知路由和账号接入设置。",
+        title: "个人 API 凭证中心",
+        description: "在一个开发者自助界面里创建、吊销并理解你的 API 密钥，用于脚本、CLI 与外部系统接入。",
         stats: [createApiKeyStat(settings.apiKeys), createTelegramStat(settings.telegram), createRoleStat(session)],
         actions: [
           { kind: "link", label: "打开 Telegram", to: "/telegram", tone: "primary" },
@@ -490,8 +490,8 @@ function buildHero({
     case "telegram":
       return {
         eyebrow: "通知路由",
-        title: "Telegram 通知配置",
-        description: "Telegram 入口已移动到左侧设置组；当前页面聚焦机器人通知与 Chat ID 绑定。",
+        title: "Telegram 个人通知中心",
+        description: "在这里绑定 Chat ID、启停个人提醒，并预留后续的通知偏好与打扰控制。",
         stats: [createTelegramStat(settings.telegram), createApiKeyStat(settings.apiKeys), createRoleStat(session)],
         actions: [
           { kind: "link", label: "打开 API 密钥", to: "/api-keys", tone: "primary" },
@@ -502,8 +502,8 @@ function buildHero({
     case "webhook":
       return {
         eyebrow: "回调接入",
-        title: "Webhook 页面已占位",
-        description: "Webhook 已出现在左侧设置菜单中，当前先完成导航占位，后续再接入事件订阅与签名配置。",
+        title: "Webhook 接入控制台",
+        description: "用统一的信息架构承接端点、事件订阅、签名说明、测试投递与日志，后端接口即将开放。",
         stats: [createApiKeyStat(settings.apiKeys), createTelegramStat(settings.telegram), createRoleStat(session)],
         actions: [
           { kind: "link", label: "返回 API 密钥", to: "/api-keys", tone: "primary" },

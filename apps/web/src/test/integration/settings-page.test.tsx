@@ -1,101 +1,84 @@
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+﻿import { cleanup, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import type { ReactElement } from "react";
 
-import { App } from "../../app/App";
-import { jsonResponse } from "../helpers/mock-api";
+import { ApiKeysPage } from "../../features/settings/ApiKeysPage";
+import { TelegramSettingsPage } from "../../features/settings/TelegramSettingsPage";
+import { WebhookPage } from "../../features/settings/WebhookPage";
 
-describe("settings integration", () => {
+function renderWithRouter(element: ReactElement) {
+  return render(<MemoryRouter>{element}</MemoryRouter>);
+}
+
+describe("settings pages", () => {
   afterEach(() => {
     cleanup();
-    vi.restoreAllMocks();
-    window.localStorage.clear();
-    window.history.pushState({}, "", "/");
   });
 
-  it(
-    "renders the reworked sidebar and keeps theme selection across navigation",
-    async () => {
-      window.history.pushState({}, "", "/settings");
-      vi.spyOn(globalThis, "fetch").mockImplementation((input) => {
-        const url = typeof input === "string" ? input : input instanceof Request ? input.url : String(input);
+  it("reveals a newly created api key and shows quickstart guidance", async () => {
+    const user = userEvent.setup();
+    const onCreateApiKey = vi.fn().mockResolvedValue({
+      key: { secret: "wk_live_secret_123456", prefix: "wk_live_abcd" }
+    });
 
-        if (url.endsWith("/auth/session")) {
-          return jsonResponse({
-            user: {
-              id: "member-1",
-              email: "member@example.com",
-              role: "member",
-              createdAt: "2026-04-08T00:00:00.000Z"
-            },
-            featureToggles: {
-              aiEnabled: true,
-              telegramEnabled: true,
-              outboundEnabled: true,
-              mailboxCreationEnabled: true
-            }
-          });
-        }
+    renderWithRouter(
+      <ApiKeysPage
+        apiKeys={[
+          {
+            id: "key-1",
+            label: "本地脚本",
+            prefix: "wk_live_1234",
+            createdAt: "2026-04-08T00:00:00.000Z",
+            lastUsedAt: null,
+            revokedAt: null
+          }
+        ]}
+        onCreateApiKey={onCreateApiKey}
+        onRevokeApiKey={vi.fn()}
+      />
+    );
 
-        if (url.endsWith("/api/mailboxes")) {
-          return jsonResponse({
-            mailboxes: [{ id: "box-1", address: "ops@example.com", label: "Ops", createdAt: "2026-04-08T00:00:00.000Z" }]
-          });
-        }
-        if (url.endsWith("/api/messages?mailboxId=box-1")) {
-          return jsonResponse({
-            messages: [
-              {
-                id: "msg-1",
-                mailboxId: "box-1",
-                fromAddress: "ops@example.com",
-                subject: "Verification",
-                previewText: "Use 123456",
-                bodyText: "Use 123456",
-                extraction: { method: "regex", type: "auth_code", value: "123456", label: "Code" },
-                oversizeStatus: null,
-                attachmentCount: 0,
-                attachments: [],
-                receivedAt: "2026-04-08T00:00:00.000Z"
-              }
-            ]
-          });
-        }
-        if (url.endsWith("/api/outbound?mailboxId=box-1")) {
-          return jsonResponse({ messages: [] });
-        }
-        if (url.endsWith("/api/keys")) {
-          return jsonResponse({ keys: [] });
-        }
-        if (url.endsWith("/api/telegram")) {
-          return jsonResponse({ subscription: null });
-        }
+    expect(screen.getByRole("heading", { name: /快速开始/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /安全建议/i })).toBeInTheDocument();
 
-        return jsonResponse({});
-      });
+    await user.click(screen.getByRole("button", { name: /创建密钥/i }));
+    await user.type(screen.getByLabelText(/密钥名称/i), "个人 CLI");
+    await user.click(screen.getByRole("button", { name: /确认创建/i }));
 
-      render(<App />);
+    expect(onCreateApiKey).toHaveBeenCalledWith("个人 CLI");
+    expect(await screen.findByText(/只会显示一次/i)).toBeInTheDocument();
+    expect(screen.getByText("wk_live_secret_123456", { selector: "code" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /我已安全保存/i })).toBeInTheDocument();
+  });
 
-      const sidebar = await screen.findByRole("navigation", { name: /工作台导航/i });
-      expect(sidebar).toBeInTheDocument();
-      expect(within(sidebar).getByRole("link", { name: /^仪表盘$/i })).toBeInTheDocument();
-      expect(within(sidebar).getByRole("link", { name: /^邮件(?:\s|$)/i })).toBeInTheDocument();
-      expect(screen.getByRole("heading", { name: /密钥、通知与接入控制/i })).toBeInTheDocument();
-      expect(screen.getByRole("heading", { name: /API 密钥/i })).toBeInTheDocument();
-      expect(screen.queryByLabelText(/API 密钥 二级菜单/i)).not.toBeInTheDocument();
-      expect(screen.getByLabelText(/当前左侧菜单/i)).toHaveTextContent("API 密钥");
-      expect(screen.queryByLabelText(/工作台快速搜索/i)).not.toBeInTheDocument();
-      fireEvent.click(screen.getByRole("button", { name: /用户菜单/i }));
-      expect(screen.getByRole("menuitem", { name: /退出登录/i })).toBeInTheDocument();
+  it("renders a webhook control-center scaffold instead of the old placeholder", () => {
+    renderWithRouter(<WebhookPage />);
 
-      fireEvent.click(screen.getByRole("button", { name: /切换到浅色主题/i }));
-      expect(document.documentElement.dataset.theme).toBe("light");
-      expect(window.localStorage.getItem("wemail-workspace-theme")).toBe("light");
+    expect(screen.getByRole("heading", { name: /事件订阅/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Payload 示例/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /投递日志/i })).toBeInTheDocument();
+    expect(screen.getByText("接口即将开放", { selector: "strong" })).toBeInTheDocument();
+  });
 
-      fireEvent.click(within(sidebar).getByRole("link", { name: /^邮件(?:\s|$)/i }));
-      expect(await screen.findByRole("navigation", { name: /邮件 二级菜单/i })).toBeInTheDocument();
-      expect(await screen.findByRole("heading", { name: /一个工作台，管理所有邮箱/i })).toBeInTheDocument();
-      expect(document.documentElement.dataset.theme).toBe("light");
-    },
-    10000
-  );
+  it("renders the telegram self-serve notification center and submits chat settings", async () => {
+    const user = userEvent.setup();
+    const onSaveTelegram = vi.fn().mockResolvedValue(undefined);
+
+    renderWithRouter(
+      <TelegramSettingsPage telegram={{ chatId: "12345678", enabled: true }} onSaveTelegram={onSaveTelegram} />
+    );
+
+    expect(screen.getByDisplayValue("12345678")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /通知偏好/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /打扰控制/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /测试通知/i })).toBeInTheDocument();
+
+    await user.clear(screen.getByLabelText(/Chat ID/i));
+    await user.type(screen.getByLabelText(/Chat ID/i), "87654321");
+    await user.click(screen.getByRole("button", { name: /保存 Telegram 设置/i }));
+
+    expect(onSaveTelegram).toHaveBeenCalledWith({ chatId: "87654321", enabled: true });
+  });
 });

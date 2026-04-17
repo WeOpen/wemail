@@ -1,19 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
   <rect width="1200" height="630" fill="#f5f1ea"/>
   <circle cx="181" cy="120" r="160" fill="#ff7a00" fill-opacity="0.08"/>
   <circle cx="1068" cy="512" r="196" fill="#111111" fill-opacity="0.05"/>
   <rect x="120" y="120" width="960" height="390" rx="40" fill="#fffaf6" stroke="#e8ddd2" stroke-width="2"/>
-  <g transform="translate(176 190)">
-    <rect x="0" y="12" width="152" height="112" rx="36" fill="#ffffff" stroke="#111111" stroke-width="8"/>
-    <path d="M14 31L48 62L76 44L104 62L138 31" stroke="#111111" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M48 62L76 44L104 62" stroke="#ff7a00" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M16 108L55 70" stroke="#111111" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M136 108L97 70" stroke="#111111" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="76" cy="92" r="24" fill="#ff7a00" stroke="#111111" stroke-width="6.5"/>
-    <path d="M61.5 101V73L76 91L90.5 73V101" stroke="#111111" stroke-width="4.9" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="translate(274 226)">
+    <g transform="translate(0 6)">
+      <rect x="0" y="22" width="152" height="110" rx="38" fill="#ffffff" stroke="#111111" stroke-width="8"/>
+      <path d="M18 36.5L53 66L76 49L99 66L134 36.5" stroke="#111111" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M53 66L76 49L99 66" stroke="#ff7a00" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M18.5 117L55 76" stroke="#111111" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M133.5 117L97 76" stroke="#111111" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="76" cy="101" r="23" fill="#ff7a00" stroke="#111111" stroke-width="6.5"/>
+      <path d="M62.2 112V86L76 102.5L89.8 86V112" stroke="#111111" stroke-width="4.9" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <g transform="translate(224 8)">
+      <text x="205" y="86" fill="#111111" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="94" font-weight="700" letter-spacing="-4" text-anchor="middle"><tspan fill="#111111">We</tspan><tspan fill="#ff7a00">Mail</tspan></text>
+      <text x="205" y="118" fill="#7c6e64" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="18" font-weight="600" letter-spacing="5" text-anchor="middle">EDGE MAIL OPERATIONS</text>
+    </g>
   </g>
-  <text x="360" y="285" fill="#111111" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="94" font-weight="700" letter-spacing="-4">We</text>
-  <text x="495" y="285" fill="#ff7a00" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="94" font-weight="700" letter-spacing="-4">Mail</text>
-  <text x="364" y="330" fill="#7c6e64" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="18" font-weight="600" letter-spacing="5">EDGE MAIL OPERATIONS</text>
-  <text x="188" y="414" fill="#111111" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="34" font-weight="600" letter-spacing="-1.2">Temporary inboxes, outbound control, and admin oversight in one operator-friendly workspace.</text>
 </svg>

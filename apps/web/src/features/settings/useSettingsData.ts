@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
 import type { ApiKeySummary, SessionSummary, TelegramSubscriptionSummary } from "@wemail/shared";
 
@@ -25,13 +25,9 @@ export function useSettingsData({ session, onToast }: UseSettingsDataOptions) {
   const createApiKey = useCallback(
     async (label: string) => {
       const payload = await createApiKeyAction(label);
-      onToast({
-        message: `API Key 已创建，请立即复制：${payload.key.secret}`,
-        tone: "info",
-        dismissible: true,
-        durationMs: 6000
-      });
+      onToast({ message: "API Key 已创建，请在页面中立即复制并保存。", tone: "success" });
       await refreshSettingsData();
+      return payload;
     },
     [onToast, refreshSettingsData]
   );
@@ -46,13 +42,8 @@ export function useSettingsData({ session, onToast }: UseSettingsDataOptions) {
   );
 
   const saveTelegram = useCallback(
-    async (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      const form = new FormData(event.currentTarget);
-      await saveTelegramAction({
-        chatId: form.get("chatId"),
-        enabled: form.get("enabled") === "on"
-      });
+    async (payload: { chatId: string; enabled: boolean }) => {
+      await saveTelegramAction(payload);
       onToast({ message: "Telegram 设置已保存。", tone: "success" });
       await refreshSettingsData();
     },

@@ -14,13 +14,15 @@ import type {
 
 import type { InviteSummary } from "../features/admin/types";
 import type { OutboundHistoryItem } from "../features/inbox/types";
-import { ApiKeysPanel } from "../features/settings/ApiKeysPanel";
-import { TelegramPanel } from "../features/settings/TelegramPanel";
+import { ApiKeysPage } from "../features/settings/ApiKeysPage";
+import { TelegramSettingsPage } from "../features/settings/TelegramSettingsPage";
+import { WebhookPage } from "../features/settings/WebhookPage";
 import { AdminPage } from "../pages/AdminPage";
 import { AnnouncementsPage } from "../pages/AnnouncementsPage";
 import { DashboardPage } from "../pages/DashboardPage";
 import { InboxPage } from "../pages/InboxPage";
 import { SystemAppearancePage } from "../pages/SystemAppearancePage";
+import { SystemProfilePage } from "../pages/SystemProfilePage";
 import { WorkspacePlaceholderPage } from "../pages/WorkspacePlaceholderPage";
 import type { WorkspaceTheme, WorkspaceThemePreference } from "./useWorkspaceTheme";
 
@@ -42,9 +44,9 @@ type AppRoutesProps = {
   settings: {
     apiKeys: ApiKeySummary[];
     telegram: TelegramSubscriptionSummary | null;
-    createApiKey: (label: string) => Promise<void>;
+    createApiKey: (label: string) => Promise<{ key: { secret: string; prefix: string } }>;
     revokeApiKey: (keyId: string) => Promise<void>;
-    saveTelegram: (event: FormEvent<HTMLFormElement>) => Promise<void>;
+    saveTelegram: (payload: { chatId: string; enabled: boolean }) => Promise<void>;
   };
   admin: {
     adminUsers: UserSummary[];
@@ -92,15 +94,11 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
   );
 
   const apiKeysPage = (
-    <main className="workspace-grid settings-grid">
-      <ApiKeysPanel apiKeys={settings.apiKeys} onCreateApiKey={settings.createApiKey} onRevokeApiKey={settings.revokeApiKey} />
-    </main>
+    <ApiKeysPage apiKeys={settings.apiKeys} onCreateApiKey={settings.createApiKey} onRevokeApiKey={settings.revokeApiKey} />
   );
 
   const telegramPage = (
-    <main className="workspace-grid settings-grid">
-      <TelegramPanel telegram={settings.telegram} onSaveTelegram={settings.saveTelegram} />
-    </main>
+    <TelegramSettingsPage telegram={settings.telegram} onSaveTelegram={settings.saveTelegram} />
   );
 
   const restrictedUsersPage = (
@@ -108,7 +106,7 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
       <section className="panel workspace-card restricted-card">
         <p className="panel-kicker">受限区域</p>
         <h2>当前账号无法访问用户管理</h2>
-        <p className="section-copy">当前仍会展示统一工作台外壳，但只有管理员才能调整用户相关的控制能力。</p>
+        <p className="section-copy">当前仍会显示统一工作台外壳，但只有管理员才能使用这里的用户控制能力。</p>
       </section>
     </main>
   );
@@ -152,7 +150,7 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
           },
           {
             title: "邮箱总览",
-            description: `当前系统追踪 ${admin.adminMailboxes.length} 个邮箱入口，后续可继续细分。`
+            description: `当前系统追踪 ${admin.adminMailboxes.length} 个邮箱入口，后续可继续细化。`
           }
         ]}
         notePoints={["权限控制已保留", "二级菜单已切换到顶部", "后续可按模块逐步拆分真实功能"]}
@@ -165,7 +163,7 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
     <WorkspacePlaceholderPage
       kicker="账号中心"
       title="账号列表先以占位页承接"
-      description="已按图片结构预留账号列表入口，后续可把邮箱/账号实体映射到这里。"
+      description="已按目标信息结构预留账号列表入口，后续可把邮箱 / 账号实体映射到这里。"
       cards={[
         {
           title: "邮件列表",
@@ -217,7 +215,7 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
     <WorkspacePlaceholderPage
       kicker="账号中心"
       title="账号设置先保留结构位置"
-      description="账号设置已经移到账号栏目顶部的二级菜单，后续可在这里接入默认行为与接入规则。"
+      description="账号设置已经移动到账号栏目顶部的二级菜单，后续可在这里接入默认行为与接入规则。"
       cards={[
         {
           title: "账号列表",
@@ -261,7 +259,7 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
     <WorkspacePlaceholderPage
       kicker="邮件中心"
       title="发件箱入口已占位"
-      description="当前外发面板仍保留在邮件列表页，后续可把它抽离到独立发件箱页面。"
+      description="当前外发面板仍保留在邮件列表页，后续可将其抽离到独立发件箱页面。"
       cards={[
         {
           title: "邮件列表",
@@ -271,7 +269,7 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
         },
         {
           title: "邮件设置",
-          description: "如果后续要拆分更多邮件能力，可继续接到邮件设置页面。",
+          description: "如后续需要拆分更多邮件能力，可继续接到邮件设置页面。",
           actionLabel: "打开邮件设置",
           to: "/mail/settings"
         }
@@ -301,27 +299,7 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
     />
   );
 
-  const webhookPage = (
-    <WorkspacePlaceholderPage
-      kicker="设置"
-      title="Webhook 页面先以占位承接"
-      description="Webhook 已加入左侧设置分组，后续可以在这里接入签名、事件订阅和回调地址配置。"
-      cards={[
-        {
-          title: "API 密钥",
-          description: "当前自动化接入能力仍集中在 API 密钥页面。",
-          actionLabel: "打开 API 密钥",
-          to: "/api-keys"
-        },
-        {
-          title: "文档",
-          description: "文档入口也已挂载，可作为回调说明的后续落点。",
-          actionLabel: "打开文档",
-          to: "/docs"
-        }
-      ]}
-    />
-  );
+  const webhookPage = <WebhookPage />;
 
   const docsPage = (
     <WorkspacePlaceholderPage
@@ -356,22 +334,12 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
   );
 
   const systemProfilePage = (
-    <WorkspacePlaceholderPage
-      kicker="系统设置"
-      title="个人设置入口已预留"
-      description="个人设置已移动到系统设置的顶部二级菜单，后续可在这里补充个人资料、偏好与安全项。"
-      cards={[
-        {
-          title: "当前账号",
-          description: `${session.user.email} · ${session.user.role === "admin" ? "管理员" : "成员"}`
-        },
-        {
-          title: "外观设置",
-          description: "返回外观设置占位页查看后续主题扩展位。",
-          actionLabel: "打开外观设置",
-          to: "/system/appearance"
-        }
-      ]}
+    <SystemProfilePage
+      sessionSummary={{
+        email: session.user.email,
+        role: session.user.role === "admin" ? "管理员" : "成员",
+        createdAtLabel: new Date(session.user.createdAt).toLocaleDateString("zh-CN")
+      }}
     />
   );
 
