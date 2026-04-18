@@ -1,6 +1,6 @@
-# 📬 wemail
+# 📬 WeMail
 
-`wemail` 是一个基于 pnpm monorepo 的 disposable email 服务。
+`WeMail` 是一个基于 pnpm monorepo 的 disposable email 服务。
 
 ## 🏗️ 仓库结构
 

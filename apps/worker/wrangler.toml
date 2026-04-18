@@ -6,7 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 # Local defaults used by `wrangler dev`.
 [vars]
 ENVIRONMENT = "local"
-APP_NAME = "wemail"
+APP_NAME = "WeMail"
 DEFAULT_MAIL_DOMAIN = "example.com"
 COOKIE_NAME = "wemail_session"
 COOKIE_SECURE = "false"
@@ -34,7 +34,7 @@ workers_dev = true
 
 [env.staging.vars]
 ENVIRONMENT = "staging"
-APP_NAME = "wemail"
+APP_NAME = "WeMail"
 DEFAULT_MAIL_DOMAIN = "staging.example.com"
 COOKIE_NAME = "wemail_session"
 COOKIE_SECURE = "true"
@@ -60,7 +60,7 @@ workers_dev = true
 
 [env.production.vars]
 ENVIRONMENT = "production"
-APP_NAME = "wemail"
+APP_NAME = "WeMail"
 DEFAULT_MAIL_DOMAIN = "example.com"
 COOKIE_NAME = "wemail_session"
 COOKIE_SECURE = "true"

@@ -30,7 +30,7 @@ describe("App", () => {
     expect(status).toHaveAttribute("aria-busy", "true");
     expect(status).toHaveTextContent(/Preparing WeMail/i);
     expect(screen.getByText(/Loading workspace/i)).toBeInTheDocument();
-    expect(screen.getByRole("img", { name: /wemail loading mark/i })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: /WeMail loading mark/i })).toBeInTheDocument();
     expect(container.querySelector(".wemail-loading-title")).toBeNull();
     expect(container.querySelector(".wemail-loading-detail")).toBeNull();
     expect(screen.queryByText(/姝ｅ湪鍔犺浇 WeMail 宸ヤ綔鍙?/i)).not.toBeInTheDocument();
@@ -44,7 +44,7 @@ describe("App", () => {
 
       const navigation = await screen.findByRole("navigation", { name: /landing page navigation/i });
       expect(navigation).toBeInTheDocument();
-      expect(within(navigation).getByLabelText(/wemail brand lockup/i)).toBeInTheDocument();
+      expect(within(navigation).getByLabelText(/WeMail brand lockup/i)).toBeInTheDocument();
       expect(within(navigation).getByRole("link", { name: /^Features$/i })).toHaveAttribute("href", "#features");
       expect(within(navigation).getByRole("link", { name: /^How it works$/i })).toHaveAttribute("href", "#how-it-works");
       expect(screen.getByRole("heading", { name: /The platform/i })).toBeInTheDocument();
@@ -64,7 +64,7 @@ describe("App", () => {
       fireEvent.click(within(navigation).getByRole("link", { name: /登录/i }));
 
       expect(await screen.findByRole("button", { name: /^立即登录$/i })).toBeInTheDocument();
-      expect(screen.getByLabelText(/wemail auth brand/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/WeMail auth brand/i)).toBeInTheDocument();
       expect(screen.queryAllByRole("heading", { name: /登录到 WeMail/i })).toHaveLength(0);
       expect(screen.queryByText(/在同一个认证入口里切换登录与注册/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/^账号登录$/i)).not.toBeInTheDocument();
@@ -80,7 +80,7 @@ describe("App", () => {
       vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("not authenticated"));
       render(<App />);
 
-      fireEvent.click(await screen.findByRole("link", { name: /wemail auth brand/i }));
+      fireEvent.click(await screen.findByRole("link", { name: /WeMail auth brand/i }));
 
       await waitFor(() => {
         expect(window.location.pathname).toBe("/");
@@ -202,10 +202,96 @@ describe("App", () => {
       });
 
       render(<App />);
-      expect(await screen.findByRole("heading", { name: /密钥、通知与接入控制/i })).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: /^API 密钥$/i })).toBeInTheDocument();
+      expect(screen.queryByRole("heading", { name: /个人 API 凭证中心/i })).not.toBeInTheDocument();
       await waitFor(() => {
         expect(window.location.pathname).toBe("/settings");
       });
+    },
+    10000
+  );
+
+  it(
+    "routes authenticated members into the redesigned api key workspace on /api-keys",
+    async () => {
+      window.history.pushState({}, "", "/api-keys");
+      vi.restoreAllMocks();
+      vi.spyOn(globalThis, "fetch").mockImplementation((input) => {
+        const url = typeof input === "string" ? input : input instanceof Request ? input.url : String(input);
+
+        if (url.endsWith("/auth/session")) {
+          return jsonResponse({
+            user: {
+              id: "member-1",
+              email: "member@example.com",
+              role: "member",
+              createdAt: "2026-04-08T00:00:00.000Z"
+            },
+            featureToggles: {
+              aiEnabled: true,
+              telegramEnabled: true,
+              outboundEnabled: true,
+              mailboxCreationEnabled: true
+            }
+          });
+        }
+
+        if (url.endsWith("/api/mailboxes")) return jsonResponse({ mailboxes: [] });
+        if (url.endsWith("/api/keys")) return jsonResponse({ keys: [] });
+        if (url.endsWith("/api/telegram")) return jsonResponse({ subscription: null });
+        return jsonResponse({});
+      });
+
+      render(<App />);
+
+      expect(await screen.findByRole("heading", { name: /^API 密钥$/i })).toBeInTheDocument();
+      expect(screen.getByText("总密钥")).toBeInTheDocument();
+      expect(screen.getByText("活跃密钥")).toBeInTheDocument();
+      expect(screen.getByText("从未使用")).toBeInTheDocument();
+      expect(screen.getByText("已吊销")).toBeInTheDocument();
+      expect(screen.queryByRole("heading", { name: /安全建议/i })).not.toBeInTheDocument();
+      expect(screen.queryByText(/如何选择这三种接入/i)).not.toBeInTheDocument();
+    },
+    10000
+  );
+
+  it(
+    "routes authenticated members into the account list workspace instead of the old placeholder",
+    async () => {
+      window.history.pushState({}, "", "/accounts/list");
+      vi.restoreAllMocks();
+      vi.spyOn(globalThis, "fetch").mockImplementation((input) => {
+        const url = typeof input === "string" ? input : input instanceof Request ? input.url : String(input);
+
+        if (url.endsWith("/auth/session")) {
+          return jsonResponse({
+            user: {
+              id: "member-1",
+              email: "member@example.com",
+              role: "member",
+              createdAt: "2026-04-08T00:00:00.000Z"
+            },
+            featureToggles: {
+              aiEnabled: true,
+              telegramEnabled: true,
+              outboundEnabled: true,
+              mailboxCreationEnabled: true
+            }
+          });
+        }
+
+        if (url.endsWith("/api/mailboxes")) return jsonResponse({ mailboxes: [] });
+        if (url.endsWith("/api/keys")) return jsonResponse({ keys: [] });
+        if (url.endsWith("/api/telegram")) return jsonResponse({ subscription: null });
+        return jsonResponse({});
+      });
+
+      const { container } = render(<App />);
+
+      expect(await screen.findByRole("heading", { name: /^账号列表$/i })).toBeInTheDocument();
+      expect(screen.queryByText("账号列表先以占位页承接")).not.toBeInTheDocument();
+      expect(container.querySelectorAll(".accounts-status-pill")).toHaveLength(3);
+      expect(container.querySelector(".accounts-list-bulk-bar")).toBeNull();
     },
     10000
   );
@@ -242,7 +328,7 @@ describe("App", () => {
       vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("not authenticated"));
       render(<App />);
 
-      expect(await screen.findByLabelText(/wemail auth brand/i)).toBeInTheDocument();
+      expect(await screen.findByLabelText(/WeMail auth brand/i)).toBeInTheDocument();
       expect(await screen.findByRole("tab", { name: /^注册$/i })).toHaveAttribute("aria-selected", "true");
       expect(screen.getByRole("button", { name: /^立即注册$/i })).toBeInTheDocument();
       expect(screen.queryByRole("heading", { name: /创建你的工作台账号/i })).not.toBeInTheDocument();
@@ -333,10 +419,10 @@ describe("App", () => {
 
       render(<App />);
 
-      expect(await screen.findByRole("heading", { name: /访问、配额与系统开关/i })).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: /邀请码控制/i })).toBeInTheDocument();
       expect(screen.getByRole("heading", { name: /邮箱总览/i })).toBeInTheDocument();
       expect(screen.queryByLabelText(/工作台快速搜索/i)).not.toBeInTheDocument();
-      expect(screen.getByLabelText(/wemail logo/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/WeMail logo/i)).toBeInTheDocument();
       fireEvent.click(screen.getByRole("button", { name: /用户菜单/i }));
       expect(screen.getByRole("menuitem", { name: /退出登录/i })).toBeInTheDocument();
       expect(await screen.findByText(/ops@example.com/i)).toBeInTheDocument();
@@ -406,7 +492,7 @@ describe("App", () => {
       });
 
       render(<App />);
-      expect(await screen.findByRole("heading", { name: /访问、配额与系统开关/i })).toBeInTheDocument();
+      expect(await screen.findByRole("heading", { name: /邀请码控制/i })).toBeInTheDocument();
 
       await waitFor(() => {
         expect(calls.get("http://127.0.0.1:8787/auth/session") ?? 0).toBe(1);

@@ -124,7 +124,7 @@ export const developerTabs = [
     code: `curl -X POST https://wemail.local/api/outbound/send \\
   -H 'Authorization: Bearer <api-key>' \\
   -H 'Content-Type: application/json' \\
-  -d '{"mailboxId":"<mailbox-id>","toAddress":"user@example.com","subject":"Test","bodyText":"Hello from wemail"}'`
+  -d '{"mailboxId":"<mailbox-id>","toAddress":"user@example.com","subject":"Test","bodyText":"Hello from WeMail"}'`
   }
 ] as const;
 

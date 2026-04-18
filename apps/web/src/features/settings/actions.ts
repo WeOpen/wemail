@@ -8,6 +8,6 @@ export async function revokeApiKeyAction(keyId: string) {
   return revokeApiKey(keyId);
 }
 
-export async function saveTelegramAction(payload: { chatId: FormDataEntryValue | null; enabled: boolean }) {
+export async function saveTelegramAction(payload: { chatId: string; enabled: boolean }) {
   return saveTelegramSubscription(payload);
 }

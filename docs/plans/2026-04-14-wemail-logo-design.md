@@ -1,10 +1,10 @@
-# Wemail Logo Design
+# WeMail Logo Design
 
 **Date:** 2026-04-14
 
 ## Goal
 
-为 `wemail` 设计一个极简科技感项目 logo：主体是一封信，中央折痕与字母 `W` 融为一体。
+为 `WeMail` 设计一个极简科技感项目 logo：主体是一封信，中央折痕与字母 `W` 融为一体。
 
 ## Decisions
 

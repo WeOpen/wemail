@@ -21,10 +21,7 @@ export function fetchTelegramSubscription() {
   return apiFetch<{ subscription: TelegramSubscriptionSummary | null }>("/api/telegram");
 }
 
-export function saveTelegramSubscription(payload: {
-  chatId: FormDataEntryValue | null;
-  enabled: boolean;
-}) {
+export function saveTelegramSubscription(payload: { chatId: string; enabled: boolean }) {
   return apiFetch("/api/telegram", {
     method: "PUT",
     body: JSON.stringify(payload)
