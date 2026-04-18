@@ -2,8 +2,6 @@
 
 import type { ApiKeySummary } from "@wemail/shared";
 
-import { IntegrationChoiceCard, SettingsSupportCard } from "./SettingsSupport";
-
 type CreateApiKeyResult = {
   key: {
     secret: string;
@@ -35,9 +33,9 @@ function formatDate(value: string | null) {
 }
 
 function getStatusLabel(key: ApiKeySummary) {
-  if (key.revokedAt) return "已吊销";
-  if (!key.lastUsedAt) return "从未使用";
-  return "正常";
+  if (key.revokedAt) return "已失效";
+  if (!key.lastUsedAt) return "未使用";
+  return "可用";
 }
 
 async function copyText(text: string) {
@@ -58,6 +56,7 @@ export function ApiKeysPage({ apiKeys, onCreateApiKey, onRevokeApiKey }: ApiKeys
     const unusedKeys = activeKeys.filter((key) => !key.lastUsedAt).length;
     const revokedKeys = apiKeys.length - activeKeys.length;
     return {
+      totalKeys: apiKeys.length,
       activeKeys: activeKeys.length,
       unusedKeys,
       revokedKeys
@@ -104,8 +103,66 @@ export function ApiKeysPage({ apiKeys, onCreateApiKey, onRevokeApiKey }: ApiKeys
   };
 
   return (
-    <main className="workspace-grid integration-page-grid">
-      <div className="integration-primary-column">
+    <main className="workspace-grid api-keys-layout-grid">
+      <section className="api-keys-top-stats" aria-label="API 密钥状态概览">
+        <article className="panel workspace-card page-panel integration-side-card">
+          <div className="integration-card-copy">
+            <p className="panel-kicker">凭证概览</p>
+            <h3>总密钥</h3>
+            <p className="section-copy">当前已创建的全部 API 凭证数量。</p>
+          </div>
+          <div className="integration-stat-list">
+            <article className="integration-stat-row">
+              <strong>总数</strong>
+              <span>{summary.totalKeys}</span>
+            </article>
+          </div>
+        </article>
+
+        <article className="panel workspace-card page-panel integration-side-card">
+          <div className="integration-card-copy">
+            <p className="panel-kicker">可用状态</p>
+            <h3>活跃密钥</h3>
+            <p className="section-copy">当前仍可用于发起 API 请求的凭证。</p>
+          </div>
+          <div className="integration-stat-list">
+            <article className="integration-stat-row">
+              <strong>可用</strong>
+              <span>{summary.activeKeys}</span>
+            </article>
+          </div>
+        </article>
+
+        <article className="panel workspace-card page-panel integration-side-card">
+          <div className="integration-card-copy">
+            <p className="panel-kicker">接入进度</p>
+            <h3>从未使用</h3>
+            <p className="section-copy">已创建但尚未进入真实调用的密钥。</p>
+          </div>
+          <div className="integration-stat-list">
+            <article className="integration-stat-row">
+              <strong>未使用</strong>
+              <span>{summary.unusedKeys}</span>
+            </article>
+          </div>
+        </article>
+
+        <article className="panel workspace-card page-panel integration-side-card">
+          <div className="integration-card-copy">
+            <p className="panel-kicker">风险控制</p>
+            <h3>已吊销</h3>
+            <p className="section-copy">已经失效、不会再继续放行请求的密钥。</p>
+          </div>
+          <div className="integration-stat-list">
+            <article className="integration-stat-row">
+              <strong>失效</strong>
+              <span>{summary.revokedKeys}</span>
+            </article>
+          </div>
+        </article>
+      </section>
+
+      <div className="api-keys-content-grid">
         <section className="panel workspace-card page-panel integration-surface-card">
           <div className="workspace-card-header">
             <div className="integration-card-copy">
@@ -240,35 +297,6 @@ export function ApiKeysPage({ apiKeys, onCreateApiKey, onRevokeApiKey }: ApiKeys
           </div>
         </section>
       </div>
-
-      <aside className="integration-secondary-column">
-        <SettingsSupportCard kicker="当前状态" title="接入状态概览" description="让你快速判断当前有哪些可用密钥、哪些仍未接入实际调用。">
-          <div className="integration-stat-list">
-            <article className="integration-stat-row">
-              <strong>活跃密钥</strong>
-              <span>{summary.activeKeys}</span>
-            </article>
-            <article className="integration-stat-row">
-              <strong>从未使用</strong>
-              <span>{summary.unusedKeys}</span>
-            </article>
-            <article className="integration-stat-row">
-              <strong>已吊销</strong>
-              <span>{summary.revokedKeys}</span>
-            </article>
-          </div>
-        </SettingsSupportCard>
-
-        <SettingsSupportCard kicker="安全建议" title="安全建议" description="这类凭证几乎等同于你的自动化身份，建议把风险提示直接放在页面里，而不是只写在文档里。">
-          <ul className="integration-bullet-list">
-            <li>不要把密钥写死在前端代码或公开仓库里。</li>
-            <li>优先放进环境变量，不同用途使用不同密钥。</li>
-            <li>发现泄露风险时，先吊销再创建新密钥。</li>
-          </ul>
-        </SettingsSupportCard>
-
-        <IntegrationChoiceCard current="api-keys" />
-      </aside>
     </main>
   );
 }
