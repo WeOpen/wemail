@@ -212,6 +212,47 @@ describe("App", () => {
   );
 
   it(
+    "routes authenticated members into the account list workspace instead of the old placeholder",
+    async () => {
+      window.history.pushState({}, "", "/accounts/list");
+      vi.restoreAllMocks();
+      vi.spyOn(globalThis, "fetch").mockImplementation((input) => {
+        const url = typeof input === "string" ? input : input instanceof Request ? input.url : String(input);
+
+        if (url.endsWith("/auth/session")) {
+          return jsonResponse({
+            user: {
+              id: "member-1",
+              email: "member@example.com",
+              role: "member",
+              createdAt: "2026-04-08T00:00:00.000Z"
+            },
+            featureToggles: {
+              aiEnabled: true,
+              telegramEnabled: true,
+              outboundEnabled: true,
+              mailboxCreationEnabled: true
+            }
+          });
+        }
+
+        if (url.endsWith("/api/mailboxes")) return jsonResponse({ mailboxes: [] });
+        if (url.endsWith("/api/keys")) return jsonResponse({ keys: [] });
+        if (url.endsWith("/api/telegram")) return jsonResponse({ subscription: null });
+        return jsonResponse({});
+      });
+
+      const { container } = render(<App />);
+
+      expect(await screen.findByRole("heading", { name: /^账号列表$/i })).toBeInTheDocument();
+      expect(screen.queryByText("账号列表先以占位页承接")).not.toBeInTheDocument();
+      expect(container.querySelectorAll(".accounts-status-pill")).toHaveLength(3);
+      expect(container.querySelector(".accounts-list-bulk-bar")).toBeNull();
+    },
+    10000
+  );
+
+  it(
     "renders a single auth card and keeps login/register tabs synced with the URL",
     async () => {
       window.history.pushState({}, "", "/login");

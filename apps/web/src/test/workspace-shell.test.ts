@@ -36,7 +36,7 @@ describe("buildWorkspaceShellState", () => {
             icon: "accounts",
             label: "账号",
             to: "/accounts/list",
-            hint: "账号列表 · 创建账号 · 账号设置"
+            hint: "账号列表 · 账号设置"
           },
           {
             id: "mail",

@@ -14,6 +14,8 @@ import type {
 
 import type { InviteSummary } from "../features/admin/types";
 import type { OutboundHistoryItem } from "../features/inbox/types";
+import { AccountsListPage } from "../features/accounts/AccountsListPage";
+import { AccountsSettingsPage } from "../features/accounts/AccountsSettingsPage";
 import { ApiKeysPage } from "../features/settings/ApiKeysPage";
 import { TelegramSettingsPage } from "../features/settings/TelegramSettingsPage";
 import { WebhookPage } from "../features/settings/WebhookPage";
@@ -159,73 +161,9 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
 
   const dashboardPage = <DashboardPage />;
 
-  const accountsListPage = (
-    <WorkspacePlaceholderPage
-      kicker="账号中心"
-      title="账号列表先以占位页承接"
-      description="已按目标信息结构预留账号列表入口，后续可把邮箱 / 账号实体映射到这里。"
-      cards={[
-        {
-          title: "邮件列表",
-          description: "现有邮箱列表与消息流仍在邮件列表页面可用。",
-          actionLabel: "打开邮件列表",
-          to: "/mail/list"
-        },
-        {
-          title: "账号设置",
-          description: "账号设置位已经预留，后续可拆出偏好与接入规则。",
-          actionLabel: "打开账号设置",
-          to: "/accounts/settings"
-        }
-      ]}
-      notePoints={["当前先以占位为主", "后续可复用现有邮箱创建逻辑", "不会影响现有邮件能力"]}
-    />
-  );
+  const accountsListPage = <AccountsListPage />;
 
-  const accountsCreatePage = (
-    <WorkspacePlaceholderPage
-      kicker="账号中心"
-      title="创建账号入口已挂到顶部二级菜单"
-      description="先把信息架构与导航切换完成，后续可以把创建账号表单接到这里。"
-      cards={[
-        {
-          title: "邮件列表",
-          description: "当前邮箱创建能力仍保留在邮件列表页的创建邮箱对话框中。",
-          actionLabel: "去邮件列表",
-          to: "/mail/list"
-        },
-        {
-          title: "账号列表",
-          description: "返回账号列表占位页查看后续承接位置。",
-          actionLabel: "打开账号列表",
-          to: "/accounts/list"
-        }
-      ]}
-      notePoints={["后续可把当前创建邮箱流程映射为账号创建", "保留为独立二级菜单入口"]}
-    />
-  );
-
-  const accountsSettingsPage = (
-    <WorkspacePlaceholderPage
-      kicker="账号中心"
-      title="账号设置先保留结构位置"
-      description="账号设置已经移动到账号栏目顶部的二级菜单，后续可在这里接入默认行为与接入规则。"
-      cards={[
-        {
-          title: "账号列表",
-          description: "回到账号列表查看预留入口。",
-          actionLabel: "打开账号列表",
-          to: "/accounts/list"
-        },
-        {
-          title: "API 密钥",
-          description: "接入类配置仍然在设置组的 API 密钥页面中维护。",
-          actionLabel: "打开 API 密钥",
-          to: "/api-keys"
-        }
-      ]}
-    />
-  );
+  const accountsSettingsPage = <AccountsSettingsPage />;
 
   const mailUnassignedPage = (
     <WorkspacePlaceholderPage
@@ -343,7 +281,6 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
       <Route path="/dashboard" element={dashboardPage} />
       <Route path="/accounts" element={accountsListPage} />
       <Route path="/accounts/list" element={accountsListPage} />
-      <Route path="/accounts/create" element={accountsCreatePage} />
       <Route path="/accounts/settings" element={accountsSettingsPage} />
       <Route path="/mail" element={inboxPage} />
       <Route path="/mail/list" element={inboxPage} />

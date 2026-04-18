@@ -1,4 +1,57 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+async function mockAuthenticatedMember(page: Page) {
+  await page.route("**/auth/session", async (route) => {
+    await route.fulfill({
+      json: {
+        user: {
+          id: "member-1",
+          email: "member@example.com",
+          role: "member",
+          createdAt: "2026-04-08T00:00:00.000Z"
+        },
+        featureToggles: {
+          aiEnabled: true,
+          telegramEnabled: true,
+          outboundEnabled: true,
+          mailboxCreationEnabled: true
+        }
+      }
+    });
+  });
+
+  await page.route("**/api/mailboxes", async (route) =>
+    route.fulfill({
+      json: {
+        mailboxes: [{ id: "box-1", address: "ops@example.com", label: "Ops", createdAt: "2026-04-08T00:00:00.000Z" }]
+      }
+    })
+  );
+  await page.route("**/api/messages?mailboxId=box-1", async (route) =>
+    route.fulfill({
+      json: {
+        messages: [
+          {
+            id: "msg-1",
+            mailboxId: "box-1",
+            fromAddress: "ops@example.com",
+            subject: "Verification",
+            previewText: "Use 123456",
+            bodyText: "Use 123456",
+            extraction: { method: "regex", type: "auth_code", value: "123456", label: "Code" },
+            oversizeStatus: null,
+            attachmentCount: 0,
+            attachments: [],
+            receivedAt: "2026-04-08T00:00:00.000Z"
+          }
+        ]
+      }
+    })
+  );
+  await page.route("**/api/outbound?mailboxId=box-1", async (route) => route.fulfill({ json: { messages: [] } }));
+  await page.route("**/api/keys", async (route) => route.fulfill({ json: { keys: [] } }));
+  await page.route("**/api/telegram", async (route) => route.fulfill({ json: { subscription: null } }));
+}
 
 test("shows the optimus-style landing page for signed-out users", async ({ page }) => {
   test.setTimeout(60000);
@@ -56,56 +109,7 @@ test("restores the intended route after auth when next is present", async ({ pag
 
 test("shows the reworked shared access shell for an authenticated member", async ({ page }) => {
   test.setTimeout(60000);
-  await page.route("**/auth/session", async (route) => {
-    await route.fulfill({
-      json: {
-        user: {
-          id: "member-1",
-          email: "member@example.com",
-          role: "member",
-          createdAt: "2026-04-08T00:00:00.000Z"
-        },
-        featureToggles: {
-          aiEnabled: true,
-          telegramEnabled: true,
-          outboundEnabled: true,
-          mailboxCreationEnabled: true
-        }
-      }
-    });
-  });
-
-  await page.route("**/api/mailboxes", async (route) =>
-    route.fulfill({
-      json: {
-        mailboxes: [{ id: "box-1", address: "ops@example.com", label: "Ops", createdAt: "2026-04-08T00:00:00.000Z" }]
-      }
-    })
-  );
-  await page.route("**/api/messages?mailboxId=box-1", async (route) =>
-    route.fulfill({
-      json: {
-        messages: [
-          {
-            id: "msg-1",
-            mailboxId: "box-1",
-            fromAddress: "ops@example.com",
-            subject: "Verification",
-            previewText: "Use 123456",
-            bodyText: "Use 123456",
-            extraction: { method: "regex", type: "auth_code", value: "123456", label: "Code" },
-            oversizeStatus: null,
-            attachmentCount: 0,
-            attachments: [],
-            receivedAt: "2026-04-08T00:00:00.000Z"
-          }
-        ]
-      }
-    })
-  );
-  await page.route("**/api/outbound?mailboxId=box-1", async (route) => route.fulfill({ json: { messages: [] } }));
-  await page.route("**/api/keys", async (route) => route.fulfill({ json: { keys: [] } }));
-  await page.route("**/api/telegram", async (route) => route.fulfill({ json: { subscription: null } }));
+  await mockAuthenticatedMember(page);
 
   await page.goto("/settings");
   const sidebar = page.getByRole("navigation", { name: /工作台导航/i });
@@ -135,6 +139,27 @@ test("shows the reworked shared access shell for an authenticated member", async
   await expect(page.getByRole("heading", { name: /当前邮箱/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /最新消息/i })).toBeVisible();
   await expect.poll(async () => page.evaluate(() => document.documentElement.dataset.theme), { timeout: 10000 }).toBe("light");
+  await sidebar.getByRole("link", { name: /^账号(?:\s|$)/i }).click();
+  await expect(page.getByRole("heading", { name: /^账号列表$/i })).toBeVisible();
+  await expect(page.getByText(/已选择\s+\d+\s+个账号/i)).toHaveCount(0);
+  await expect(page.locator(".accounts-list-filter-grid")).toBeVisible();
+  await expect
+    .poll(() => page.locator(".accounts-list-filter-grid").evaluate((element) => getComputedStyle(element).gridTemplateColumns), {
+      timeout: 10000
+    })
+    .not.toBe("none");
+
+});
+
+
+test("shows the account settings policy center on its direct route for an authenticated member", async ({ page }) => {
+  test.setTimeout(60000);
+  await mockAuthenticatedMember(page);
+
+  await page.goto("/accounts/settings");
+  await expect(page.getByRole("heading", { name: /^账号设置$/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /^当前策略摘要$/i })).toBeVisible();
+  await expect(page.locator(".accounts-settings-summary-row")).toHaveCount(6);
 });
 
 test("shows the admin users workspace for an authenticated admin", async ({ page }) => {
