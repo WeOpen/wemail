@@ -1297,6 +1297,12 @@ button:disabled {
   color: var(--text-muted);
 }
 
+.message-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .detail-panel-hero {
   display: grid;
   gap: 16px;

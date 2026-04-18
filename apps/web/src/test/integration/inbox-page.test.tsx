@@ -1,4 +1,5 @@
 import { cleanup, render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { App } from "../../app/App";
@@ -60,6 +61,19 @@ describe("mail list integration", () => {
                 { id: "att-1", filename: "device.txt", contentType: "text/plain", size: 1024, key: "attachments/device.txt" }
               ],
               receivedAt: "2026-04-08T00:01:00.000Z"
+            },
+            {
+              id: "msg-3",
+              mailboxId: "box-1",
+              fromAddress: "team@demo.app",
+              subject: "Welcome to Demo App",
+              previewText: "No extraction available",
+              bodyText: "No extraction available",
+              extraction: { method: "none", type: "none", value: "", label: "未提取" },
+              oversizeStatus: null,
+              attachmentCount: 0,
+              attachments: [],
+              receivedAt: "2026-04-08T00:02:00.000Z"
             }
           ]
         });
@@ -118,5 +132,22 @@ describe("mail list integration", () => {
 
     const mailboxPanel = screen.getByRole("heading", { name: /^邮箱$/i }).closest("section");
     expect(within(mailboxPanel as HTMLElement).getByText(/QA Signup/i)).toBeInTheDocument();
+  });
+
+  it("lets QA filter down to code-only messages without losing the extraction-first hierarchy", async () => {
+    const user = userEvent.setup();
+
+    render(<App />);
+
+    expect(await screen.findByRole("button", { name: /^复制验证码$/i })).toBeInTheDocument();
+    expect(screen.getByText(/^LOGIN LINK$/i)).toBeInTheDocument();
+    expect(screen.getByText(/^未提取$/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /^仅看验证码$/i }));
+
+    expect(screen.getAllByText("482913").length).toBeGreaterThan(0);
+    expect(screen.queryByText(/^LOGIN LINK$/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^未提取$/i)).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^复制验证码$/i })).toBeInTheDocument();
   });
 });
