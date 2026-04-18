@@ -59,8 +59,8 @@ describe("buildWorkspaceShellState", () => {
             id: "system",
             icon: "system",
             label: "系统设置",
-            to: "/system/appearance",
-            hint: "外观设置 · 个人设置"
+            to: "/system/settings",
+            hint: "系统设置 · 个人设置"
           }
         ]
       }

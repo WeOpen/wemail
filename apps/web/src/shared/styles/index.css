@@ -2383,16 +2383,16 @@ button:disabled {
   padding-left: 18px;
 }
 
-.appearance-settings-grid {
+.system-settings-grid {
   grid-template-columns: minmax(0, 1fr);
   gap: 18px;
 }
 
-.appearance-settings-panel {
+.system-settings-panel {
   align-content: start;
 }
 
-.appearance-settings-copy {
+.system-settings-copy {
   display: grid;
   gap: 12px;
 }

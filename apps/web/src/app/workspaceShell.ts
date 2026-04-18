@@ -148,10 +148,10 @@ const workspacePrimaryNav: WorkspacePrimaryNavConfig[] = [
     id: "system",
     section: "设置",
     label: "系统设置",
-    to: "/system/appearance",
+    to: "/system/settings",
     icon: "system",
     children: [
-      { label: "外观设置", to: "/system/appearance" },
+      { label: "系统设置", to: "/system/settings" },
       { label: "个人设置", to: "/system/profile" }
     ]
   }
@@ -165,7 +165,7 @@ function normalizeWorkspacePath(pathname: string) {
   if (pathname === "/mail") return "/mail/list";
   if (pathname === "/mail/unassigned") return "/mail/outbound";
   if (pathname === "/users") return "/users/list";
-  if (pathname === "/system") return "/system/appearance";
+  if (pathname === "/system") return "/system/settings";
   return pathname;
 }
 

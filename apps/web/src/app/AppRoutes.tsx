@@ -25,7 +25,7 @@ import { AdminPage } from "../pages/AdminPage";
 import { AnnouncementsPage } from "../pages/AnnouncementsPage";
 import { DashboardPage } from "../pages/DashboardPage";
 import { InboxPage } from "../pages/InboxPage";
-import { SystemAppearancePage } from "../pages/SystemAppearancePage";
+import { SystemSettingsPage } from "../pages/SystemSettingsPage";
 import { SystemProfilePage } from "../pages/SystemProfilePage";
 import { WorkspacePlaceholderPage } from "../pages/WorkspacePlaceholderPage";
 import type { WorkspaceTheme, WorkspaceThemePreference } from "./useWorkspaceTheme";
@@ -203,8 +203,8 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
 
   const announcementsPage = <AnnouncementsPage canPublish={session.user.role === "admin"} />;
 
-  const systemAppearancePage = (
-    <SystemAppearancePage
+  const systemSettingsPage = (
+    <SystemSettingsPage
       resolvedTheme={appearance.theme}
       themePreference={appearance.themePreference}
       onSelectThemePreference={appearance.setThemePreference}
@@ -243,8 +243,8 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
       <Route path="/telegram" element={telegramPage} />
       <Route path="/docs" element={docsPage} />
       <Route path="/announcements" element={announcementsPage} />
-      <Route path="/system" element={systemAppearancePage} />
-      <Route path="/system/appearance" element={systemAppearancePage} />
+      <Route path="/system" element={<Navigate replace to="/system/settings" />} />
+      <Route path="/system/settings" element={systemSettingsPage} />
       <Route path="/system/profile" element={systemProfilePage} />
     </Routes>
   );
