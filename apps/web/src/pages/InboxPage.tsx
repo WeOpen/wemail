@@ -3,10 +3,10 @@ import { X } from "lucide-react";
 
 import type { MailboxSummary, MessageSummary } from "@wemail/shared";
 
+import { InboxSummaryBar } from "../features/inbox/InboxSummaryBar";
 import { MailboxPanel } from "../features/inbox/MailboxPanel";
 import { MessageDetailPanel } from "../features/inbox/MessageDetailPanel";
 import { MessageStreamPanel } from "../features/inbox/MessageStreamPanel";
-import { OutboundPanel } from "../features/inbox/OutboundPanel";
 import type { OutboundHistoryItem } from "../features/inbox/types";
 
 type InboxPageProps = {
@@ -32,20 +32,27 @@ export function InboxPage({
   messages,
   selectedMessageId,
   selectedMessage,
-  outboundHistory,
   mailboxComposerOpen,
   onCloseMailboxComposer,
   onCreateMailbox,
   onOpenMailboxComposer,
   onSelectMailbox,
   onSelectMessage,
-  onRefreshMessages,
-  onSendMail
+  onRefreshMessages
 }: InboxPageProps) {
   const [label, setLabel] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const suggestedLabel = useMemo(() => `Mailbox ${mailboxes.length + 1}`, [mailboxes.length]);
+  const selectedMailbox = useMemo(
+    () => mailboxes.find((mailbox) => mailbox.id === selectedMailboxId) ?? null,
+    [mailboxes, selectedMailboxId]
+  );
+  const extractionCount = useMemo(
+    () => messages.filter((message) => message.extraction.type !== "none" && message.extraction.value.trim().length > 0).length,
+    [messages]
+  );
+  const attachmentCount = useMemo(() => messages.reduce((sum, message) => sum + message.attachmentCount, 0), [messages]);
 
   useEffect(() => {
     if (mailboxComposerOpen) {
@@ -67,25 +74,29 @@ export function InboxPage({
 
   return (
     <>
-      <main className="workspace-grid inbox-grid">
-        <MailboxPanel
-          mailboxes={mailboxes}
-          selectedMailboxId={selectedMailboxId}
+      <main className="workspace-grid inbox-page-grid">
+        <InboxSummaryBar
+          attachmentCount={attachmentCount}
+          extractionCount={extractionCount}
+          messageCount={messages.length}
           onOpenMailboxComposer={onOpenMailboxComposer}
-          onSelectMailbox={onSelectMailbox}
+          selectedMailbox={selectedMailbox}
         />
-        <MessageStreamPanel
-          messages={messages}
-          selectedMessageId={selectedMessageId}
-          onRefreshMessages={onRefreshMessages}
-          onSelectMessage={onSelectMessage}
-        />
-        <MessageDetailPanel selectedMessage={selectedMessage} />
-        <OutboundPanel
-          outboundHistory={outboundHistory}
-          selectedMailboxId={selectedMailboxId}
-          onSendMail={onSendMail}
-        />
+        <div className="workspace-grid inbox-grid">
+          <MailboxPanel
+            mailboxes={mailboxes}
+            selectedMailboxId={selectedMailboxId}
+            onOpenMailboxComposer={onOpenMailboxComposer}
+            onSelectMailbox={onSelectMailbox}
+          />
+          <MessageStreamPanel
+            messages={messages}
+            selectedMessageId={selectedMessageId}
+            onRefreshMessages={onRefreshMessages}
+            onSelectMessage={onSelectMessage}
+          />
+          <MessageDetailPanel selectedMessage={selectedMessage} />
+        </div>
       </main>
 
       {mailboxComposerOpen ? (

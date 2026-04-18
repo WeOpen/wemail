@@ -105,14 +105,15 @@ describe("mail list integration", () => {
   it("renders the extraction-first mail workspace instead of the old four-panel inbox", async () => {
     render(<App />);
 
+    expect(await screen.findByRole("heading", { name: /^QA Signup$/i })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: /^复制验证码$/i })).toBeInTheDocument();
+    expect(screen.getAllByText("482913").length).toBeGreaterThan(0);
     expect(await screen.findByText(/待提取/i)).toBeInTheDocument();
-    expect(screen.getByText(/当前消息/i)).toBeInTheDocument();
+    expect(screen.getByText(/^当前消息$/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /^发送测试邮件$/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /^消息列表$/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /^消息详情$/i })).toBeInTheDocument();
-    expect(screen.getAllByText("482913").length).toBeGreaterThan(0);
-    expect(screen.getByText(/LOGIN LINK/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /^复制验证码$/i })).toBeInTheDocument();
+    expect(screen.getByText(/^LOGIN LINK$/i)).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: /^发送邮件$/i })).not.toBeInTheDocument();
 
     const mailboxPanel = screen.getByRole("heading", { name: /^邮箱$/i }).closest("section");
