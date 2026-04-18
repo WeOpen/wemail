@@ -136,8 +136,12 @@ test("shows the reworked shared access shell for an authenticated member", async
 
   await sidebar.getByRole("link", { name: /^邮件(?:\s|$)/i }).click();
   await expect(page.getByRole("navigation", { name: /邮件 二级菜单/i })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /当前邮箱/i })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /最新消息/i })).toBeVisible();
+  await expect(page.getByText(/待提取/i)).toBeVisible();
+  await expect(page.getByRole("heading", { name: /^消息列表$/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /^消息详情$/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: /^发送测试邮件$/i })).toBeVisible();
+  await expect(page.locator(".message-extraction-chip").first()).toContainText("123456");
+  await expect(page.getByRole("heading", { name: /^发送邮件$/i })).toHaveCount(0);
   await expect.poll(async () => page.evaluate(() => document.documentElement.dataset.theme), { timeout: 10000 }).toBe("light");
   await sidebar.getByRole("link", { name: /^账号(?:\s|$)/i }).click();
   await expect(page.getByRole("heading", { name: /^账号列表$/i })).toBeVisible();
