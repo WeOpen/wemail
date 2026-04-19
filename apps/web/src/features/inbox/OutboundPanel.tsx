@@ -2,6 +2,7 @@ import type { FormEvent } from "react";
 import { X } from "lucide-react";
 
 import type { OutboundHistoryItem } from "./types";
+import { FormField, TextInput, TextareaInput } from "../../shared/form";
 
 type OutboundPanelProps = {
   open: boolean;
@@ -33,18 +34,15 @@ export function OutboundPanel({
           </button>
         </div>
         <form className="composer-form outbound-form" onSubmit={onSendMail}>
-          <label>
-            收件人
-            <input name="toAddress" type="email" required />
-          </label>
-          <label>
-            主题
-            <input name="subject" required />
-          </label>
-          <label>
-            正文
-            <textarea name="bodyText" rows={6} required />
-          </label>
+          <FormField label="收件人" required>
+            <TextInput name="toAddress" required type="email" />
+          </FormField>
+          <FormField label="主题" required>
+            <TextInput name="subject" required />
+          </FormField>
+          <FormField label="正文" required>
+            <TextareaInput name="bodyText" required rows={6} />
+          </FormField>
           <button className="workspace-action-button primary" type="submit" disabled={!selectedMailboxId}>
             发送邮件
           </button>

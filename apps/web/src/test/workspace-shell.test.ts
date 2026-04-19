@@ -53,14 +53,13 @@ describe("buildWorkspaceShellState", () => {
           { id: "api-keys", icon: "keys", label: "API 密钥", to: "/api-keys", hint: undefined },
           { id: "webhook", icon: "webhook", label: "Webhook", to: "/webhook", hint: undefined },
           { id: "telegram", icon: "telegram", label: "Telegram", to: "/telegram", hint: undefined },
-          { id: "docs", icon: "docs", label: "文档", to: "/docs", hint: undefined },
           { id: "announcements", icon: "announcements", label: "公告", to: "/announcements", hint: undefined },
           {
             id: "system",
             icon: "system",
             label: "系统设置",
             to: "/system/settings",
-            hint: "系统设置 · 个人设置"
+            hint: "系统设置 · 个人设置 · 关于我们"
           }
         ]
       }

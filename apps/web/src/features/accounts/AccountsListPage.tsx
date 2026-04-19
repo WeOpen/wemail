@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { CheckboxField, FormField, SelectInput, TextInput } from "../../shared/form";
 import { mailboxAccountsMockData, type MailboxAccountRecord, type MailboxAccountStatus } from "./accountsMockData";
 
 const statusLabelMap: Record<MailboxAccountStatus, string> = {
@@ -147,47 +148,42 @@ export function AccountsListPage() {
           <p className="section-copy">第一版先把邮箱账号的列表骨架替换成真实表格壳层，便于后续接入批量管理与生命周期操作。</p>
 
           <div className="workspace-grid accounts-list-filter-grid">
-            <label>
-              <span className="sr-only">搜索账号</span>
-              <input aria-label="搜索账号" placeholder="搜索 ID / 地址 / 标签 / 创建人" type="search" />
-            </label>
-            <label>
-              <span className="sr-only">状态筛选</span>
-              <select aria-label="状态筛选" defaultValue="all">
+            <FormField label={<span className="sr-only">搜索账号</span>}>
+              <TextInput aria-label="搜索账号" placeholder="搜索 ID / 地址 / 标签 / 创建人" type="search" />
+            </FormField>
+            <FormField label={<span className="sr-only">状态筛选</span>}>
+              <SelectInput aria-label="状态筛选" defaultValue="all">
                 <option value="all">全部状态</option>
                 <option value="enabled">启用</option>
                 <option value="disabled">停用</option>
                 <option value="archived">已归档</option>
                 <option value="soft_deleted">已软删除</option>
-              </select>
-            </label>
-            <label>
-              <span className="sr-only">标签筛选</span>
-              <select aria-label="标签筛选" defaultValue="all">
+              </SelectInput>
+            </FormField>
+            <FormField label={<span className="sr-only">标签筛选</span>}>
+              <SelectInput aria-label="标签筛选" defaultValue="all">
                 <option value="all">全部标签</option>
                 <option value="运营">运营</option>
                 <option value="增长">增长</option>
                 <option value="历史">历史</option>
-              </select>
-            </label>
-            <label>
-              <span className="sr-only">创建人筛选</span>
-              <select aria-label="创建人筛选" defaultValue="all">
+              </SelectInput>
+            </FormField>
+            <FormField label={<span className="sr-only">创建人筛选</span>}>
+              <SelectInput aria-label="创建人筛选" defaultValue="all">
                 <option value="all">全部创建人</option>
                 <option value="Will">Will</option>
                 <option value="Ada">Ada</option>
                 <option value="System">System</option>
-              </select>
-            </label>
-            <label>
-              <span className="sr-only">最近活跃筛选</span>
-              <select aria-label="最近活跃筛选" defaultValue="all">
+              </SelectInput>
+            </FormField>
+            <FormField label={<span className="sr-only">最近活跃筛选</span>}>
+              <SelectInput aria-label="最近活跃筛选" defaultValue="all">
                 <option value="all">全部活跃时间</option>
                 <option value="7d">近 7 天</option>
                 <option value="30d">近 30 天</option>
                 <option value="90d">近 90 天</option>
-              </select>
-            </label>
+              </SelectInput>
+            </FormField>
           </div>
 
           <div className="workspace-topbar-actions accounts-list-quick-filters">
@@ -257,10 +253,13 @@ export function AccountsListPage() {
               <thead>
                 <tr>
                   <th className="accounts-list-checkbox-cell" scope="col">
-                    <label className="checkbox-row">
-                      <input aria-label="选择全部账号" checked={allVisibleSelected} onChange={toggleSelectAll} type="checkbox" />
-                      <span className="sr-only">选择全部账号</span>
-                    </label>
+                    <CheckboxField
+                      aria-label="选择全部账号"
+                      checked={allVisibleSelected}
+                      className="checkbox-row"
+                      label={<span className="sr-only">选择全部账号</span>}
+                      onChange={toggleSelectAll}
+                    />
                   </th>
                   <th scope="col">ID</th>
                   <th scope="col">地址</th>
@@ -287,15 +286,13 @@ export function AccountsListPage() {
                   return (
                     <tr key={account.id}>
                       <td className="accounts-list-checkbox-cell">
-                        <label className="checkbox-row">
-                          <input
-                            aria-label={`选择账号 ${account.address}`}
-                            checked={isSelected}
-                            onChange={() => toggleSelection(account.id)}
-                            type="checkbox"
-                          />
-                          <span className="sr-only">选择账号 {account.address}</span>
-                        </label>
+                        <CheckboxField
+                          aria-label={`选择账号 ${account.address}`}
+                          checked={isSelected}
+                          className="checkbox-row"
+                          label={<span className="sr-only">选择账号 {account.address}</span>}
+                          onChange={() => toggleSelection(account.id)}
+                        />
                       </td>
                       <td>{account.id}</td>
                       <td>{account.address}</td>
@@ -351,10 +348,9 @@ export function AccountsListPage() {
             <p>
               <strong>{hardDeletePhrase}</strong>
             </p>
-            <label>
-              确认词
-              <input aria-label="确认词" onChange={(event) => setConfirmationPhrase(event.target.value)} type="text" value={confirmationPhrase} />
-            </label>
+            <FormField label="确认词">
+              <TextInput aria-label="确认词" onChange={(event) => setConfirmationPhrase(event.target.value)} type="text" value={confirmationPhrase} />
+            </FormField>
             <div className="workspace-dialog-actions">
               <button className="workspace-action-button secondary" onClick={closeHardDeleteDialog} type="button">
                 关闭

@@ -9,6 +9,7 @@ import { MessageDetailPanel } from "../features/inbox/MessageDetailPanel";
 import { MessageStreamPanel } from "../features/inbox/MessageStreamPanel";
 import { OutboundPanel } from "../features/inbox/OutboundPanel";
 import type { OutboundHistoryItem } from "../features/inbox/types";
+import { FormField, TextInput } from "../shared/form";
 
 type InboxPageProps = {
   mailboxes: MailboxSummary[];
@@ -125,9 +126,8 @@ export function InboxPage({
             </div>
             <p className="section-copy">给邮箱填写一个简短标签，地址仍会通过现有后端流程创建。</p>
             <form className="composer-form workspace-dialog-form" onSubmit={(event) => void handleCreateMailbox(event)}>
-              <label>
-                邮箱标签
-                <input
+              <FormField label="邮箱标签" required>
+                <TextInput
                   autoFocus
                   name="mailboxLabel"
                   onChange={(event) => setLabel(event.target.value)}
@@ -135,7 +135,7 @@ export function InboxPage({
                   required
                   value={label}
                 />
-              </label>
+              </FormField>
               <div className="workspace-dialog-actions">
                 <button className="workspace-action-button secondary" onClick={onCloseMailboxComposer} type="button">
                   取消

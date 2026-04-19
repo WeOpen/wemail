@@ -162,7 +162,9 @@ describe("mail list integration", () => {
     await user.click(screen.getByRole("button", { name: /^发送测试邮件$/i }));
 
     const dialog = await screen.findByRole("dialog", { name: /^发送测试邮件$/i });
-    expect(within(dialog).getByLabelText(/收件人/i)).toBeInTheDocument();
+    expect(within(dialog).getByLabelText(/收件人/i)).toHaveClass("form-control");
+    expect(within(dialog).getByLabelText(/主题/i)).toHaveClass("form-control");
+    expect(within(dialog).getByLabelText(/正文/i)).toHaveClass("form-control");
     expect(within(dialog).getByText(/首次外发后，记录会显示在这里/i)).toBeInTheDocument();
   });
 

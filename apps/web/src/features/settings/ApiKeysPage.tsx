@@ -1,6 +1,7 @@
 ﻿import { useMemo, useState } from "react";
 
 import type { ApiKeySummary } from "@wemail/shared";
+import { FormField, TextInput } from "../../shared/form";
 
 type CreateApiKeyResult = {
   key: {
@@ -168,16 +169,15 @@ export function ApiKeysPage({ apiKeys, onCreateApiKey, onRevokeApiKey }: ApiKeys
                 <h3>创建新的 API 密钥</h3>
                 <p className="section-copy">为不同用途命名不同密钥，后续排查与吊销时会更清晰。</p>
               </div>
-              <div className="integration-form-grid">
-                <label htmlFor="api-key-label">密钥名称</label>
-                <input
+              <FormField className="integration-form-grid" htmlFor="api-key-label" label="密钥名称">
+                <TextInput
                   id="api-key-label"
                   name="label"
                   onChange={(event) => setLabel(event.target.value)}
                   placeholder="例如：个人 CLI / 本地脚本 / 自动化工作流"
                   value={label}
                 />
-              </div>
+              </FormField>
               <div className="workspace-dialog-actions integration-inline-actions">
                 <button className="workspace-action-button ghost" onClick={() => setIsCreateOpen(false)} type="button">
                   取消

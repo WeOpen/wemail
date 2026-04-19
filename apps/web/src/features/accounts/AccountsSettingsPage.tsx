@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { CheckboxField, FormField, SelectInput, TextInput } from "../../shared/form";
 import { mailboxAccountPolicyMock } from "./accountsMockData";
 
 export function AccountsSettingsPage() {
@@ -87,21 +88,17 @@ export function AccountsSettingsPage() {
             <p className="panel-kicker">创建规则</p>
             <h3>默认创建规则</h3>
 
-            <label>
-              <input
-                checked={defaultTagsEnabled}
-                onChange={(event) => {
-                  setDefaultTagsEnabled(event.target.checked);
-                  setCreationSaved(false);
-                }}
-                type="checkbox"
-              />
-              自动附加默认标签
-            </label>
+            <CheckboxField
+              checked={defaultTagsEnabled}
+              label="自动附加默认标签"
+              onChange={(event) => {
+                setDefaultTagsEnabled(event.target.checked);
+                setCreationSaved(false);
+              }}
+            />
 
-            <label>
-              默认标签
-              <input
+            <FormField label="默认标签">
+              <TextInput
                 onChange={(event) => {
                   setDefaultTags(event.target.value);
                   setCreationSaved(false);
@@ -109,11 +106,10 @@ export function AccountsSettingsPage() {
                 type="text"
                 value={defaultTags}
               />
-            </label>
+            </FormField>
 
-            <label>
-              默认状态
-              <select
+            <FormField label="默认状态">
+              <SelectInput
                 onChange={(event) => {
                   setDefaultStatus(event.target.value as typeof defaultStatus);
                   setCreationSaved(false);
@@ -123,32 +119,26 @@ export function AccountsSettingsPage() {
                 <option value="启用">启用</option>
                 <option value="停用">停用</option>
                 <option value="待审核">待审核</option>
-              </select>
-            </label>
+              </SelectInput>
+            </FormField>
 
-            <label>
-              <input
-                checked={allowCreationOverride}
-                onChange={(event) => {
-                  setAllowCreationOverride(event.target.checked);
-                  setCreationSaved(false);
-                }}
-                type="checkbox"
-              />
-              允许创建时覆盖默认标签
-            </label>
+            <CheckboxField
+              checked={allowCreationOverride}
+              label="允许创建时覆盖默认标签"
+              onChange={(event) => {
+                setAllowCreationOverride(event.target.checked);
+                setCreationSaved(false);
+              }}
+            />
 
-            <label>
-              <input
-                checked={requireCreatorNote}
-                onChange={(event) => {
-                  setRequireCreatorNote(event.target.checked);
-                  setCreationSaved(false);
-                }}
-                type="checkbox"
-              />
-              创建账号时要求备注
-            </label>
+            <CheckboxField
+              checked={requireCreatorNote}
+              label="创建账号时要求备注"
+              onChange={(event) => {
+                setRequireCreatorNote(event.target.checked);
+                setCreationSaved(false);
+              }}
+            />
 
             <button className="workspace-action-button primary" onClick={saveCreationRules} type="button">
               保存默认创建规则
@@ -160,9 +150,8 @@ export function AccountsSettingsPage() {
             <p className="panel-kicker">生命周期</p>
             <h3>生命周期规则</h3>
 
-            <label>
-              不活跃阈值（天）
-              <input
+            <FormField label="不活跃阈值（天）">
+              <TextInput
                 min={1}
                 onChange={(event) => {
                   setInactiveDays(Number(event.target.value));
@@ -171,11 +160,10 @@ export function AccountsSettingsPage() {
                 type="number"
                 value={inactiveDays}
               />
-            </label>
+            </FormField>
 
-            <label>
-              不活跃后动作
-              <select
+            <FormField label="不活跃后动作">
+              <SelectInput
                 onChange={(event) => {
                   setInactiveAction(event.target.value as typeof inactiveAction);
                   setLifecycleSaved(false);
@@ -185,12 +173,11 @@ export function AccountsSettingsPage() {
                 <option value="仅标记">仅标记</option>
                 <option value="自动停用">自动停用</option>
                 <option value="自动归档">自动归档</option>
-              </select>
-            </label>
+              </SelectInput>
+            </FormField>
 
-            <label>
-              软删除保留期（天）
-              <input
+            <FormField label="软删除保留期（天）">
+              <TextInput
                 min={1}
                 onChange={(event) => {
                   setSoftDeleteRetentionDays(Number(event.target.value));
@@ -199,32 +186,26 @@ export function AccountsSettingsPage() {
                 type="number"
                 value={softDeleteRetentionDays}
               />
-            </label>
+            </FormField>
 
-            <label>
-              <input
-                aria-label="允许彻底删除"
-                checked={allowHardDelete}
-                onChange={(event) => {
-                  setAllowHardDelete(event.target.checked);
-                  setLifecycleSaved(false);
-                }}
-                type="checkbox"
-              />
-              允许彻底删除
-            </label>
+            <CheckboxField
+              aria-label="允许彻底删除"
+              checked={allowHardDelete}
+              label="允许彻底删除"
+              onChange={(event) => {
+                setAllowHardDelete(event.target.checked);
+                setLifecycleSaved(false);
+              }}
+            />
 
-            <label>
-              <input
-                checked={requireSoftDeleteBeforeHardDelete}
-                onChange={(event) => {
-                  setRequireSoftDeleteBeforeHardDelete(event.target.checked);
-                  setLifecycleSaved(false);
-                }}
-                type="checkbox"
-              />
-              彻底删除前必须先软删除
-            </label>
+            <CheckboxField
+              checked={requireSoftDeleteBeforeHardDelete}
+              label="彻底删除前必须先软删除"
+              onChange={(event) => {
+                setRequireSoftDeleteBeforeHardDelete(event.target.checked);
+                setLifecycleSaved(false);
+              }}
+            />
 
             <button className="workspace-action-button primary" onClick={saveLifecycleRules} type="button">
               保存生命周期规则
@@ -236,21 +217,17 @@ export function AccountsSettingsPage() {
             <p className="panel-kicker">操作保护</p>
             <h3>批量操作保护</h3>
 
-            <label>
-              <input
-                checked={confirmStandardBulkActions}
-                onChange={(event) => {
-                  setConfirmStandardBulkActions(event.target.checked);
-                  setProtectionSaved(false);
-                }}
-                type="checkbox"
-              />
-              普通批量操作显示确认弹窗
-            </label>
+            <CheckboxField
+              checked={confirmStandardBulkActions}
+              label="普通批量操作显示确认弹窗"
+              onChange={(event) => {
+                setConfirmStandardBulkActions(event.target.checked);
+                setProtectionSaved(false);
+              }}
+            />
 
-            <label>
-              单次普通批量操作上限
-              <input
+            <FormField label="单次普通批量操作上限">
+              <TextInput
                 min={1}
                 onChange={(event) => {
                   setStandardBulkLimit(Number(event.target.value));
@@ -259,23 +236,19 @@ export function AccountsSettingsPage() {
                 type="number"
                 value={standardBulkLimit}
               />
-            </label>
+            </FormField>
 
-            <label>
-              <input
-                checked={requireDangerPhrase}
-                onChange={(event) => {
-                  setRequireDangerPhrase(event.target.checked);
-                  setProtectionSaved(false);
-                }}
-                type="checkbox"
-              />
-              危险操作要求确认词
-            </label>
+            <CheckboxField
+              checked={requireDangerPhrase}
+              label="危险操作要求确认词"
+              onChange={(event) => {
+                setRequireDangerPhrase(event.target.checked);
+                setProtectionSaved(false);
+              }}
+            />
 
-            <label>
-              单次彻底删除上限
-              <input
+            <FormField label="单次彻底删除上限">
+              <TextInput
                 min={1}
                 onChange={(event) => {
                   setHardDeleteLimit(Number(event.target.value));
@@ -284,19 +257,16 @@ export function AccountsSettingsPage() {
                 type="number"
                 value={hardDeleteLimit}
               />
-            </label>
+            </FormField>
 
-            <label>
-              <input
-                checked={auditLoggingEnabled}
-                onChange={(event) => {
-                  setAuditLoggingEnabled(event.target.checked);
-                  setProtectionSaved(false);
-                }}
-                type="checkbox"
-              />
-              记录批量操作日志
-            </label>
+            <CheckboxField
+              checked={auditLoggingEnabled}
+              label="记录批量操作日志"
+              onChange={(event) => {
+                setAuditLoggingEnabled(event.target.checked);
+                setProtectionSaved(false);
+              }}
+            />
 
             <button className="workspace-action-button primary" onClick={saveProtectionRules} type="button">
               保存批量操作保护

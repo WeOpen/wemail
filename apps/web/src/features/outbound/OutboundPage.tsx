@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useSearchParams } from "react-router-dom";
 
+import { FormField, TextInput } from "../../shared/form";
 import type { OutboundHistoryItem } from "../inbox/types";
 import { buildOutboundRecords, type OutboundRecord } from "./outboundMockData";
 import { OutboundComposeDrawer } from "./OutboundComposeDrawer";
@@ -132,16 +133,15 @@ export function OutboundPage({ outboundHistory, hasActiveMailbox, onSendMail }: 
           </div>
 
           <div className="outbound-toolbar-row">
-            <label className="outbound-search-field">
-              <span className="sr-only">发件箱搜索</span>
-              <input
+            <FormField className="outbound-search-field" label={<span className="sr-only">发件箱搜索</span>}>
+              <TextInput
                 aria-label="发件箱搜索"
                 onChange={(event) => setSearchValue(event.target.value)}
                 placeholder="搜索收件人 / 主题 / 发件结果"
                 type="search"
                 value={searchValue}
               />
-            </label>
+            </FormField>
             <div aria-label="发件箱状态筛选" className="outbound-filter-row" role="toolbar">
               {(Object.keys(FILTER_LABELS) as OutboundFilter[]).map((filterKey) => (
                 <button

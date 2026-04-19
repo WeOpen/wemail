@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { X } from "lucide-react";
+import { FormField, TextInput, TextareaInput } from "../../shared/form";
 
 type OutboundComposeDraft = {
   toAddress?: string;
@@ -76,18 +77,15 @@ export function OutboundComposeDrawer({
           className="composer-form outbound-form outbound-compose-form"
           onSubmit={(event) => void handleSubmit(event)}
         >
-          <label>
-            收件人
-            <input defaultValue={draft?.toAddress ?? ""} name="toAddress" required type="email" />
-          </label>
-          <label>
-            主题
-            <input defaultValue={draft?.subject ?? ""} name="subject" required />
-          </label>
-          <label>
-            正文
-            <textarea defaultValue={draft?.bodyText ?? ""} name="bodyText" required rows={8} />
-          </label>
+          <FormField label="收件人" required>
+            <TextInput defaultValue={draft?.toAddress ?? ""} name="toAddress" required type="email" />
+          </FormField>
+          <FormField label="主题" required>
+            <TextInput defaultValue={draft?.subject ?? ""} name="subject" required />
+          </FormField>
+          <FormField label="正文" required>
+            <TextareaInput defaultValue={draft?.bodyText ?? ""} name="bodyText" required rows={8} />
+          </FormField>
 
           {!hasActiveMailbox ? (
             <p className="outbound-compose-note">当前没有可用邮箱，先回到邮件列表选择一个邮箱后再发送。</p>

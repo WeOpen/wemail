@@ -166,9 +166,9 @@ describe("outbound page integration", () => {
     await user.click(screen.getByRole("button", { name: /^新建发送$/i }));
 
     const dialog = await screen.findByRole("dialog", { name: /^新建发送$/i });
-    await user.type(within(dialog).getByLabelText(/^收件人$/i), "fresh@example.com");
-    await user.type(within(dialog).getByLabelText(/^主题$/i), "Fresh send");
-    await user.type(within(dialog).getByLabelText(/^正文$/i), "hello from the compose drawer");
+    await user.type(within(dialog).getByLabelText(/收件人/i), "fresh@example.com");
+    await user.type(within(dialog).getByLabelText(/主题/i), "Fresh send");
+    await user.type(within(dialog).getByLabelText(/正文/i), "hello from the compose drawer");
     await user.click(within(dialog).getByRole("button", { name: /^发送邮件$/i }));
 
     await waitFor(() => {
@@ -203,7 +203,7 @@ describe("outbound page integration", () => {
 
     await user.click(within(detail).getByRole("button", { name: /^按当前异常信息补发$/i }));
     const dialog = await screen.findByRole("dialog", { name: /^新建发送$/i });
-    expect(within(dialog).getByLabelText(/^收件人$/i)).toHaveValue("unknown+signup@example.com");
-    expect(within(dialog).getByLabelText(/^主题$/i)).toHaveValue("Magic link fallback");
+    expect(within(dialog).getByLabelText(/收件人/i)).toHaveValue("unknown+signup@example.com");
+    expect(within(dialog).getByLabelText(/主题/i)).toHaveValue("Magic link fallback");
   });
 });

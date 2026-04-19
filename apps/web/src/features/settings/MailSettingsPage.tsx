@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 
+import { CheckboxField, FormField, SelectInput, TextInput, TextareaInput } from "../../shared/form";
 import { mailSettingsMockData } from "./mailSettingsMockData";
 
 type SenderRulesState = {
@@ -104,9 +105,8 @@ export function MailSettingsPage() {
           </div>
 
           <div className="mail-settings-field-grid">
-            <label>
-              默认发件身份
-              <select
+            <FormField label="默认发件身份">
+              <SelectInput
                 aria-label="默认发件身份"
                 onChange={(event) => {
                   setSenderDraft((current) => ({ ...current, defaultIdentity: event.target.value }));
@@ -119,12 +119,11 @@ export function MailSettingsPage() {
                     {identity}
                   </option>
                 ))}
-              </select>
-            </label>
+              </SelectInput>
+            </FormField>
 
-            <label>
-              默认签名
-              <textarea
+            <FormField label="默认签名">
+              <TextareaInput
                 aria-label="默认签名"
                 onChange={(event) => {
                   setSenderDraft((current) => ({ ...current, signature: event.target.value }));
@@ -133,12 +132,11 @@ export function MailSettingsPage() {
                 rows={3}
                 value={senderDraft.signature}
               />
-            </label>
+            </FormField>
 
             <div className="mail-settings-inline-grid">
-              <label>
-                重试次数
-                <select
+              <FormField label="重试次数">
+                <SelectInput
                   aria-label="重试次数"
                   onChange={(event) => {
                     setSenderDraft((current) => ({ ...current, retryAttempts: event.target.value }));
@@ -151,12 +149,11 @@ export function MailSettingsPage() {
                       {retryAttempts}
                     </option>
                   ))}
-                </select>
-              </label>
+                </SelectInput>
+              </FormField>
 
-              <label>
-                重试间隔
-                <select
+              <FormField label="重试间隔">
+                <SelectInput
                   aria-label="重试间隔"
                   onChange={(event) => {
                     setSenderDraft((current) => ({ ...current, retryDelay: event.target.value }));
@@ -169,12 +166,11 @@ export function MailSettingsPage() {
                       {retryDelay}
                     </option>
                   ))}
-                </select>
-              </label>
+                </SelectInput>
+              </FormField>
 
-              <label>
-                失败记录保留
-                <select
+              <FormField label="失败记录保留">
+                <SelectInput
                   aria-label="失败记录保留"
                   onChange={(event) => {
                     setSenderDraft((current) => ({ ...current, failureRetention: event.target.value }));
@@ -187,35 +183,33 @@ export function MailSettingsPage() {
                       {failureRetention}
                     </option>
                   ))}
-                </select>
-              </label>
+                </SelectInput>
+              </FormField>
             </div>
 
             <div className="toggle-grid">
-              <label className="integration-detail-card checkbox-row">
-                <input
-                  aria-label="失败后自动重试"
-                  checked={senderDraft.retryEnabled}
-                  onChange={(event) => {
-                    setSenderDraft((current) => ({ ...current, retryEnabled: event.target.checked }));
-                    setSenderSavedNotice(false);
-                  }}
-                  type="checkbox"
-                />
-                <span>失败后自动重试</span>
-              </label>
-              <label className="integration-detail-card checkbox-row">
-                <input
-                  aria-label="允许临时覆盖发件身份"
-                  checked={senderDraft.allowManualOverride}
-                  onChange={(event) => {
-                    setSenderDraft((current) => ({ ...current, allowManualOverride: event.target.checked }));
-                    setSenderSavedNotice(false);
-                  }}
-                  type="checkbox"
-                />
-                <span>允许临时覆盖发件身份</span>
-              </label>
+              <CheckboxField
+                aria-label="失败后自动重试"
+                checked={senderDraft.retryEnabled}
+                className="integration-detail-card"
+                label="失败后自动重试"
+                onChange={(event) => {
+                  setSenderDraft((current) => ({ ...current, retryEnabled: event.target.checked }));
+                  setSenderSavedNotice(false);
+                }}
+                variant="card"
+              />
+              <CheckboxField
+                aria-label="允许临时覆盖发件身份"
+                checked={senderDraft.allowManualOverride}
+                className="integration-detail-card"
+                label="允许临时覆盖发件身份"
+                onChange={(event) => {
+                  setSenderDraft((current) => ({ ...current, allowManualOverride: event.target.checked }));
+                  setSenderSavedNotice(false);
+                }}
+                variant="card"
+              />
             </div>
           </div>
 
@@ -236,59 +230,54 @@ export function MailSettingsPage() {
 
           <div className="mail-settings-field-grid">
             <div className="toggle-grid">
-              <label className="integration-detail-card checkbox-row">
-                <input
-                  aria-label="Webhook 通知"
-                  checked={routingDraft.webhookEnabled}
-                  onChange={(event) => {
-                    setRoutingDraft((current) => ({ ...current, webhookEnabled: event.target.checked }));
-                    setRoutingSavedNotice(false);
-                  }}
-                  type="checkbox"
-                />
-                <span>Webhook 通知</span>
-              </label>
-              <label className="integration-detail-card checkbox-row">
-                <input
-                  aria-label="Telegram 通知"
-                  checked={routingDraft.telegramEnabled}
-                  onChange={(event) => {
-                    setRoutingDraft((current) => ({ ...current, telegramEnabled: event.target.checked }));
-                    setRoutingSavedNotice(false);
-                  }}
-                  type="checkbox"
-                />
-                <span>Telegram 通知</span>
-              </label>
-              <label className="integration-detail-card checkbox-row">
-                <input
-                  aria-label="失败告警"
-                  checked={routingDraft.failureAlerts}
-                  onChange={(event) => {
-                    setRoutingDraft((current) => ({ ...current, failureAlerts: event.target.checked }));
-                    setRoutingSavedNotice(false);
-                  }}
-                  type="checkbox"
-                />
-                <span>失败告警</span>
-              </label>
-              <label className="integration-detail-card checkbox-row">
-                <input
-                  aria-label="异常 / 无匹配提醒"
-                  checked={routingDraft.exceptionAlerts}
-                  onChange={(event) => {
-                    setRoutingDraft((current) => ({ ...current, exceptionAlerts: event.target.checked }));
-                    setRoutingSavedNotice(false);
-                  }}
-                  type="checkbox"
-                />
-                <span>异常 / 无匹配提醒</span>
-              </label>
+              <CheckboxField
+                aria-label="Webhook 通知"
+                checked={routingDraft.webhookEnabled}
+                className="integration-detail-card"
+                label="Webhook 通知"
+                onChange={(event) => {
+                  setRoutingDraft((current) => ({ ...current, webhookEnabled: event.target.checked }));
+                  setRoutingSavedNotice(false);
+                }}
+                variant="card"
+              />
+              <CheckboxField
+                aria-label="Telegram 通知"
+                checked={routingDraft.telegramEnabled}
+                className="integration-detail-card"
+                label="Telegram 通知"
+                onChange={(event) => {
+                  setRoutingDraft((current) => ({ ...current, telegramEnabled: event.target.checked }));
+                  setRoutingSavedNotice(false);
+                }}
+                variant="card"
+              />
+              <CheckboxField
+                aria-label="失败告警"
+                checked={routingDraft.failureAlerts}
+                className="integration-detail-card"
+                label="失败告警"
+                onChange={(event) => {
+                  setRoutingDraft((current) => ({ ...current, failureAlerts: event.target.checked }));
+                  setRoutingSavedNotice(false);
+                }}
+                variant="card"
+              />
+              <CheckboxField
+                aria-label="异常 / 无匹配提醒"
+                checked={routingDraft.exceptionAlerts}
+                className="integration-detail-card"
+                label="异常 / 无匹配提醒"
+                onChange={(event) => {
+                  setRoutingDraft((current) => ({ ...current, exceptionAlerts: event.target.checked }));
+                  setRoutingSavedNotice(false);
+                }}
+                variant="card"
+              />
             </div>
 
-            <label>
-              Webhook 端点
-              <input
+            <FormField label="Webhook 端点">
+              <TextInput
                 aria-label="Webhook 端点"
                 onChange={(event) => {
                   setRoutingDraft((current) => ({ ...current, webhookEndpoint: event.target.value }));
@@ -297,12 +286,11 @@ export function MailSettingsPage() {
                 type="url"
                 value={routingDraft.webhookEndpoint}
               />
-            </label>
+            </FormField>
 
             <div className="mail-settings-inline-grid">
-              <label>
-                Telegram 目标
-                <input
+              <FormField label="Telegram 目标">
+                <TextInput
                   aria-label="Telegram 目标"
                   onChange={(event) => {
                     setRoutingDraft((current) => ({ ...current, telegramTarget: event.target.value }));
@@ -311,11 +299,10 @@ export function MailSettingsPage() {
                   type="text"
                   value={routingDraft.telegramTarget}
                 />
-              </label>
+              </FormField>
 
-              <label>
-                异常处理策略
-                <select
+              <FormField label="异常处理策略">
+                <SelectInput
                   aria-label="异常处理策略"
                   onChange={(event) => {
                     setRoutingDraft((current) => ({ ...current, exceptionStrategy: event.target.value }));
@@ -328,12 +315,11 @@ export function MailSettingsPage() {
                       {exceptionStrategy}
                     </option>
                   ))}
-                </select>
-              </label>
+                </SelectInput>
+              </FormField>
 
-              <label>
-                异常归属
-                <select
+              <FormField label="异常归属">
+                <SelectInput
                   aria-label="异常归属"
                   onChange={(event) => {
                     setRoutingDraft((current) => ({ ...current, fallbackOwner: event.target.value }));
@@ -346,8 +332,8 @@ export function MailSettingsPage() {
                       {fallbackOwner}
                     </option>
                   ))}
-                </select>
-              </label>
+                </SelectInput>
+              </FormField>
             </div>
           </div>
 
@@ -368,9 +354,8 @@ export function MailSettingsPage() {
 
           <div className="mail-settings-field-grid">
             <div className="mail-settings-inline-grid">
-              <label>
-                默认进入页面
-                <select
+              <FormField label="默认进入页面">
+                <SelectInput
                   aria-label="默认进入页面"
                   onChange={(event) => {
                     setWorkspaceDraft((current) => ({ ...current, defaultMailRoute: event.target.value }));
@@ -383,12 +368,11 @@ export function MailSettingsPage() {
                       {route.label}
                     </option>
                   ))}
-                </select>
-              </label>
+                </SelectInput>
+              </FormField>
 
-              <label>
-                发件箱默认筛选
-                <select
+              <FormField label="发件箱默认筛选">
+                <SelectInput
                   aria-label="发件箱默认筛选"
                   onChange={(event) => {
                     setWorkspaceDraft((current) => ({ ...current, outboundDefaultFilter: event.target.value }));
@@ -401,12 +385,11 @@ export function MailSettingsPage() {
                       {filter}
                     </option>
                   ))}
-                </select>
-              </label>
+                </SelectInput>
+              </FormField>
 
-              <label>
-                列表密度
-                <select
+              <FormField label="列表密度">
+                <SelectInput
                   aria-label="列表密度"
                   onChange={(event) => {
                     setWorkspaceDraft((current) => ({ ...current, listDensity: event.target.value }));
@@ -419,35 +402,33 @@ export function MailSettingsPage() {
                       {density}
                     </option>
                   ))}
-                </select>
-              </label>
+                </SelectInput>
+              </FormField>
             </div>
 
             <div className="toggle-grid">
-              <label className="integration-detail-card checkbox-row">
-                <input
-                  aria-label="默认展开异常记录"
-                  checked={workspaceDraft.expandExceptionsByDefault}
-                  onChange={(event) => {
-                    setWorkspaceDraft((current) => ({ ...current, expandExceptionsByDefault: event.target.checked }));
-                    setWorkspaceSavedNotice(false);
-                  }}
-                  type="checkbox"
-                />
-                <span>默认展开异常记录</span>
-              </label>
-              <label className="integration-detail-card checkbox-row">
-                <input
-                  aria-label="优先打开最近失败记录"
-                  checked={workspaceDraft.openLatestFailureFirst}
-                  onChange={(event) => {
-                    setWorkspaceDraft((current) => ({ ...current, openLatestFailureFirst: event.target.checked }));
-                    setWorkspaceSavedNotice(false);
-                  }}
-                  type="checkbox"
-                />
-                <span>优先打开最近失败记录</span>
-              </label>
+              <CheckboxField
+                aria-label="默认展开异常记录"
+                checked={workspaceDraft.expandExceptionsByDefault}
+                className="integration-detail-card"
+                label="默认展开异常记录"
+                onChange={(event) => {
+                  setWorkspaceDraft((current) => ({ ...current, expandExceptionsByDefault: event.target.checked }));
+                  setWorkspaceSavedNotice(false);
+                }}
+                variant="card"
+              />
+              <CheckboxField
+                aria-label="优先打开最近失败记录"
+                checked={workspaceDraft.openLatestFailureFirst}
+                className="integration-detail-card"
+                label="优先打开最近失败记录"
+                onChange={(event) => {
+                  setWorkspaceDraft((current) => ({ ...current, openLatestFailureFirst: event.target.checked }));
+                  setWorkspaceSavedNotice(false);
+                }}
+                variant="card"
+              />
             </div>
           </div>
 
