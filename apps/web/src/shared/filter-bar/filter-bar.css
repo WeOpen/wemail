@@ -1,0 +1,41 @@
+.ui-filter-bar {
+  display: grid;
+  gap: 12px;
+  align-items: end;
+}
+
+.ui-filter-bar-columns-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ui-filter-bar-columns-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ui-filter-bar-columns-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.ui-filter-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ui-filter-bar-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+@media (max-width: 960px) {
+  .ui-filter-bar-columns-2,
+  .ui-filter-bar-columns-3,
+  .ui-filter-bar-columns-4 {
+    grid-template-columns: 1fr;
+  }
+}

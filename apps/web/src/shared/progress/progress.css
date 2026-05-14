@@ -1,0 +1,77 @@
+.ui-progress {
+  display: grid;
+  gap: 8px;
+}
+
+.ui-progress-track {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-soft) 18%, transparent);
+}
+
+.ui-progress-sm .ui-progress-track {
+  height: 6px;
+}
+
+.ui-progress-lg .ui-progress-track {
+  height: 12px;
+}
+
+.ui-progress-indicator {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width var(--transition-fast);
+}
+
+.ui-progress[data-state="indeterminate"] .ui-progress-indicator {
+  width: 38%;
+  animation: ui-progress-indeterminate 1s ease-in-out infinite;
+}
+
+.ui-progress-neutral .ui-progress-indicator {
+  background: var(--text-muted);
+}
+
+.ui-progress-brand .ui-progress-indicator {
+  background: var(--accent);
+}
+
+.ui-progress-success .ui-progress-indicator {
+  background: #20c997;
+}
+
+.ui-progress-warning .ui-progress-indicator {
+  background: #ffb84d;
+}
+
+.ui-progress-danger .ui-progress-indicator {
+  background: #ef4444;
+}
+
+.ui-progress-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+@keyframes ui-progress-indeterminate {
+  0% {
+    transform: translateX(-110%);
+  }
+
+  100% {
+    transform: translateX(300%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-progress-indicator {
+    transition: none;
+    animation: none;
+  }
+}

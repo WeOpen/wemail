@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
+import { Badge } from "../../shared/badge";
 import { Button } from "../../shared/button";
-import { CheckboxField, FormField, SelectInput, TextInput } from "../../shared/form";
+import { FilterBar, FilterBarActions } from "../../shared/filter-bar";
+import { CheckboxField, FormField, SearchInput, SelectInput, TextInput } from "../../shared/form";
 import { OverlayDialog } from "../../shared/overlay";
+import { Pagination } from "../../shared/pagination";
+import { Page, PageHeader, PageMain, PageToolbar } from "../../shared/page-layout";
 import {
   Table,
   TableBody,
@@ -42,6 +46,21 @@ function formatLastActive(value: string) {
   return dateTimeFormatter.format(new Date(value));
 }
 
+function getStatusBadgeVariant(status: MailboxAccountStatus) {
+  switch (status) {
+    case "enabled":
+      return "success";
+    case "disabled":
+      return "warning";
+    case "archived":
+      return "neutral";
+    case "soft_deleted":
+      return "danger";
+    default:
+      return "neutral";
+  }
+}
+
 function updateSelectedAccounts(
   accounts: MailboxAccountRecord[],
   selectedIds: string[],
@@ -61,10 +80,12 @@ function updateSelectedAccounts(
 
 export function AccountsListPage() {
   const [accounts, setAccounts] = useState(mailboxAccountsMockData);
+  const [page, setPage] = useState(1);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isMoreActionsOpen, setIsMoreActionsOpen] = useState(false);
   const [isHardDeleteDialogOpen, setIsHardDeleteDialogOpen] = useState(false);
   const [confirmationPhrase, setConfirmationPhrase] = useState("");
+  const pageSize = 3;
 
   const selectedAccounts = useMemo(
     () => accounts.filter((account) => selectedIds.includes(account.id)),
@@ -72,7 +93,6 @@ export function AccountsListPage() {
   );
 
   const selectedCount = selectedAccounts.length;
-  const allVisibleSelected = accounts.length > 0 && selectedCount === accounts.length;
   const hardDeletePhrase = `DELETE ${selectedCount} ACCOUNTS`;
   const selectedAccountsWithMailHistory = selectedAccounts.filter(
     (account) => account.messageCount > 0 || account.outboundCount > 0
@@ -87,6 +107,19 @@ export function AccountsListPage() {
     }
   }, [selectedCount]);
 
+  useEffect(() => {
+    const pageCount = Math.max(1, Math.ceil(accounts.length / pageSize));
+    if (page > pageCount) {
+      setPage(pageCount);
+    }
+  }, [accounts.length, page, pageSize]);
+
+  const visibleAccounts = useMemo(() => {
+    const startIndex = (page - 1) * pageSize;
+    return accounts.slice(startIndex, startIndex + pageSize);
+  }, [accounts, page, pageSize]);
+  const allVisibleSelected = visibleAccounts.length > 0 && visibleAccounts.every((account) => selectedIds.includes(account.id));
+
   function toggleSelection(accountId: string) {
     setSelectedIds((currentIds) =>
       currentIds.includes(accountId) ? currentIds.filter((id) => id !== accountId) : [...currentIds, accountId]
@@ -94,7 +127,7 @@ export function AccountsListPage() {
   }
 
   function toggleSelectAll() {
-    setSelectedIds(allVisibleSelected ? [] : accounts.map((account) => account.id));
+    setSelectedIds(allVisibleSelected ? [] : visibleAccounts.map((account) => account.id));
   }
 
   function closeHardDeleteDialog() {
@@ -139,56 +172,58 @@ export function AccountsListPage() {
 
   return (
     <>
-      <main className="workspace-grid accounts-list-page">
+      <Page className="workspace-grid accounts-list-page">
         <section className="panel workspace-card page-panel accounts-list-toolbar-card">
-          <div className="workspace-card-header">
-            <div>
-              <p className="panel-kicker">账号中心</p>
-            </div>
-            <div className="workspace-topbar-actions">
-              <Button variant="primary">导出</Button>
-              <Button variant="secondary">刷新</Button>
-            </div>
-          </div>
+          <PageHeader
+            actions={
+              <div className="workspace-topbar-actions">
+                <Button variant="primary">导出</Button>
+                <Button variant="secondary">刷新</Button>
+              </div>
+            }
+            kicker="账号中心"
+          />
 
-          <div className="workspace-grid accounts-list-filter-grid">
-            <FormField label={<span className="sr-only">搜索账号</span>}>
-              <TextInput aria-label="搜索账号" placeholder="搜索 ID / 地址 / 创建人" type="search" />
-            </FormField>
-            <FormField label={<span className="sr-only">状态筛选</span>}>
-              <SelectInput aria-label="状态筛选" defaultValue="all">
-                <option value="all">全部状态</option>
-                <option value="enabled">启用</option>
-                <option value="disabled">停用</option>
-                <option value="archived">已归档</option>
-                <option value="soft_deleted">已软删除</option>
-              </SelectInput>
-            </FormField>
-            <FormField label={<span className="sr-only">创建人筛选</span>}>
-              <SelectInput aria-label="创建人筛选" defaultValue="all">
-                <option value="all">全部创建人</option>
-                <option value="Will">Will</option>
-                <option value="Ada">Ada</option>
-                <option value="System">System</option>
-              </SelectInput>
-            </FormField>
-            <FormField label={<span className="sr-only">最近活跃筛选</span>}>
-              <SelectInput aria-label="最近活跃筛选" defaultValue="all">
-                <option value="all">全部活跃时间</option>
-                <option value="7d">近 7 天</option>
-                <option value="30d">近 30 天</option>
-                <option value="90d">近 90 天</option>
-              </SelectInput>
-            </FormField>
-          </div>
+          <PageToolbar>
+            <FilterBar className="accounts-list-filter-grid" columns={4}>
+              <FormField label={<span className="sr-only">搜索账号</span>}>
+                <SearchInput aria-label="搜索账号" placeholder="搜索 ID / 地址 / 创建人" />
+              </FormField>
+              <FormField label={<span className="sr-only">状态筛选</span>}>
+                <SelectInput aria-label="状态筛选" defaultValue="all">
+                  <option value="all">全部状态</option>
+                  <option value="enabled">启用</option>
+                  <option value="disabled">停用</option>
+                  <option value="archived">已归档</option>
+                  <option value="soft_deleted">已软删除</option>
+                </SelectInput>
+              </FormField>
+              <FormField label={<span className="sr-only">创建人筛选</span>}>
+                <SelectInput aria-label="创建人筛选" defaultValue="all">
+                  <option value="all">全部创建人</option>
+                  <option value="Will">Will</option>
+                  <option value="Ada">Ada</option>
+                  <option value="System">System</option>
+                </SelectInput>
+              </FormField>
+              <FormField label={<span className="sr-only">最近活跃筛选</span>}>
+                <SelectInput aria-label="最近活跃筛选" defaultValue="all">
+                  <option value="all">全部活跃时间</option>
+                  <option value="7d">近 7 天</option>
+                  <option value="30d">近 30 天</option>
+                  <option value="90d">近 90 天</option>
+                </SelectInput>
+              </FormField>
+            </FilterBar>
 
-          <div className="workspace-topbar-actions accounts-list-quick-filters">
-            <Button variant="ghost">仅看异常</Button>
-            <Button variant="ghost">仅看长期不活跃</Button>
-          </div>
+            <FilterBarActions className="workspace-topbar-actions accounts-list-quick-filters">
+              <Button variant="ghost">仅看异常</Button>
+              <Button variant="ghost">仅看长期不活跃</Button>
+            </FilterBarActions>
+          </PageToolbar>
         </section>
 
-        <section className="panel workspace-card page-panel accounts-list-table-card">
+        <PageMain className="panel workspace-card page-panel accounts-list-table-card">
           <div className="workspace-card-header">
             <div>
               <p className="panel-kicker">账号列表</p>
@@ -197,43 +232,43 @@ export function AccountsListPage() {
 
           {selectedCount > 0 ? (
             <section aria-label="批量操作条" className="panel workspace-card accounts-list-bulk-bar">
-              <div className="workspace-card-header">
-                <div>
-                  <p className="panel-kicker">批量操作</p>
-                  <h4>已选择 {selectedCount} 个账号</h4>
-                </div>
-                <div className="workspace-topbar-actions">
-                  <Button onClick={() => runStatusBulkAction("enabled")} variant="primary">
-                    批量启用
-                  </Button>
-                  <Button onClick={() => runStatusBulkAction("disabled")} variant="secondary">
-                    批量停用
-                  </Button>
-                  <Button onClick={() => runStatusBulkAction("archived")} variant="secondary">
-                    批量归档
-                  </Button>
-                  <div>
-                    <Button
-                      aria-expanded={isMoreActionsOpen}
-                      onClick={() => setIsMoreActionsOpen((current) => !current)}
-                      variant="secondary"
-                    >
-                      更多操作
+              <PageHeader
+                actions={
+                  <div className="workspace-topbar-actions">
+                    <Button onClick={() => runStatusBulkAction("enabled")} variant="primary">
+                      批量启用
                     </Button>
-                    {isMoreActionsOpen ? (
-                      <div aria-label="危险批量操作" className="panel workspace-card accounts-list-more-actions" role="group">
-                        <p className="panel-kicker">危险操作</p>
-                        <Button onClick={runSoftDelete} variant="ghost">
-                          批量软删除
-                        </Button>
-                        <Button onClick={openHardDeleteDialog} variant="danger">
-                          批量彻底删除
-                        </Button>
-                      </div>
-                    ) : null}
+                    <Button onClick={() => runStatusBulkAction("disabled")} variant="secondary">
+                      批量停用
+                    </Button>
+                    <Button onClick={() => runStatusBulkAction("archived")} variant="secondary">
+                      批量归档
+                    </Button>
+                    <div>
+                      <Button
+                        aria-expanded={isMoreActionsOpen}
+                        onClick={() => setIsMoreActionsOpen((current) => !current)}
+                        variant="secondary"
+                      >
+                        更多操作
+                      </Button>
+                      {isMoreActionsOpen ? (
+                        <div aria-label="危险批量操作" className="panel workspace-card accounts-list-more-actions" role="group">
+                          <p className="panel-kicker">危险操作</p>
+                          <Button onClick={runSoftDelete} variant="ghost">
+                            批量软删除
+                          </Button>
+                          <Button onClick={openHardDeleteDialog} variant="danger">
+                            批量彻底删除
+                          </Button>
+                        </div>
+                      ) : null}
+                    </div>
                   </div>
-                </div>
-              </div>
+                }
+                kicker="批量操作"
+                title={`已选择 ${selectedCount} 个账号`}
+              />
             </section>
           ) : null}
 
@@ -264,7 +299,7 @@ export function AccountsListPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {accounts.map((account) => {
+                {visibleAccounts.map((account) => {
                   const isSelected = selectedIds.includes(account.id);
 
                   return (
@@ -283,7 +318,9 @@ export function AccountsListPage() {
                       <TableCell>{formatDate(account.createdAt)}</TableCell>
                       <TableCell>
                         <div className="accounts-list-status-cell">
-                          <span className={`accounts-status-pill accounts-status-pill--${account.status}`}>{statusLabelMap[account.status]}</span>
+                          <Badge appearance="soft" statusRole="status" variant={getStatusBadgeVariant(account.status)}>
+                            {statusLabelMap[account.status]}
+                          </Badge>
                           {account.deletedAt ? <div className="section-copy">软删于 {formatDate(account.deletedAt)}</div> : null}
                         </div>
                       </TableCell>
@@ -302,8 +339,16 @@ export function AccountsListPage() {
               </TableBody>
             </Table>
           </TableContainer>
-        </section>
-      </main>
+          <Pagination
+            aria-label="账号列表分页"
+            className="accounts-list-pagination"
+            onChange={setPage}
+            page={page}
+            pageSize={pageSize}
+            total={accounts.length}
+          />
+        </PageMain>
+      </Page>
 
       {isHardDeleteDialogOpen ? (
         <OverlayDialog closeLabel="关闭彻底删除确认" eyebrow="危险操作" onClose={closeHardDeleteDialog} title="确认彻底删除">

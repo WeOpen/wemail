@@ -23,7 +23,6 @@ import { TelegramSettingsPage } from "../features/settings/TelegramSettingsPage"
 import { WebhookPage } from "../features/settings/WebhookPage";
 import { AnnouncementsPage } from "../pages/AnnouncementsPage";
 import { DashboardPage } from "../pages/DashboardPage";
-import { DesignSystemPage } from "../pages/DesignSystemPage";
 import { InboxPage } from "../pages/InboxPage";
 import { SystemSettingsPage } from "../pages/SystemSettingsPage";
 import { SystemProfilePage } from "../pages/SystemProfilePage";
@@ -234,7 +233,6 @@ export function AppRoutes({ session, inbox, selectedMessage, settings, admin, ap
       <Route path="/system/settings" element={systemSettingsPage} />
       <Route path="/system/profile" element={systemProfilePage} />
       <Route path="/system/about" element={<AboutPage />} />
-      <Route path="/design-system" element={<DesignSystemPage />} />
     </Routes>
   );
 }

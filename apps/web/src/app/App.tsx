@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, useLocation } from "react-router-dom";
 import { AppLayout } from "./AppLayout";
 import { AppRoutes } from "./AppRoutes";
 import { AuthPage } from "../pages/AuthPage";
+import { DesignSystemPage } from "../pages/DesignSystemPage";
 import { WemailLoadingShell } from "../shared/WemailLoadingShell";
 import { WemailToastViewport } from "../shared/WemailToastViewport";
 import { useAppStore } from "./appStore";
@@ -59,6 +60,16 @@ function AppContent() {
   }, [location.pathname, session]);
 
   const toastViewport = <WemailToastViewport onDismissToast={dismissToast} toasts={toasts} />;
+  const isPublicDesignSystemPage = location.pathname === "/design-system";
+
+  if (isPublicDesignSystemPage) {
+    return (
+      <>
+        {toastViewport}
+        <DesignSystemPage />
+      </>
+    );
+  }
 
   if (auth.loadingSession) {
     return (

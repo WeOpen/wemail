@@ -1,0 +1,253 @@
+import { type CSSProperties } from "react";
+
+export const designSystemSharedStyles = {
+  stack: {
+    display: "grid",
+    gap: "16px"
+  } satisfies CSSProperties,
+  chipRow: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "8px"
+  } satisfies CSSProperties,
+  chip: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "6px",
+    borderRadius: "999px",
+    padding: "6px 10px",
+    fontSize: "12px",
+    lineHeight: 1.2,
+    border: "1px solid var(--border-subtle, rgba(15, 23, 42, 0.08))",
+    background: "var(--surface-secondary, rgba(15, 23, 42, 0.04))",
+    color: "var(--text, #111827)"
+  } satisfies CSSProperties,
+  previewCard: {
+    minWidth: 0,
+    overflowWrap: "anywhere",
+    border: "1px solid var(--border-subtle, rgba(15, 23, 42, 0.08))",
+    borderRadius: "16px",
+    padding: "16px",
+    background: "var(--surface-muted)",
+    display: "grid",
+    gap: "12px"
+  } satisfies CSSProperties
+};
+
+export const designSystemPageStyles = {
+  shell: {
+    maxWidth: "1440px",
+    width: "min(1440px, calc(100vw - 24px))",
+    margin: "0 auto",
+    padding: "84px 0 32px"
+  } satisfies CSSProperties,
+  hero: {
+    display: "grid",
+    gap: "20px",
+    gridTemplateColumns: "minmax(0, 1fr)",
+    alignItems: "start",
+    background: "var(--surface-muted)",
+    boxShadow: "0 18px 42px rgba(15, 23, 42, 0.08)"
+  } satisfies CSSProperties,
+  sectionLayout: {
+    display: "grid",
+    gap: "20px",
+    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+    alignItems: "start"
+  } satisfies CSSProperties,
+  metaGrid: {
+    display: "grid",
+    gap: "12px"
+  } satisfies CSSProperties,
+  sidebarShell: {
+    display: "grid",
+    gap: "20px",
+    alignSelf: "start",
+    position: "sticky",
+    top: "96px",
+    padding: "8px 0",
+    borderRadius: "24px",
+    border: "1px solid var(--border-subtle, rgba(15, 23, 42, 0.08))",
+    background: "var(--surface-muted)",
+    boxShadow: "0 18px 42px rgba(15, 23, 42, 0.08)"
+  } satisfies CSSProperties,
+  sidebarNav: {
+    minHeight: 0,
+    padding: "10px 10px 22px 22px",
+    border: "none",
+    borderRadius: 0,
+    background: "transparent",
+    boxShadow: "none",
+    backdropFilter: "none"
+  } satisfies CSSProperties,
+  sidebarGroup: {
+    gap: "10px"
+  } satisfies CSSProperties,
+  sidebarGroupHeader: {
+    margin: 0,
+    padding: "0 2px"
+  } satisfies CSSProperties,
+  sidebarGroupList: {
+    gap: "10px"
+  } satisfies CSSProperties,
+  sidebarButton: {
+    cursor: "pointer"
+  } satisfies CSSProperties,
+  sidebarButtonActive: {
+    boxShadow: "0 12px 24px rgba(0, 0, 0, 0.16)"
+  } satisfies CSSProperties,
+  sidebarButtonMeta: {
+    fontSize: "12px"
+  } satisfies CSSProperties,
+  sidebarDot: {
+    width: "10px",
+    height: "10px",
+    borderRadius: "999px",
+    background: "currentColor",
+    display: "inline-block"
+  } satisfies CSSProperties,
+  emphasisChip: {
+    ...designSystemSharedStyles.chip,
+    background: "var(--brand-50, rgba(255, 122, 0, 0.12))",
+    borderColor: "var(--brand-200, rgba(255, 122, 0, 0.2))",
+    color: "var(--brand-600, #b45309)"
+  } satisfies CSSProperties,
+  denseList: {
+    margin: 0,
+    paddingLeft: "18px",
+    display: "grid",
+    gap: "8px",
+    color: "var(--text-muted, #667085)"
+  } satisfies CSSProperties,
+  subheading: {
+    margin: 0,
+    fontSize: "14px",
+    fontWeight: 700,
+    color: "var(--text, #111827)"
+  } satisfies CSSProperties
+};
+
+export const designSystemExampleStyles = {
+  previewPane: {
+    minWidth: 0,
+    display: "grid",
+    gap: "16px"
+  } satisfies CSSProperties,
+  previewGrid: {
+    minWidth: 0,
+    display: "grid",
+    gap: "16px"
+  } satisfies CSSProperties,
+  twoColumnGrid: {
+    minWidth: 0,
+    display: "grid",
+    gap: "12px",
+    gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))"
+  } satisfies CSSProperties,
+  denseGrid: {
+    minWidth: 0,
+    display: "grid",
+    gap: "10px",
+    gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 128px), 1fr))"
+  } satisfies CSSProperties,
+  fullWidthCard: {
+    minWidth: 0,
+    overflowX: "auto",
+    scrollbarGutter: "stable"
+  } satisfies CSSProperties
+};
+
+export const designSystemDocStyles = {
+  shell: {
+    display: "grid",
+    gap: "20px",
+    padding: "24px",
+    borderRadius: "24px",
+    background: "var(--surface-muted)",
+    boxShadow: "0 18px 42px rgba(15, 23, 42, 0.08)"
+  } satisfies CSSProperties,
+  header: {
+    display: "grid",
+    gap: "12px",
+    paddingBottom: "16px",
+    borderBottom: "1px solid var(--border-subtle, rgba(15, 23, 42, 0.08))"
+  } satisfies CSSProperties,
+  sectionList: {
+    display: "grid",
+    gap: "16px"
+  } satisfies CSSProperties,
+  section: {
+    display: "grid",
+    gap: "10px",
+    padding: "18px 20px",
+    borderRadius: "18px",
+    border: "1px solid var(--border-subtle, rgba(15, 23, 42, 0.08))",
+    background: "var(--surface-muted)",
+    boxShadow: "0 18px 42px rgba(15, 23, 42, 0.08)"
+  } satisfies CSSProperties,
+  sectionHeading: {
+    margin: 0,
+    fontSize: "18px"
+  } satisfies CSSProperties,
+  paragraphGroup: {
+    display: "grid",
+    gap: "8px"
+  } satisfies CSSProperties,
+  exampleNote: {
+    padding: "14px 16px",
+    borderRadius: "14px",
+    background: "var(--surface-secondary, rgba(15, 23, 42, 0.04))",
+    color: "var(--text-muted, #667085)"
+  } satisfies CSSProperties,
+  guidanceNote: {
+    padding: "14px 16px",
+    borderRadius: "14px",
+    border: "1px solid var(--border-subtle, rgba(15, 23, 42, 0.08))",
+    background: "var(--surface-primary, rgba(255,255,255,0.9))"
+  } satisfies CSSProperties,
+  codeSampleList: {
+    display: "grid",
+    gap: "12px"
+  } satisfies CSSProperties,
+  codeSampleCard: {
+    display: "grid",
+    gap: "8px"
+  } satisfies CSSProperties,
+  codeSampleHeading: {
+    margin: 0,
+    fontSize: "15px",
+    color: "var(--text, #111827)"
+  } satisfies CSSProperties,
+  codeSamplePre: {
+    margin: 0,
+    padding: "14px 16px",
+    overflowX: "auto",
+    borderRadius: "14px",
+    border: "1px solid var(--border-subtle, rgba(15, 23, 42, 0.08))",
+    background: "var(--surface-secondary, rgba(15, 23, 42, 0.04))",
+    color: "var(--text, #111827)",
+    fontSize: "13px",
+    lineHeight: 1.6,
+    whiteSpace: "pre-wrap"
+  } satisfies CSSProperties
+};
+
+export function resolveDesignSystemSidebarLayoutStyle(viewportWidth?: number): CSSProperties {
+  const width = viewportWidth ?? (typeof window !== "undefined" ? window.innerWidth : 1280);
+
+  if (width < 980) {
+    return {
+      display: "grid",
+      gap: "24px",
+      gridTemplateColumns: "minmax(0, 1fr)",
+      alignItems: "start"
+    };
+  }
+
+  return {
+    display: "grid",
+    gap: "28px",
+    gridTemplateColumns: "minmax(240px, 280px) minmax(0, 1fr)",
+    alignItems: "start"
+  };
+}

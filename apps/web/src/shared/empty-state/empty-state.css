@@ -1,0 +1,76 @@
+.ui-empty-state {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  padding: var(--space-8);
+  border: 1px dashed color-mix(in srgb, var(--border-strong) 88%, transparent);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(circle at top, color-mix(in srgb, var(--surface-muted) 92%, transparent), transparent 68%),
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 96%, transparent), color-mix(in srgb, var(--surface-muted) 92%, transparent));
+  color: var(--text);
+  text-align: center;
+}
+
+.ui-empty-state-default {
+  --ui-empty-state-tone: var(--neutral-500);
+}
+
+.ui-empty-state-error {
+  --ui-empty-state-tone: var(--danger-500);
+  border-color: color-mix(in srgb, var(--danger-500) 28%, transparent);
+  background:
+    radial-gradient(circle at top, color-mix(in srgb, var(--danger-100) 52%, transparent), transparent 66%),
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 96%, transparent), color-mix(in srgb, var(--danger-100) 26%, transparent));
+}
+
+.ui-empty-state-no-access {
+  --ui-empty-state-tone: var(--warning-500);
+  border-color: color-mix(in srgb, var(--warning-500) 28%, transparent);
+  background:
+    radial-gradient(circle at top, color-mix(in srgb, var(--warning-100) 52%, transparent), transparent 66%),
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 96%, transparent), color-mix(in srgb, var(--warning-100) 24%, transparent));
+}
+
+.ui-empty-state-media {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--ui-empty-state-tone) 14%, var(--surface-strong));
+  color: var(--ui-empty-state-tone);
+}
+
+.ui-empty-state-copy {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 36rem;
+}
+
+.ui-empty-state-title {
+  font-size: var(--font-title-md);
+  line-height: var(--line-title);
+  letter-spacing: -0.03em;
+}
+
+.ui-empty-state-description,
+.ui-empty-state-content {
+  color: var(--text-muted);
+  font-size: var(--font-body-md);
+  line-height: var(--line-body);
+}
+
+.ui-empty-state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-empty-state {
+    transition: none;
+  }
+}

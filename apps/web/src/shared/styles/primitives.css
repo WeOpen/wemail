@@ -8,13 +8,64 @@
  * See docs/plans/2026-04-22-design-system-v1.md §7.
  *
  * === S2 atoms (typography / divider / icon / spinner / skeleton) ===
+ * @import "../typography/typography.css";
+ * @import "../divider/divider.css";
+ * @import "../icon/icon.css";
+ * @import "../spinner/spinner.css";
+ * @import "../skeleton/skeleton.css";
  *
  * === S3 cards & status (card / tag / badge / empty-state) ===
+ * @import "../card/card.css";
+ * @import "../tag/tag.css";
+ * @import "../badge/badge.css";
+ * @import "../empty-state/empty-state.css";
  *
  * === S4 navigation (breadcrumb / pagination / tabs / steps) ===
+ * @import "../breadcrumb/breadcrumb.css";
+ * @import "../pagination/pagination.css";
+ * @import "../tabs/tabs.css";
+ * @import "../steps/steps.css";
  *
  * === S5 forms & feedback (SearchInput / Checkbox / Radio / MultiSelect /
  *                          progress / alert / copy-button / kv-list / avatar) ===
+ * @import "../form/form.css";
+ * @import "../progress/progress.css";
+ * @import "../alert/alert.css";
+ * @import "../copy-button/copy-button.css";
+ * @import "../kv-list/kv-list.css";
+ * @import "../avatar/avatar.css";
  *
  * === S6 overlays (tooltip / popover / scroll-area) ===
+ * @import "../tooltip/tooltip.css";
+ * @import "../popover/popover.css";
+ * @import "../scroll-area/scroll-area.css";
  */
+@import "../typography/typography.css";
+@import "../divider/divider.css";
+@import "../icon/icon.css";
+@import "../spinner/spinner.css";
+@import "../skeleton/skeleton.css";
+@import "../page-layout/page-layout.css";
+@import "../filter-bar/filter-bar.css";
+@import "../metric-card/metric-card.css";
+
+@import "../card/card.css";
+@import "../tag/tag.css";
+@import "../badge/badge.css";
+@import "../empty-state/empty-state.css";
+
+@import "../breadcrumb/breadcrumb.css";
+@import "../pagination/pagination.css";
+@import "../tabs/tabs.css";
+@import "../steps/steps.css";
+
+@import "../form/form.css";
+@import "../progress/progress.css";
+@import "../alert/alert.css";
+@import "../copy-button/copy-button.css";
+@import "../kv-list/kv-list.css";
+@import "../avatar/avatar.css";
+
+@import "../tooltip/tooltip.css";
+@import "../popover/popover.css";
+@import "../scroll-area/scroll-area.css";

@@ -100,22 +100,26 @@
   --success-500: #22c55e;
   --success-100: #d1fadf;
   --success-600: #16a34a;
-  --success-bg: rgba(34, 197, 94, 0.14);
+  --success-soft: rgba(34, 197, 94, 0.14);
+  --success-bg: var(--success-soft);
 
   --warning-500: #f59e0b;
   --warning-100: #fef0c7;
   --warning-600: #d97706;
-  --warning-bg: rgba(245, 158, 11, 0.14);
+  --warning-soft: rgba(245, 158, 11, 0.14);
+  --warning-bg: var(--warning-soft);
 
   --danger-500: #ef4444;
   --danger-100: #fee2e2;
   --danger-600: #dc2626;
-  --danger-bg: rgba(239, 68, 68, 0.14);
+  --danger-soft: rgba(239, 68, 68, 0.14);
+  --danger-bg: var(--danger-soft);
 
   --info-500: #3b82f6;
   --info-100: #dbeafe;
   --info-600: #2563eb;
-  --info-bg: rgba(59, 130, 246, 0.14);
+  --info-soft: rgba(59, 130, 246, 0.14);
+  --info-bg: var(--info-soft);
 
   /* Neutrals — 9 stops */
   --neutral-0: #ffffff;

@@ -1,0 +1,52 @@
+.ui-icon {
+  --icon-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  color: currentColor;
+  flex: none;
+}
+
+.ui-icon-xs {
+  --icon-size: 14px;
+}
+
+.ui-icon-sm {
+  --icon-size: 16px;
+}
+
+.ui-icon-md {
+  --icon-size: 20px;
+}
+
+.ui-icon-lg {
+  --icon-size: 24px;
+}
+
+.ui-icon-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.ui-icon.ui-tone-muted {
+  color: var(--text-muted);
+}
+
+.ui-icon.ui-tone-accent {
+  color: var(--brand-500);
+}
+
+.ui-icon.ui-tone-success {
+  color: var(--success-600);
+}
+
+.ui-icon.ui-tone-warning {
+  color: var(--warning-600);
+}
+
+.ui-icon.ui-tone-danger {
+  color: var(--danger-600);
+}

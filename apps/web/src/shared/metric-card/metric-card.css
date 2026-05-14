@@ -1,0 +1,37 @@
+.ui-metric-card {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.ui-metric-card-hero {
+  background: var(--hero-gradient);
+}
+
+.ui-metric-card-title {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: -0.03em;
+}
+
+.ui-metric-card-value {
+  line-height: 0.95;
+}
+
+.ui-metric-card-value-lg .ui-metric-card-value {
+  font-size: clamp(1.3rem, 2vw, 1.8rem);
+}
+
+.ui-metric-card-value-xl .ui-metric-card-value {
+  font-size: clamp(2rem, 3vw, 2.6rem);
+}
+
+.ui-metric-card-detail,
+.ui-metric-card-caption {
+  color: var(--text-muted);
+}
+
+.ui-metric-card-caption {
+  color: var(--accent);
+  font-weight: 600;
+}

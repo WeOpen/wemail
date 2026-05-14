@@ -1,8 +1,20 @@
-import { createRef } from "react";
+import { createRef, useState } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { CheckboxField, FormField, RadioGroupField, SelectInput, TextInput, TextareaInput } from "../shared/form";
+import {
+  Checkbox,
+  CheckboxField,
+  FormField,
+  MultiSelect,
+  Radio,
+  RadioGroupField,
+  SearchInput,
+  SelectInput,
+  TextInput,
+  TextareaInput
+} from "../shared/form";
 
 describe("shared form primitives", () => {
   it("associates FormField labels with wrapped controls", () => {
@@ -110,5 +122,148 @@ describe("shared form primitives", () => {
     fireEvent.click(compact);
 
     expect(compact).toBeChecked();
+  });
+
+  it("renders SearchInput with clear affordance in controlled mode", async () => {
+    const user = userEvent.setup();
+
+    function Host() {
+      const [value, setValue] = useState("ops");
+
+      return (
+        <SearchInput
+          aria-label="搜索邮箱"
+          onChange={(event) => setValue(event.target.value)}
+          value={value}
+        />
+      );
+    }
+
+    render(<Host />);
+
+    const input = screen.getByRole("searchbox", { name: "搜索邮箱" });
+    expect(input).toHaveValue("ops");
+    expect(input.closest(".ui-search-input")).toHaveAttribute("data-state", "has-value");
+
+    await user.click(screen.getByRole("button", { name: "清除搜索" }));
+
+    expect(input).toHaveValue("");
+    expect(screen.queryByRole("button", { name: "清除搜索" })).not.toBeInTheDocument();
+  });
+
+  it("supports standalone checkbox and radio primitives without changing field APIs", async () => {
+    const user = userEvent.setup();
+
+    function RadioHost() {
+      const [value, setValue] = useState("deliver");
+
+      return (
+        <>
+          <Checkbox defaultChecked description="把抄送地址一并搜索" label="包含抄送" />
+          <Radio
+            checked={value === "deliver"}
+            description="仅显示成功投递的记录"
+            label="仅投递成功"
+            name="delivery-state"
+            onChange={() => setValue("deliver")}
+            value="deliver"
+            variant="card"
+          />
+          <Radio
+            checked={value === "failed"}
+            label="仅投递失败"
+            name="delivery-state"
+            onChange={() => setValue("failed")}
+            value="failed"
+            variant="card"
+          />
+        </>
+      );
+    }
+
+    render(<RadioHost />);
+
+    const checkbox = screen.getByRole("checkbox", { name: "包含抄送" });
+    const failed = screen.getByRole("radio", { name: "仅投递失败" });
+
+    expect(checkbox).toBeChecked();
+    expect(screen.getByText("把抄送地址一并搜索")).toBeInTheDocument();
+    expect(failed.closest(".form-check")).toHaveAttribute("data-state", "unchecked");
+
+    await user.click(failed);
+
+    expect(failed).toBeChecked();
+    expect(failed.closest(".form-check")).toHaveAttribute("data-state", "checked");
+  });
+
+  it("supports uncontrolled multi-select interaction and keyboard toggling", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MultiSelect
+        aria-label="选择通知渠道"
+        defaultValue={["email"]}
+        options={[
+          { label: "邮件", value: "email" },
+          { label: "Telegram", value: "telegram" },
+          { disabled: true, label: "Webhook", value: "webhook" }
+        ]}
+        placeholder="选择渠道"
+      />
+    );
+
+    const trigger = screen.getByRole("button", { name: /选择通知渠道/i });
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    expect(trigger).toHaveTextContent("邮件");
+
+    await user.click(trigger);
+
+    const dialog = screen.getByRole("dialog", { name: "选择通知渠道" });
+    expect(dialog).toBeInTheDocument();
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+
+    const telegram = screen.getByRole("checkbox", { name: "Telegram" });
+    telegram.focus();
+    await user.keyboard(" ");
+
+    expect(telegram).toBeChecked();
+    expect(trigger).toHaveTextContent("邮件, Telegram");
+
+    const webhook = screen.getByRole("checkbox", { name: "Webhook" });
+    expect(webhook).toBeDisabled();
+
+    await user.keyboard("{Escape}");
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("supports controlled multi-select value updates", async () => {
+    const user = userEvent.setup();
+
+    function Host() {
+      const [value, setValue] = useState<string[]>(["read"]);
+
+      return (
+        <MultiSelect
+          aria-label="选择权限"
+          onValueChange={setValue}
+          options={[
+            { label: "读取", value: "read" },
+            { label: "写入", value: "write" },
+            { label: "删除", value: "delete" }
+          ]}
+          value={value}
+        />
+      );
+    }
+
+    render(<Host />);
+
+    const trigger = screen.getByRole("button", { name: /选择权限/i });
+    expect(trigger).toHaveTextContent("读取");
+
+    await user.click(trigger);
+    await user.click(screen.getByRole("checkbox", { name: "写入" }));
+
+    expect(trigger).toHaveTextContent("读取, 写入");
   });
 });

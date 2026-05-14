@@ -1,0 +1,132 @@
+.ui-heading,
+.ui-text,
+.ui-label,
+.ui-code,
+.ui-kbd {
+  margin: 0;
+  color: var(--text);
+}
+
+.ui-heading {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.ui-heading-display-lg {
+  font-size: var(--font-display-lg);
+  line-height: var(--line-display);
+}
+
+.ui-heading-display-md {
+  font-size: var(--font-display-md);
+  line-height: var(--line-display);
+}
+
+.ui-heading-title-lg {
+  font-size: var(--font-title-lg);
+  line-height: var(--line-title);
+}
+
+.ui-heading-title-md {
+  font-size: var(--font-title-md);
+  line-height: var(--line-title);
+}
+
+.ui-text-lg {
+  font-size: var(--font-body-lg);
+  line-height: var(--line-body);
+}
+
+.ui-text-md,
+.ui-label-md {
+  font-size: var(--font-body-md);
+  line-height: var(--line-body);
+}
+
+.ui-text-caption,
+.ui-label-caption {
+  font-size: var(--font-caption);
+  line-height: var(--line-caption);
+}
+
+.ui-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 600;
+}
+
+.ui-text-muted,
+.ui-text.ui-tone-muted,
+.ui-label.ui-tone-muted {
+  color: var(--text-muted);
+}
+
+.ui-heading.ui-tone-accent,
+.ui-text.ui-tone-accent,
+.ui-label.ui-tone-accent,
+.ui-code.ui-tone-accent {
+  color: var(--brand-500);
+}
+
+.ui-heading.ui-tone-success,
+.ui-text.ui-tone-success,
+.ui-label.ui-tone-success,
+.ui-code.ui-tone-success {
+  color: var(--success-600);
+}
+
+.ui-heading.ui-tone-warning,
+.ui-text.ui-tone-warning,
+.ui-label.ui-tone-warning,
+.ui-code.ui-tone-warning {
+  color: var(--warning-600);
+}
+
+.ui-heading.ui-tone-danger,
+.ui-text.ui-tone-danger,
+.ui-label.ui-tone-danger,
+.ui-code.ui-tone-danger {
+  color: var(--danger-600);
+}
+
+.ui-code,
+.ui-kbd {
+  font-family: var(--font-mono);
+  font-size: var(--font-mono-size);
+  line-height: var(--line-mono);
+}
+
+.ui-code {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.14rem 0.42rem;
+  border: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--surface-muted) 84%, transparent);
+}
+
+.ui-code-block {
+  padding: var(--space-3) var(--space-4);
+  overflow: auto;
+}
+
+.ui-kbd {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.2rem 0.45rem;
+  border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--surface-strong) 84%, transparent);
+  box-shadow: var(--elevation-xs);
+}
+
+.ui-kbd-key {
+  min-width: 1.2rem;
+  text-align: center;
+}
+
+.ui-kbd-separator {
+  color: var(--text-soft);
+}

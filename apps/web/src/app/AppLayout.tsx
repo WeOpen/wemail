@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   Bell,
   ChevronDown,
@@ -18,7 +18,8 @@ import {
 
 import type { SessionSummary } from "@wemail/shared";
 
-import { Button, ButtonLink } from "../shared/button";
+import { Button } from "../shared/button";
+import { Tabs, TabsList, TabsPanel, TabsTrigger } from "../shared/tabs";
 import { WemailBrandLockup } from "../shared/WemailBrandLockup";
 import type { WorkspaceRailIcon, WorkspaceShellState } from "./workspaceShell";
 import type { WorkspaceTheme } from "./useWorkspaceTheme";
@@ -81,6 +82,7 @@ export function AppLayout({
   children
 }: AppLayoutProps) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement | null>(null);
   const railScrollRef = useRef<HTMLElement | null>(null);
@@ -107,6 +109,9 @@ export function AppLayout({
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  const activeSecondaryRoute =
+    shell.secondaryNav.find((item) => item.to === location.pathname)?.to ?? shell.secondaryNav[0]?.to ?? "";
 
   useEffect(() => {
     const areas = [railScrollRef.current, mainScrollRef.current].filter(Boolean) as Array<HTMLElement>;
@@ -162,19 +167,28 @@ export function AppLayout({
 
         <div className="workspace-topbar-center">
           {shell.secondaryNav.length > 0 ? (
-            <nav className="workspace-pill-nav workspace-secondary-nav" aria-label={`${shell.activePrimaryLabel} 二级菜单`}>
-              {shell.secondaryNav.map((item) => (
-                <ButtonLink
-                  className="workspace-pill-link"
-                  isActive={location.pathname === item.to}
-                  key={item.to}
-                  size="sm"
-                  to={item.to}
-                  variant="pill"
-                >
-                  {item.label}
-                </ButtonLink>
-              ))}
+            <nav aria-label={`${shell.activePrimaryLabel} 二级菜单`} className="workspace-secondary-tabs-nav">
+              <Tabs
+                activationMode="automatic"
+                className="workspace-secondary-tabs"
+                onValueChange={(nextValue) => {
+                  if (!nextValue || nextValue === location.pathname) return;
+                  void navigate(nextValue);
+                }}
+                value={activeSecondaryRoute}
+                variant="segmented"
+              >
+                <TabsList className="workspace-pill-nav workspace-secondary-nav">
+                  {shell.secondaryNav.map((item) => (
+                    <TabsTrigger className="workspace-pill-link" key={item.to} value={item.to}>
+                      {item.label}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+                {shell.secondaryNav.map((item) => (
+                  <TabsPanel className="sr-only" forceMount key={item.to} value={item.to} />
+                ))}
+              </Tabs>
             </nav>
           ) : (
             <div aria-label="当前左侧菜单" className="workspace-pill-nav workspace-secondary-nav workspace-secondary-nav-single">

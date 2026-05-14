@@ -21,3 +21,5 @@ apps/web/test-results/
 .omx/
 optimus/
 .superpowers/
+.claude
+.playwright-mcp/

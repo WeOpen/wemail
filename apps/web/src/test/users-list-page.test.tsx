@@ -50,9 +50,9 @@ describe("UsersListPage", () => {
     expect(screen.getByRole("columnheader", { name: "角色" })).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "操作" })).toHaveClass("ui-table-sticky-end");
     expect(screen.getByRole("checkbox", { name: "选择全部用户" }).closest("th")).toHaveClass("ui-table-sticky-start");
-    expect(screen.getAllByText("正常").find((element) => element.classList.contains("accounts-status-pill"))).toHaveClass(
-      "accounts-status-pill",
-      "accounts-status-pill--enabled"
+    expect(screen.getAllByText("正常").find((element) => element.classList.contains("ui-badge"))).toHaveClass(
+      "ui-badge",
+      "ui-badge-success"
     );
     expect(screen.getByLabelText("搜索用户")).toBeInTheDocument();
     expect(screen.getByLabelText("角色筛选")).toBeInTheDocument();

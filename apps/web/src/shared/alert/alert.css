@@ -1,0 +1,65 @@
+.ui-alert {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  padding: 14px 16px;
+  border: 1px solid transparent;
+  border-radius: calc(var(--radius-card) - 8px);
+}
+
+.ui-alert-soft.ui-alert-info {
+  background: color-mix(in srgb, var(--info-soft, rgba(59, 130, 246, 0.14)) 100%, transparent);
+  border-color: color-mix(in srgb, var(--info-500, #3b82f6) 18%, transparent);
+}
+
+.ui-alert-soft.ui-alert-success {
+  background: color-mix(in srgb, var(--success-soft, rgba(32, 201, 151, 0.16)) 100%, transparent);
+  border-color: color-mix(in srgb, #20c997 18%, transparent);
+}
+
+.ui-alert-soft.ui-alert-warning {
+  background: color-mix(in srgb, var(--warning-soft, rgba(255, 184, 77, 0.16)) 100%, transparent);
+  border-color: color-mix(in srgb, #ffb84d 24%, transparent);
+}
+
+.ui-alert-soft.ui-alert-error {
+  background: color-mix(in srgb, rgba(239, 68, 68, 0.14) 100%, transparent);
+  border-color: color-mix(in srgb, #ef4444 24%, transparent);
+}
+
+.ui-alert-outline {
+  background: var(--surface-strong);
+  border-color: var(--border);
+}
+
+.ui-alert-copy {
+  display: grid;
+  gap: 6px;
+}
+
+.ui-alert-title {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.ui-alert-body,
+.ui-alert-actions {
+  color: var(--text-muted);
+}
+
+.ui-alert-icon,
+.ui-alert-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.ui-alert-close {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+}

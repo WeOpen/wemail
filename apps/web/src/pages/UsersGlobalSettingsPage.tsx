@@ -7,6 +7,7 @@ import { InvitePanel } from "../features/admin/InvitePanel";
 import { MailboxOversightPanel } from "../features/admin/MailboxOversightPanel";
 import { QuotaPanel } from "../features/admin/QuotaPanel";
 import type { InviteSummary } from "../features/admin/types";
+import { Page, PageHeader, PageMain } from "../shared/page-layout";
 
 type UsersGlobalSettingsPageProps = {
   adminUsers: UserSummary[];
@@ -34,16 +35,16 @@ export function UsersGlobalSettingsPage({
   onToggleFeatures
 }: UsersGlobalSettingsPageProps) {
   return (
-    <main className="workspace-grid users-global-grid">
+    <Page as="main" className="workspace-grid users-global-grid">
       <section className="panel workspace-card page-panel users-page-header">
-        <div className="users-page-header-copy">
-          <p className="panel-kicker">用户设置</p>
-          <h2>全局控制</h2>
-          <p className="section-copy">集中管理邀请码、系统级配额、全局功能开关和邮箱总览。</p>
-        </div>
+        <PageHeader
+          description="集中管理邀请码、系统级配额、全局功能开关和邮箱总览。"
+          kicker="用户设置"
+          title="全局控制"
+        />
       </section>
 
-      <div className="users-global-panels">
+      <PageMain className="users-global-panels">
         <InvitePanel adminInvites={adminInvites} onCreateInvite={onCreateInvite} onDisableInvite={onDisableInvite} />
         <QuotaPanel
           adminUsers={adminUsers}
@@ -53,7 +54,7 @@ export function UsersGlobalSettingsPage({
         />
         <FeatureTogglesPanel adminFeatures={adminFeatures} onToggleFeatures={onToggleFeatures} />
         <MailboxOversightPanel adminMailboxes={adminMailboxes} />
-      </div>
-    </main>
+      </PageMain>
+    </Page>
   );
 }

@@ -9,20 +9,18 @@ import {
   Eye,
   FileCheck,
   Lock,
-  Menu,
-  MoonStar,
   Send,
-  Shield,
-  SunMedium,
-  X
+  Shield
 } from "lucide-react";
 
 import { Button, ButtonLink } from "../../shared/button";
 import { Switch } from "../../shared/switch";
+import { Tabs, TabsList, TabsPanel, TabsTrigger } from "../../shared/tabs";
 import { WemailBrandLockup } from "../../shared/WemailBrandLockup";
 import { AnimatedSphere } from "./AnimatedSphere";
 import { AnimatedTetrahedron } from "./AnimatedTetrahedron";
 import { AnimatedWave } from "./AnimatedWave";
+import { PublicSiteNavigation } from "./PublicSiteNavigation";
 import {
   certifications,
   developerFeatures,
@@ -33,7 +31,6 @@ import {
   heroWords,
   infrastructureLocations,
   integrations,
-  landingNavLinks,
   metrics,
   pricingPlans,
   securityCards,
@@ -329,135 +326,6 @@ function AnimatedCounter({ value, prefix, suffix }: { value: number; prefix: str
   );
 }
 
-function DesktopNavLinks() {
-  return (
-    <div className="landing-nav-links" aria-label="首页分区导航">
-      {landingNavLinks.map((link) => (
-        <a key={link.href} href={link.href} className="landing-nav-link">
-          {link.label}
-        </a>
-      ))}
-    </div>
-  );
-}
-
-function ThemeIcon({ theme }: { theme: "dark" | "light" }) {
-  return theme === "dark" ? <SunMedium aria-hidden="true" /> : <MoonStar aria-hidden="true" />;
-}
-
-function Navigation({ onToggleTheme, theme }: { onToggleTheme: () => void; theme: "dark" | "light" }) {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const reducedMotion = useReducedMotion();
-  const isCompactNavigation = useCompactNavigation();
-
-  useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 20);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    const body = document.body;
-    if (isMobileMenuOpen) {
-      body.dataset.mobileMenu = "open";
-    } else {
-      delete body.dataset.mobileMenu;
-    }
-    return () => {
-      delete body.dataset.mobileMenu;
-    };
-  }, [isMobileMenuOpen]);
-
-  useEffect(() => {
-    if (!isCompactNavigation) {
-      setIsMobileMenuOpen(false);
-    }
-  }, [isCompactNavigation]);
-
-  return (
-    <header className={isScrolled ? "landing-nav-shell is-scrolled" : "landing-nav-shell"}>
-      <nav className={isScrolled || isMobileMenuOpen ? "landing-nav is-floating" : "landing-nav"} aria-label="首页导航">
-        <div className={isScrolled ? "landing-nav-bar compact" : "landing-nav-bar"}>
-          <Link aria-label="WeMail 首页" className="landing-brand" to="/">
-            <WemailBrandLockup className="landing-brand-lockup" compact label="WeMail brand lockup" />
-          </Link>
-
-          <DesktopNavLinks />
-
-          <div className="landing-nav-actions">
-            <ButtonLink size="sm" to="/login" variant="secondary">
-              登录
-            </ButtonLink>
-            <ButtonLink size="sm" to="/register" variant="primary">
-              注册
-            </ButtonLink>
-          </div>
-
-          <Button
-            aria-controls={isCompactNavigation ? "landing-mobile-menu" : undefined}
-            aria-expanded={isCompactNavigation ? isMobileMenuOpen : undefined}
-            aria-label={isCompactNavigation ? "切换菜单" : theme === "dark" ? "切换到浅色主题" : "切换到深色主题"}
-            iconOnly
-            onClick={() => {
-              if (isCompactNavigation) {
-                setIsMobileMenuOpen((current) => !current);
-                return;
-              }
-              onToggleTheme();
-            }}
-            size="sm"
-            variant="icon"
-          >
-            {isCompactNavigation ? (isMobileMenuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />) : <ThemeIcon theme={theme} />}
-          </Button>
-        </div>
-      </nav>
-
-      {isCompactNavigation && isMobileMenuOpen ? (
-        <div className="landing-mobile-menu-backdrop" role="dialog" aria-label="首页移动菜单" aria-modal="true" id="landing-mobile-menu">
-          <div className="landing-mobile-menu">
-            <div className="landing-mobile-links">
-              {landingNavLinks.map((link, index) => (
-                <a
-                  key={link.href}
-                  className="landing-mobile-link"
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  style={{ ["--menu-delay" as string]: reducedMotion ? "0ms" : `${index * 70}ms` } as CSSProperties}
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-            <div className="landing-mobile-actions">
-              <ButtonLink size="sm" to="/login" variant="secondary" onClick={() => setIsMobileMenuOpen(false)}>
-                登录
-              </ButtonLink>
-              <ButtonLink size="sm" to="/register" variant="primary" onClick={() => setIsMobileMenuOpen(false)}>
-                注册
-              </ButtonLink>
-              <Button
-                fullWidth
-                leadingIcon={<ThemeIcon theme={theme} />}
-                onClick={() => {
-                  onToggleTheme();
-                  setIsMobileMenuOpen(false);
-                }}
-                size="sm"
-                variant="secondary"
-              >
-                {theme === "dark" ? "切换到浅色主题" : "切换到深色主题"}
-              </Button>
-            </div>
-          </div>
-        </div>
-      ) : null}
-    </header>
-  );
-}
-
 function HeroSection() {
   const reducedMotion = useReducedMotion();
   const [isVisible, setIsVisible] = useState(false);
@@ -689,6 +557,8 @@ function MetricsSection() {
 }
 
 function IntegrationsSection() {
+  const isCompactNavigation = useCompactNavigation();
+
   return (
     <RevealSection id="integrations" className="landing-section">
       <div className="landing-section-header centered">
@@ -696,30 +566,45 @@ function IntegrationsSection() {
         <h2 className="landing-display-title">和你已经在用的系统自然接上。</h2>
         <p className="landing-section-copy">把临时邮箱流程接到团队现有的通知、自动化和发布控制链路里，而不是额外再维护一套孤岛工具。</p>
       </div>
-      <div className="landing-marquee-list">
-        <div className="landing-marquee-track">
-          {Array.from({ length: 2 }).flatMap((_, loopIndex) =>
-            integrations.map((integration) => (
-              <article className="landing-integration-card" key={`${integration.name}-${loopIndex}`}>
+      {isCompactNavigation ? (
+        <div className="landing-marquee-list landing-marquee-list-compact">
+          <div className="landing-marquee-track landing-marquee-track-compact">
+            {integrations.map((integration) => (
+              <article className="landing-integration-card" key={integration.name}>
                 <strong>{integration.name}</strong>
                 <span>{integration.category}</span>
               </article>
-            ))
-          )}
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="landing-marquee-list reverse">
-        <div className="landing-marquee-track reverse">
-          {Array.from({ length: 2 }).flatMap((_, loopIndex) =>
-            [...integrations].reverse().map((integration) => (
-              <article className="landing-integration-card" key={`${integration.name}-reverse-${loopIndex}`}>
-                <strong>{integration.name}</strong>
-                <span>{integration.category}</span>
-              </article>
-            ))
-          )}
-        </div>
-      </div>
+      ) : (
+        <>
+          <div className="landing-marquee-list">
+            <div className="landing-marquee-track">
+              {Array.from({ length: 2 }).flatMap((_, loopIndex) =>
+                integrations.map((integration) => (
+                  <article className="landing-integration-card" key={`${integration.name}-${loopIndex}`}>
+                    <strong>{integration.name}</strong>
+                    <span>{integration.category}</span>
+                  </article>
+                ))
+              )}
+            </div>
+          </div>
+          <div className="landing-marquee-list reverse">
+            <div className="landing-marquee-track reverse">
+              {Array.from({ length: 2 }).flatMap((_, loopIndex) =>
+                [...integrations].reverse().map((integration) => (
+                  <article className="landing-integration-card" key={`${integration.name}-reverse-${loopIndex}`}>
+                    <strong>{integration.name}</strong>
+                    <span>{integration.category}</span>
+                  </article>
+                ))
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </RevealSection>
   );
 }
@@ -796,39 +681,36 @@ function DevelopersSection() {
           </div>
         </div>
         <div className="landing-developer-panel">
-          <div className="landing-code-tabs">
-            <div className="landing-code-tab-switch" role="tablist" aria-label="开发示例">
-              {developerTabs.map((tab, index) => (
-                <Button
-                  key={tab.label}
-                  aria-selected={index === activeTab}
-                  className={index === activeTab ? "active" : ""}
-                  isActive={index === activeTab}
-                  onClick={() => setActiveTab(index)}
-                  role="tab"
-                  size="sm"
-                  variant="pill"
-                >
-                  {tab.label}
-                </Button>
-              ))}
+          <Tabs onValueChange={(nextValue) => setActiveTab(Number(nextValue))} value={String(activeTab)} variant="segmented">
+            <div className="landing-code-tabs">
+              <TabsList aria-label="开发示例" className="landing-code-tab-switch">
+                {developerTabs.map((tab, index) => (
+                  <TabsTrigger className={index === activeTab ? "active" : undefined} key={tab.label} value={String(index)}>
+                    {tab.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              <Button
+                className="landing-code-copy"
+                leadingIcon={copiedTab === activeTab ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
+                onClick={() => void copyActiveSnippet()}
+                size="sm"
+                variant="secondary"
+              >
+                {copiedTab === activeTab ? "已复制" : "复制"}
+              </Button>
             </div>
-            <Button
-              className="landing-code-copy"
-              leadingIcon={copiedTab === activeTab ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
-              onClick={() => void copyActiveSnippet()}
-              size="sm"
-              variant="secondary"
-            >
-              {copiedTab === activeTab ? "已复制" : "复制"}
-            </Button>
-          </div>
-          <AnimatedCodeBlock code={developerTabs[activeTab]?.code ?? ""} fileLabel="api-snippet.ts" statusLabel="可直接接入" />
-          <div className="landing-code-links">
-            <a href="#pricing">查看可用方案</a>
-            <span aria-hidden="true">|</span>
-            <a href="#features">回到能力概览</a>
-          </div>
+            {developerTabs.map((tab, index) => (
+              <TabsPanel key={tab.label} value={String(index)}>
+                <AnimatedCodeBlock code={tab.code} fileLabel="api-snippet.ts" statusLabel="可直接接入" />
+                <div className="landing-code-links">
+                  <a href="#pricing">查看可用方案</a>
+                  <span aria-hidden="true">|</span>
+                  <a href="#features">回到能力概览</a>
+                </div>
+              </TabsPanel>
+            ))}
+          </Tabs>
         </div>
       </div>
     </RevealSection>
@@ -1065,7 +947,7 @@ export function WemailLandingPage({
 }) {
   return (
     <div className="landing-page noise-overlay">
-      <Navigation onToggleTheme={onToggleTheme} theme={theme} />
+      <PublicSiteNavigation onToggleTheme={onToggleTheme} theme={theme} />
       <main className="landing-page-main">
         <HeroSection />
         <FeaturesSection />

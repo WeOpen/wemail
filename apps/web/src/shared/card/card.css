@@ -1,0 +1,163 @@
+.ui-card {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 92%, transparent), color-mix(in srgb, var(--surface-muted) 94%, transparent));
+  color: var(--text);
+  box-shadow: var(--elevation-sm);
+  transition:
+    transform var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard);
+}
+
+.ui-card-padding-none {
+  padding: 0;
+}
+
+.ui-card-padding-sm {
+  padding: var(--space-4);
+}
+
+.ui-card-padding-md {
+  padding: var(--space-5);
+}
+
+.ui-card-padding-lg {
+  padding: var(--space-6);
+}
+
+.ui-card-elevation-flat {
+  box-shadow: none;
+}
+
+.ui-card-elevation-sm {
+  box-shadow: var(--elevation-sm);
+}
+
+.ui-card-elevation-md {
+  box-shadow: var(--elevation-md);
+}
+
+.ui-card-elevation-lg {
+  box-shadow: var(--elevation-lg);
+}
+
+.ui-card-data {
+  gap: var(--space-3);
+}
+
+.ui-card-data .ui-card-body {
+  font-family: var(--font-mono);
+  font-size: calc(var(--font-title-lg) * 1.08);
+  line-height: var(--line-title);
+  letter-spacing: -0.03em;
+}
+
+.ui-card-status {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface-strong) 90%, transparent), color-mix(in srgb, var(--surface-muted) 94%, transparent));
+}
+
+.ui-card-accent {
+  border-color: color-mix(in srgb, var(--brand-500) 20%, var(--border));
+}
+
+.ui-card-tone-neutral {
+  --ui-card-tone: var(--neutral-500);
+  --ui-card-tone-soft: color-mix(in srgb, var(--neutral-100) 78%, transparent);
+}
+
+.ui-card-tone-brand {
+  --ui-card-tone: var(--brand-500);
+  --ui-card-tone-soft: color-mix(in srgb, var(--brand-100) 84%, transparent);
+}
+
+.ui-card-tone-info {
+  --ui-card-tone: var(--info-500);
+  --ui-card-tone-soft: color-mix(in srgb, var(--info-100) 84%, transparent);
+}
+
+.ui-card-tone-success {
+  --ui-card-tone: var(--success-500);
+  --ui-card-tone-soft: color-mix(in srgb, var(--success-100) 84%, transparent);
+}
+
+.ui-card-tone-warning {
+  --ui-card-tone: var(--warning-500);
+  --ui-card-tone-soft: color-mix(in srgb, var(--warning-100) 84%, transparent);
+}
+
+.ui-card-tone-danger {
+  --ui-card-tone: var(--danger-500);
+  --ui-card-tone-soft: color-mix(in srgb, var(--danger-100) 84%, transparent);
+}
+
+.ui-card-tone-brand,
+.ui-card-tone-info,
+.ui-card-tone-success,
+.ui-card-tone-warning,
+.ui-card-tone-danger {
+  border-color: color-mix(in srgb, var(--ui-card-tone) 20%, var(--border));
+}
+
+.ui-card-status.ui-card-tone-brand,
+.ui-card-status.ui-card-tone-info,
+.ui-card-status.ui-card-tone-success,
+.ui-card-status.ui-card-tone-warning,
+.ui-card-status.ui-card-tone-danger,
+.ui-card-accent.ui-card-tone-brand,
+.ui-card-accent.ui-card-tone-info,
+.ui-card-accent.ui-card-tone-success,
+.ui-card-accent.ui-card-tone-warning,
+.ui-card-accent.ui-card-tone-danger {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--ui-card-tone-soft) 86%, var(--surface-strong)), color-mix(in srgb, var(--surface) 94%, transparent));
+}
+
+.ui-card.is-interactive {
+  cursor: pointer;
+}
+
+.ui-card.is-interactive:hover,
+.ui-card.is-interactive:focus-within {
+  border-color: color-mix(in srgb, var(--ui-card-tone, var(--brand-500)) 26%, var(--border));
+  box-shadow: var(--elevation-md);
+  transform: translateY(-1px);
+}
+
+.ui-card-header,
+.ui-card-body,
+.ui-card-footer {
+  min-width: 0;
+}
+
+.ui-card-header {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.ui-card-body {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.ui-card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  color: var(--text-muted);
+  font-size: var(--font-body-md);
+  line-height: var(--line-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-card {
+    transition: none;
+  }
+}
