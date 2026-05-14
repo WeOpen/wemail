@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { Button } from "../../shared/button";
-import { FormField, TextInput } from "../../shared/form";
+import { FilterBar, FilterBarActions } from "../../shared/filter-bar";
+import { FormField, SearchInput } from "../../shared/form";
+import { Page, PageBody, PageHeader, PageMain, PageSidebar, PageToolbar } from "../../shared/page-layout";
 import type { OutboundHistoryItem } from "../inbox/types";
 import { buildOutboundRecords, type OutboundRecord } from "./outboundMockData";
 import { OutboundComposeDrawer } from "./OutboundComposeDrawer";
@@ -115,50 +117,51 @@ export function OutboundPage({ outboundHistory, hasActiveMailbox, onSendMail }: 
 
   return (
     <>
-      <main className="workspace-grid outbound-page-grid">
+      <Page as="main" className="workspace-grid outbound-page-grid">
         <section className="panel workspace-card outbound-toolbar-card">
-          <div className="workspace-card-header outbound-toolbar-header">
-            <div>
-              <p className="panel-kicker">邮件中心</p>
-              <h1>发件箱</h1>
-              <p className="section-copy">按发送结果回看历史、定位失败原因，并把异常 / 无匹配记录和正常外发放在同一套工作流里。</p>
-            </div>
-            <div className="workspace-topbar-actions outbound-toolbar-actions">
-              <Button variant="secondary">刷新</Button>
-              <Button onClick={openBlankComposeDrawer} variant="primary">
-                新建发送
-              </Button>
-            </div>
-          </div>
-
-          <div className="outbound-toolbar-row">
-            <FormField className="outbound-search-field" label={<span className="sr-only">发件箱搜索</span>}>
-              <TextInput
-                aria-label="发件箱搜索"
-                onChange={(event) => setSearchValue(event.target.value)}
-                placeholder="搜索收件人 / 主题 / 发件结果"
-                type="search"
-                value={searchValue}
-              />
-            </FormField>
-            <div aria-label="发件箱状态筛选" className="outbound-filter-row" role="toolbar">
-              {(Object.keys(FILTER_LABELS) as OutboundFilter[]).map((filterKey) => (
-                <Button
-                  aria-pressed={filter === filterKey}
-                  isActive={filter === filterKey}
-                  key={filterKey}
-                  onClick={() => setFilter(filterKey)}
-                  variant="ghost"
-                >
-                  {FILTER_LABELS[filterKey]}
+          <PageHeader
+            actions={
+              <div className="workspace-topbar-actions outbound-toolbar-actions">
+                <Button variant="secondary">刷新</Button>
+                <Button onClick={openBlankComposeDrawer} variant="primary">
+                  新建发送
                 </Button>
-              ))}
-            </div>
-          </div>
+              </div>
+            }
+            description="按发送结果回看历史、定位失败原因，并把异常 / 无匹配记录和正常外发放在同一套工作流里。"
+            kicker="邮件中心"
+            title="发件箱"
+          />
+
+          <PageToolbar>
+            <FilterBar className="outbound-toolbar-row" columns={2}>
+              <FormField className="outbound-search-field" label={<span className="sr-only">发件箱搜索</span>}>
+                <SearchInput
+                  aria-label="发件箱搜索"
+                  onChange={(event) => setSearchValue(event.target.value)}
+                  placeholder="搜索收件人 / 主题 / 发件结果"
+                  value={searchValue}
+                />
+              </FormField>
+              <FilterBarActions aria-label="发件箱状态筛选" className="outbound-filter-row" role="toolbar">
+                {(Object.keys(FILTER_LABELS) as OutboundFilter[]).map((filterKey) => (
+                  <Button
+                    aria-pressed={filter === filterKey}
+                    isActive={filter === filterKey}
+                    key={filterKey}
+                    onClick={() => setFilter(filterKey)}
+                    variant="ghost"
+                  >
+                    {FILTER_LABELS[filterKey]}
+                  </Button>
+                ))}
+              </FilterBarActions>
+            </FilterBar>
+          </PageToolbar>
         </section>
 
-        <div className="workspace-grid outbound-main-grid">
-          <section aria-label="发件记录列表" className="panel workspace-card outbound-list-panel" role="region">
+        <PageBody className="workspace-grid outbound-main-grid" hasSidebar>
+          <PageMain aria-label="发件记录列表" className="panel workspace-card outbound-list-panel" role="region">
             <div className="workspace-card-header outbound-section-header">
               <div>
                 <p className="panel-kicker">发送记录</p>
@@ -193,9 +196,9 @@ export function OutboundPage({ outboundHistory, hasActiveMailbox, onSendMail }: 
                 </Button>
               ))}
             </div>
-          </section>
+          </PageMain>
 
-          <section aria-label="发件记录详情" className="panel workspace-card outbound-detail-panel" role="region">
+          <PageSidebar aria-label="发件记录详情" className="panel workspace-card outbound-detail-panel" role="region">
             {selectedRecord ? (
               <>
                 <div className="workspace-card-header outbound-section-header">
@@ -268,9 +271,9 @@ export function OutboundPage({ outboundHistory, hasActiveMailbox, onSendMail }: 
             ) : (
               <p className="empty-state">当前还没有发件记录。</p>
             )}
-          </section>
-        </div>
-      </main>
+          </PageSidebar>
+        </PageBody>
+      </Page>
 
       <OutboundComposeDrawer
         draft={composeDraft}

@@ -1,0 +1,72 @@
+.ui-skeleton {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  width: 100%;
+  min-height: 1rem;
+  border-radius: var(--radius-sm);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--surface-muted) 92%, transparent),
+      color-mix(in srgb, var(--surface-strong) 68%, transparent)
+    );
+}
+
+.ui-skeleton-rect {
+  min-height: 2.75rem;
+}
+
+.ui-skeleton-text {
+  min-height: 0.9rem;
+  border-radius: var(--radius-full);
+}
+
+.ui-skeleton-circle {
+  aspect-ratio: 1;
+  width: 2.5rem;
+  min-height: auto;
+  border-radius: 999px;
+}
+
+.ui-skeleton-rounded-sm {
+  border-radius: var(--radius-sm);
+}
+
+.ui-skeleton-rounded-md {
+  border-radius: var(--radius-md);
+}
+
+.ui-skeleton-rounded-lg {
+  border-radius: var(--radius-lg);
+}
+
+.ui-skeleton-rounded-full {
+  border-radius: 999px;
+}
+
+.ui-skeleton-animated::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, white 38%, transparent),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: ui-skeleton-shimmer 1.4s var(--ease-standard) infinite;
+}
+
+@keyframes ui-skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-skeleton-animated::after {
+    animation: none;
+  }
+}

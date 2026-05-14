@@ -1,0 +1,74 @@
+.ui-spinner {
+  --spinner-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text);
+}
+
+.ui-spinner-xs {
+  --spinner-size: 12px;
+}
+
+.ui-spinner-sm {
+  --spinner-size: 14px;
+}
+
+.ui-spinner-md {
+  --spinner-size: 16px;
+}
+
+.ui-spinner-lg {
+  --spinner-size: 20px;
+}
+
+.ui-spinner-indicator {
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  border-radius: 999px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  opacity: 0.9;
+  animation: ui-spinner-rotate 720ms linear infinite;
+}
+
+.ui-spinner-label {
+  font-size: var(--font-body-md);
+  line-height: var(--line-body);
+}
+
+.ui-spinner.ui-tone-default {
+  color: var(--text);
+}
+
+.ui-spinner.ui-tone-muted {
+  color: var(--text-muted);
+}
+
+.ui-spinner.ui-tone-accent {
+  color: var(--brand-500);
+}
+
+.ui-spinner.ui-tone-success {
+  color: var(--success-600);
+}
+
+.ui-spinner.ui-tone-warning {
+  color: var(--warning-600);
+}
+
+.ui-spinner.ui-tone-danger {
+  color: var(--danger-600);
+}
+
+@keyframes ui-spinner-rotate {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-spinner-indicator {
+    animation: none;
+  }
+}

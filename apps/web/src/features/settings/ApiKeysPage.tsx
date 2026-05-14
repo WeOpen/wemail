@@ -3,6 +3,7 @@
 import type { ApiKeySummary } from "@wemail/shared";
 import { Button } from "../../shared/button";
 import { FormField, TextInput } from "../../shared/form";
+import { MetricCard } from "../../shared/metric-card";
 
 type CreateApiKeyResult = {
   key: {
@@ -107,45 +108,41 @@ export function ApiKeysPage({ apiKeys, onCreateApiKey, onRevokeApiKey }: ApiKeys
   return (
     <main className="workspace-grid api-keys-layout-grid">
       <section className="api-keys-top-stats" aria-label="API 密钥状态概览">
-        <article className="panel workspace-card page-panel integration-side-card api-keys-stat-card">
-          <p className="panel-kicker api-keys-stat-kicker">总密钥</p>
-          <div className="integration-stat-list">
-            <article className="integration-stat-row">
-              <strong>总数</strong>
-              <span>{summary.totalKeys}</span>
-            </article>
-          </div>
-        </article>
+        <MetricCard
+          className="panel workspace-card page-panel integration-side-card api-keys-stat-card"
+          detail="总数"
+          kicker="总密钥"
+          title="密钥总览"
+          value={summary.totalKeys}
+          valueSize="lg"
+        />
 
-        <article className="panel workspace-card page-panel integration-side-card api-keys-stat-card">
-          <p className="panel-kicker api-keys-stat-kicker">活跃密钥</p>
-          <div className="integration-stat-list">
-            <article className="integration-stat-row">
-              <strong>可用</strong>
-              <span>{summary.activeKeys}</span>
-            </article>
-          </div>
-        </article>
+        <MetricCard
+          className="panel workspace-card page-panel integration-side-card api-keys-stat-card"
+          detail="可用"
+          kicker="活跃密钥"
+          title="当前可用"
+          value={summary.activeKeys}
+          valueSize="lg"
+        />
 
-        <article className="panel workspace-card page-panel integration-side-card api-keys-stat-card">
-          <p className="panel-kicker api-keys-stat-kicker">从未使用</p>
-          <div className="integration-stat-list">
-            <article className="integration-stat-row">
-              <strong>未使用</strong>
-              <span>{summary.unusedKeys}</span>
-            </article>
-          </div>
-        </article>
+        <MetricCard
+          className="panel workspace-card page-panel integration-side-card api-keys-stat-card"
+          detail="未使用"
+          kicker="从未使用"
+          title="待接入"
+          value={summary.unusedKeys}
+          valueSize="lg"
+        />
 
-        <article className="panel workspace-card page-panel integration-side-card api-keys-stat-card">
-          <p className="panel-kicker api-keys-stat-kicker">已吊销</p>
-          <div className="integration-stat-list">
-            <article className="integration-stat-row">
-              <strong>失效</strong>
-              <span>{summary.revokedKeys}</span>
-            </article>
-          </div>
-        </article>
+        <MetricCard
+          className="panel workspace-card page-panel integration-side-card api-keys-stat-card"
+          detail="失效"
+          kicker="已吊销"
+          title="不可用"
+          value={summary.revokedKeys}
+          valueSize="lg"
+        />
       </section>
 
       <div className="api-keys-content-grid">

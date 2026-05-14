@@ -1,0 +1,57 @@
+.ui-divider {
+  --divider-color: color-mix(in srgb, var(--border) 84%, transparent);
+  flex: none;
+  background: var(--divider-color);
+}
+
+.ui-divider-horizontal {
+  width: 100%;
+  height: 1px;
+}
+
+.ui-divider-vertical {
+  width: 1px;
+  align-self: stretch;
+  min-height: 100%;
+}
+
+.ui-divider-dashed {
+  background: none;
+  border-color: var(--divider-color);
+  border-style: dashed;
+}
+
+.ui-divider-horizontal.ui-divider-dashed {
+  border-top-width: 1px;
+}
+
+.ui-divider-vertical.ui-divider-dashed {
+  border-left-width: 1px;
+}
+
+.ui-divider-inset-sm {
+  margin-inline: var(--space-2);
+}
+
+.ui-divider-inset-md {
+  margin-inline: var(--space-4);
+}
+
+.ui-divider-inset-lg {
+  margin-inline: var(--space-6);
+}
+
+.ui-divider-vertical.ui-divider-inset-sm,
+.ui-divider-vertical.ui-divider-inset-md,
+.ui-divider-vertical.ui-divider-inset-lg {
+  margin-inline: 0;
+  margin-block: var(--space-2);
+}
+
+.ui-divider-vertical.ui-divider-inset-md {
+  margin-block: var(--space-4);
+}
+
+.ui-divider-vertical.ui-divider-inset-lg {
+  margin-block: var(--space-6);
+}

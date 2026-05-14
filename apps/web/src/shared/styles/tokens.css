@@ -1,0 +1,181 @@
+/*
+ * WeMail design system tokens — v1.0 (2026-04-22)
+ *
+ * Purpose: central source of truth for color / spacing / radius / shadow /
+ * font / motion / z-index / focus / chart tokens. Additive layer — this file
+ * only introduces NEW variables. The legacy :root blocks in index.css continue
+ * to own existing variables (--accent, --border, --shadow-card, etc.) so the
+ * current UI keeps rendering with zero regression while new primitives adopt
+ * the system below.
+ *
+ * Source: docs/plans/2026-04-22-design-system-v1.md §3
+ */
+
+:root {
+  /* ===== Spacing (4px grid) ===== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+  --space-18: 72px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-28: 112px;
+  --space-32: 128px;
+
+  /* ===== Radius (new scale — legacy aliases remain in index.css) ===== */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* ===== Font — semantic sizes ===== */
+  --font-display-lg: 48px;
+  --font-display-md: 32px;
+  --font-title-lg: 24px;
+  --font-title-md: 20px;
+  --font-body-lg: 16px;
+  --font-body-md: 14px;
+  --font-caption: 12px;
+  --font-mono-size: 13px;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --line-display: 1.1;
+  --line-title: 1.3;
+  --line-body: 1.55;
+  --line-caption: 1.45;
+  --line-mono: 1.6;
+
+  /* ===== Motion ===== */
+  --duration-instant: 80ms;
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --duration-slower: 480ms;
+  --ease-standard: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-emphasized: cubic-bezier(0.2, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ===== Z-index layering ===== */
+  --z-base: 0;
+  --z-raised: 1;
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-fixed: 30;
+  --z-overlay: 40;
+  --z-modal: 50;
+  --z-popover: 60;
+  --z-toast: 70;
+  --z-tooltip: 80;
+
+  /* ===== Focus ring geometry ===== */
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+}
+
+/* ===== Theme-dependent tokens — light ===== */
+:root,
+:root[data-theme="light"] {
+  /* Brand — 9 stops, --brand-500 equals the historical --accent */
+  --brand-50: #fff2e6;
+  --brand-100: #ffe0c2;
+  --brand-200: #ffc78a;
+  --brand-300: #ffa74d;
+  --brand-400: #ff8b26;
+  --brand-500: #ff7a00;
+  --brand-600: #e66d00;
+  --brand-700: #b35400;
+  --brand-soft-500: #ffb366;
+
+  /* Semantic — 500 / 100 / 600 / soft tint */
+  --success-500: #22c55e;
+  --success-100: #d1fadf;
+  --success-600: #16a34a;
+  --success-soft: rgba(34, 197, 94, 0.14);
+  --success-bg: var(--success-soft);
+
+  --warning-500: #f59e0b;
+  --warning-100: #fef0c7;
+  --warning-600: #d97706;
+  --warning-soft: rgba(245, 158, 11, 0.14);
+  --warning-bg: var(--warning-soft);
+
+  --danger-500: #ef4444;
+  --danger-100: #fee2e2;
+  --danger-600: #dc2626;
+  --danger-soft: rgba(239, 68, 68, 0.14);
+  --danger-bg: var(--danger-soft);
+
+  --info-500: #3b82f6;
+  --info-100: #dbeafe;
+  --info-600: #2563eb;
+  --info-soft: rgba(59, 130, 246, 0.14);
+  --info-bg: var(--info-soft);
+
+  /* Neutrals — 9 stops */
+  --neutral-0: #ffffff;
+  --neutral-50: #f9fafb;
+  --neutral-100: #f3f4f6;
+  --neutral-200: #e5e7eb;
+  --neutral-300: #d1d5db;
+  --neutral-400: #9ca3af;
+  --neutral-500: #6b7280;
+  --neutral-700: #374151;
+  --neutral-900: #111827;
+
+  /* Elevation */
+  --elevation-xs: 0 1px 2px rgba(17, 17, 17, 0.04);
+  --elevation-sm: 0 2px 6px rgba(17, 17, 17, 0.06), 0 1px 2px rgba(17, 17, 17, 0.04);
+  --elevation-md: 0 6px 16px rgba(17, 17, 17, 0.08), 0 2px 4px rgba(17, 17, 17, 0.04);
+  --elevation-lg: 0 14px 32px rgba(17, 17, 17, 0.1), 0 4px 8px rgba(17, 17, 17, 0.04);
+  --elevation-xl: 0 24px 64px rgba(17, 17, 17, 0.14), 0 8px 16px rgba(17, 17, 17, 0.06);
+
+  /* Focus ring color (alpha-mixed brand) */
+  --focus-ring-color: color-mix(in srgb, var(--brand-500) 30%, transparent);
+  --focus-ring: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+
+  /* Chart series — 8 distinct hues */
+  --chart-series-1: var(--brand-500);
+  --chart-series-2: var(--info-500);
+  --chart-series-3: var(--success-500);
+  --chart-series-4: var(--warning-500);
+  --chart-series-5: var(--danger-500);
+  --chart-series-6: #8b5cf6;
+  --chart-series-7: #06b6d4;
+  --chart-series-8: #ec4899;
+}
+
+/* ===== Theme-dependent tokens — dark ===== */
+:root[data-theme="dark"] {
+  /* Brand kept unchanged — consistent accent across themes */
+
+  /* Neutrals inverted — light values for text on dark surfaces */
+  --neutral-0: #0a0a0a;
+  --neutral-50: #111113;
+  --neutral-100: #1a1a1d;
+  --neutral-200: #222227;
+  --neutral-300: #2e2e34;
+  --neutral-400: #6b7280;
+  --neutral-500: #9ca3af;
+  --neutral-700: #d1d5db;
+  --neutral-900: #f3f4f6;
+
+  /* Deeper shadows for dark surfaces */
+  --elevation-xs: 0 1px 2px rgba(0, 0, 0, 0.32);
+  --elevation-sm: 0 2px 6px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.28);
+  --elevation-md: 0 6px 16px rgba(0, 0, 0, 0.48), 0 2px 4px rgba(0, 0, 0, 0.32);
+  --elevation-lg: 0 14px 32px rgba(0, 0, 0, 0.55), 0 4px 8px rgba(0, 0, 0, 0.3);
+  --elevation-xl: 0 24px 64px rgba(0, 0, 0, 0.6), 0 8px 16px rgba(0, 0, 0, 0.4);
+
+  /* Focus ring slightly brighter in dark */
+  --focus-ring-color: color-mix(in srgb, var(--brand-500) 40%, transparent);
+}

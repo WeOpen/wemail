@@ -1,0 +1,66 @@
+.ui-steps {
+  display: block;
+}
+
+.ui-steps-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ui-steps-list[data-orientation="vertical"] {
+  flex-direction: column;
+}
+
+.ui-step-item {
+  min-width: 0;
+}
+
+.ui-step-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.ui-step-trigger[data-state="current"] {
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--accent) 36%, var(--border));
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.ui-step-item[data-state="complete"] .ui-step-trigger {
+  color: var(--text);
+}
+
+.ui-step-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ui-step-copy {
+  display: grid;
+  text-align: left;
+}
+
+.ui-step-title {
+  font-weight: 600;
+}
+
+.ui-step-description {
+  color: var(--text-subtle, var(--text-muted));
+  font-size: 0.875rem;
+}

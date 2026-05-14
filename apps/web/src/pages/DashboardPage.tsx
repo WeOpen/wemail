@@ -13,6 +13,7 @@ import {
   dashboardUserRoles
 } from "../features/dashboard/dashboardMockData";
 import { nivoTheme } from "../shared/chart";
+import { MetricCard } from "../shared/metric-card";
 
 const GROWTH_KEYS = ["accounts", "mailboxes"] as const;
 const GROWTH_LABELS: Record<(typeof GROWTH_KEYS)[number], string> = {
@@ -62,13 +63,16 @@ export function DashboardPage() {
     <main className="workspace-grid dashboard-grid">
       <section className="dashboard-kpi-grid" aria-label="仪表盘核心指标">
         {dashboardKpis.map((kpi) => (
-          <article className="panel workspace-card dashboard-kpi-card" key={kpi.label}>
-            <p className="panel-kicker">KPI</p>
-            <h2>{kpi.label}</h2>
-            <strong>{kpi.value}</strong>
-            <span>{kpi.detail}</span>
-            <small>{kpi.change}</small>
-          </article>
+          <MetricCard
+            className="panel workspace-card dashboard-kpi-card"
+            caption={kpi.change}
+            detail={kpi.detail}
+            key={kpi.label}
+            kicker="KPI"
+            title={kpi.label}
+            tone="hero"
+            value={kpi.value}
+          />
         ))}
       </section>
 

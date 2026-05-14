@@ -17,3 +17,7 @@
 - 居中确认/创建弹窗用 `OverlayDialog`
 - 标题通过 `title` 传入，副标题通过 `description` 传入
 - 关闭行为由业务传 `onClose`，需要点击遮罩关闭时显式传 `closeOnBackdrop`
+- 默认支持 `Esc` 关闭；若场景必须阻止该行为，可传 `closeOnEscape={false}`
+- `description` 会自动接入 `aria-describedby`，用于补足弹层语义说明
+- 默认通过 shared layer portal 渲染到 `document.body`
+- 默认启用 focus trap、背景 inert、body scroll lock 和关闭后的焦点归还

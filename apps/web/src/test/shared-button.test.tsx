@@ -15,6 +15,9 @@ describe("shared button primitives", () => {
         <Button size="md" variant="primary">
           保存资料
         </Button>
+        <Button size="sm" variant="subtle">
+          稍后处理
+        </Button>
         <Button isActive size="xs" variant="ghost">
           仅看异常
         </Button>
@@ -25,6 +28,7 @@ describe("shared button primitives", () => {
     );
 
     expect(screen.getByRole("button", { name: "保存资料" })).toHaveClass("ui-button", "ui-button-primary", "ui-button-size-md");
+    expect(screen.getByRole("button", { name: "稍后处理" })).toHaveClass("ui-button", "ui-button-subtle", "ui-button-size-sm");
     expect(screen.getByRole("button", { name: "仅看异常" })).toHaveClass("ui-button", "ui-button-ghost", "is-active", "ui-button-size-xs");
     expect(screen.getByRole("button", { name: "关闭对话框" })).toHaveClass("ui-button", "ui-button-icon", "ui-button-icon-only", "ui-button-size-sm");
   });

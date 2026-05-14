@@ -1,0 +1,161 @@
+.ui-search-input {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding-inline: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-field);
+  background: var(--surface-muted);
+  transition: border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.ui-search-input:focus-within {
+  border-color: color-mix(in srgb, var(--accent) 48%, transparent);
+  background: var(--surface-strong);
+  box-shadow: var(--focus-ring, 0 0 0 3px rgba(255, 122, 0, 0.14));
+}
+
+.ui-search-input[data-disabled="true"] {
+  opacity: 0.62;
+}
+
+.ui-search-input-icon,
+.ui-search-input-clear,
+.ui-multi-select-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-soft);
+}
+
+.form-control.ui-search-input-control {
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 14px 0;
+  background: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: none;
+}
+
+.form-control.ui-search-input-control::-webkit-search-decoration,
+.form-control.ui-search-input-control::-webkit-search-cancel-button,
+.form-control.ui-search-input-control::-webkit-search-results-button,
+.form-control.ui-search-input-control::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form-control.ui-search-input-control:focus {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.ui-search-input-clear {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.ui-multi-select {
+  position: relative;
+  display: grid;
+  gap: 10px;
+}
+
+.ui-multi-select-trigger-shell {
+  position: relative;
+}
+
+.ui-multi-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-field);
+  background: var(--surface-muted);
+  color: var(--text);
+  text-align: left;
+  transition: border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.ui-multi-select-trigger:focus-visible,
+.ui-multi-select[data-state="open"] .ui-multi-select-trigger {
+  outline: none;
+  border-color: color-mix(in srgb, var(--accent) 48%, transparent);
+  background: var(--surface-strong);
+  box-shadow: var(--focus-ring, 0 0 0 3px rgba(255, 122, 0, 0.14));
+}
+
+.ui-multi-select-value {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.ui-multi-select-value.is-placeholder {
+  color: var(--text-soft);
+}
+
+.ui-multi-select-actions {
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.ui-multi-select-clear {
+  position: absolute;
+  top: 50%;
+  right: 34px;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+}
+
+.ui-multi-select-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius-field) + 2px);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow-card);
+}
+
+.ui-multi-select-option {
+  margin: 0;
+}
+
+.ui-multi-select-empty {
+  padding: 8px 10px;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-search-input,
+  .ui-multi-select-trigger {
+    transition: none;
+  }
+}

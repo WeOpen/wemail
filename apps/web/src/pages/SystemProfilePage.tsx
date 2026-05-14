@@ -1,5 +1,8 @@
+import { Avatar } from "../shared/avatar";
 import { Button } from "../shared/button";
 import { FormField, RadioGroupField, SelectInput, TextInput, TextareaInput } from "../shared/form";
+import { KVList } from "../shared/kv-list";
+import { Page, PageHeader } from "../shared/page-layout";
 
 type SystemProfilePageProps = {
   sessionSummary: {
@@ -11,18 +14,16 @@ type SystemProfilePageProps = {
 
 export function SystemProfilePage({ sessionSummary }: SystemProfilePageProps) {
   return (
-    <main className="workspace-grid profile-settings-grid">
+    <Page as="main" className="workspace-grid profile-settings-grid">
       <section className="panel workspace-card page-panel profile-settings-panel profile-settings-panel-identity">
-        <div className="profile-settings-copy">
-          <p className="panel-kicker">账号资料</p>
-          <h2>你的账户信息</h2>
-          <p className="section-copy">集中维护你的展示身份与基础资料，保持对外沟通时的一致性。</p>
-        </div>
+        <PageHeader
+          description="集中维护你的展示身份与基础资料，保持对外沟通时的一致性。"
+          kicker="账号资料"
+          title="你的账户信息"
+        />
 
         <div className="profile-identity-row">
-          <span className="profile-avatar" aria-hidden="true">
-            W
-          </span>
+          <Avatar aria-label="当前用户头像" fallback="W" name="WeMail Admin" size="lg" />
           <div className="profile-identity-copy">
             <strong>WeMail Admin</strong>
             <span>{sessionSummary.email}</span>
@@ -41,14 +42,12 @@ export function SystemProfilePage({ sessionSummary }: SystemProfilePageProps) {
             <TextInput aria-label="邮箱" disabled value={sessionSummary.email} />
           </FormField>
           <div className="profile-meta-grid">
-            <div className="profile-meta-card">
-              <small>角色</small>
-              <strong>{sessionSummary.role}</strong>
-            </div>
-            <div className="profile-meta-card">
-              <small>创建时间</small>
-              <strong>{sessionSummary.createdAtLabel}</strong>
-            </div>
+            <KVList
+              items={[
+                { key: "角色", value: sessionSummary.role },
+                { key: "创建时间", value: sessionSummary.createdAtLabel }
+              ]}
+            />
           </div>
         </div>
 
@@ -59,11 +58,11 @@ export function SystemProfilePage({ sessionSummary }: SystemProfilePageProps) {
       </section>
 
       <section className="panel workspace-card page-panel profile-settings-panel">
-        <div className="profile-settings-copy">
-          <p className="panel-kicker">使用偏好</p>
-          <h2>按你的工作方式来调整界面</h2>
-          <p className="section-copy">这些设置会影响你进入 WeMail 后默认看到的节奏与信息密度。</p>
-        </div>
+        <PageHeader
+          description="这些设置会影响你进入 WeMail 后默认看到的节奏与信息密度。"
+          kicker="使用偏好"
+          title="按你的工作方式来调整界面"
+        />
 
         <div className="profile-preference-list">
           <FormField
@@ -132,11 +131,11 @@ export function SystemProfilePage({ sessionSummary }: SystemProfilePageProps) {
       </section>
 
       <section className="panel workspace-card page-panel profile-settings-panel">
-        <div className="profile-settings-copy">
-          <p className="panel-kicker">安全与会话</p>
-          <h2>管理密码和当前登录状态</h2>
-          <p className="section-copy">优先显示你当前的会话信息，并把高风险操作收拢到同一个动作区。</p>
-        </div>
+        <PageHeader
+          description="优先显示你当前的会话信息，并把高风险操作收拢到同一个动作区。"
+          kicker="安全与会话"
+          title="管理密码和当前登录状态"
+        />
 
         <div className="profile-security-list">
           <div className="profile-security-row">
@@ -156,6 +155,6 @@ export function SystemProfilePage({ sessionSummary }: SystemProfilePageProps) {
           <Button variant="secondary">退出其他设备</Button>
         </div>
       </section>
-    </main>
+    </Page>
   );
 }

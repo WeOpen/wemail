@@ -1,0 +1,33 @@
+.ui-copy-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface-strong);
+  color: var(--text);
+  transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+}
+
+.ui-copy-button.is-copied {
+  border-color: color-mix(in srgb, #20c997 34%, transparent);
+  background: color-mix(in srgb, #20c997 12%, var(--surface-strong));
+}
+
+.ui-copy-button.is-error {
+  border-color: color-mix(in srgb, #ef4444 34%, transparent);
+}
+
+.ui-copy-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-copy-button {
+    transition: none;
+  }
+}

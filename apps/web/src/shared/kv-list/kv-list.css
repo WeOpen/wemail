@@ -1,0 +1,40 @@
+.ui-kv-list {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+}
+
+.ui-kv-list-compact {
+  gap: 10px;
+}
+
+.ui-kv-list-row {
+  display: grid;
+  grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.ui-kv-list-key,
+.ui-kv-list-value {
+  margin: 0;
+}
+
+.ui-kv-list-key {
+  display: grid;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.ui-kv-list-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--text);
+}
+
+.ui-kv-list-hint {
+  color: var(--text-soft);
+}

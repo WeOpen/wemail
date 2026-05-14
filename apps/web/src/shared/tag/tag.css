@@ -1,0 +1,92 @@
+.ui-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  max-width: 100%;
+  border: 1px solid transparent;
+  color: var(--text);
+  font-size: var(--font-caption);
+  font-weight: 600;
+  line-height: var(--line-caption);
+  white-space: nowrap;
+}
+
+.ui-tag-shape-rounded {
+  border-radius: var(--radius-sm);
+}
+
+.ui-tag-shape-pill {
+  border-radius: var(--radius-full);
+}
+
+.ui-tag-size-sm {
+  padding: 5px 10px;
+}
+
+.ui-tag-size-md {
+  padding: 7px 12px;
+}
+
+.ui-tag-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.ui-tag-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ui-tag-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ui-tag-neutral {
+  background: color-mix(in srgb, var(--neutral-100) 70%, transparent);
+  border-color: color-mix(in srgb, var(--neutral-300) 72%, transparent);
+  color: var(--neutral-700);
+}
+
+.ui-tag-brand {
+  background: color-mix(in srgb, var(--brand-100) 72%, transparent);
+  border-color: color-mix(in srgb, var(--brand-300) 42%, transparent);
+  color: var(--brand-700);
+}
+
+.ui-tag-info {
+  background: color-mix(in srgb, var(--info-100) 74%, transparent);
+  border-color: color-mix(in srgb, var(--info-500) 24%, transparent);
+  color: var(--info-600);
+}
+
+.ui-tag-success {
+  background: color-mix(in srgb, var(--success-100) 72%, transparent);
+  border-color: color-mix(in srgb, var(--success-500) 22%, transparent);
+  color: var(--success-600);
+}
+
+.ui-tag-warning {
+  background: color-mix(in srgb, var(--warning-100) 74%, transparent);
+  border-color: color-mix(in srgb, var(--warning-500) 24%, transparent);
+  color: var(--warning-600);
+}
+
+.ui-tag-danger {
+  background: color-mix(in srgb, var(--danger-100) 74%, transparent);
+  border-color: color-mix(in srgb, var(--danger-500) 22%, transparent);
+  color: var(--danger-600);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-tag {
+    transition: none;
+  }
+}

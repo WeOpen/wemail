@@ -7,7 +7,7 @@ import {
 } from "react";
 import { Link, type LinkProps } from "react-router-dom";
 
-type ButtonVariant = "primary" | "secondary" | "ghost" | "text" | "danger" | "icon" | "pill";
+type ButtonVariant = "primary" | "secondary" | "subtle" | "ghost" | "text" | "danger" | "icon" | "pill";
 type ButtonSize = "xs" | "sm" | "md" | "lg";
 
 type ButtonSharedProps = {
